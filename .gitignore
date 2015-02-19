@@ -1,0 +1,8 @@
+# Created by .gitignore support plugin (hsz.mobi)
+/.idea
+/bower_components
+/index.html
+/index-dev.html
+/config.html
+*-v.html
+*-dv.html

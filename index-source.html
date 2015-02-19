@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title></title>
+
+	<!-- todo cache control -->
+	<meta http-equiv="cache-control" content="no-cache">
+
+	<!-- global styling -->
+	<link rel="stylesheet" href="./styles/main.css">
+
+
+	<!-- shims -->
+	<script src="./bower_components/es6-promise-polyfill/promise.min.js"></script>
+
+	<!-- libraries -->
+
+	<!--[if lte IE 9]>			<script src="./bower_components/jquery-compat/dist/jquery.min.js"></script>	<![endif]-->
+	<![if (gt IE 9) | (!IE) ]>	<script src="./bower_components/jquery/dist/jquery.min.js"></script> 		<![endif]>
+
+	<script src="./bower_components/lodash/dist/lodash.min.js"></script>
+	<![if (gt IE 9) | (!IE) ]>	<script src="./bower_components/webcomponentsjs/webcomponents.min.js"></script> <![endif]>
+
+	<!-- Polymer components -->
+	<link rel="import" href="./bower_components/polymer/polymer.html">
+	<link rel="import" href="./bower_components/core-icons/core-icons.html">
+	<link rel="import" href="./bower_components/font-roboto/roboto.html">
+
+
+	<!-- configuration section -->
+	<link rel="import" href="./config.html">
+
+	<link rel="import" href="./components/x-app/x-app.html">
+
+	<script src="./script/main.js"></script>
+</head>
+
+<body fullbleed vertical layout unresolved>
+
+
+
+</body>
+</html>
