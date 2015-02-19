@@ -1,12 +1,33 @@
-<polymer-element name="x-app" horizontal layout flex>
+<polymer-element name="x-app" vertical layout flex>
 	<template>
 		<style>
 			:host {
 				background:#eee;
 			}
+
+			.panel {
+				margin:5px;
+				border:1px solid #ccc;
+				background-color: #fff;
+			}
+
+			.header {
+				height:30px;
+				background-color: navy;
+				color:#fff;
+				padding: 0 10px;
+			}
 		</style>
 
-		HELLO
+		<div class="header">
+			Wardrobe
+		</div>
+
+		<div horizontal layout flex>
+			<div class="panel" vertical layout flex></div>
+			<div class="panel" vertical layout flex two></div>
+			<div class="panel" vertical layout flex></div>
+		</div>
 
 	</template>
 
