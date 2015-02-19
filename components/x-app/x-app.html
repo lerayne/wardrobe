@@ -1,3 +1,5 @@
+<link rel="import" href="../unit-doll/unit-doll.html">
+
 <polymer-element name="x-app" vertical layout flex>
 	<template>
 		<style>
@@ -12,7 +14,7 @@
 			}
 
 			.header {
-				height:30px;
+				height:50px;
 				background-color: navy;
 				color:#fff;
 				padding: 0 10px;
@@ -25,13 +27,28 @@
 
 		<div horizontal layout flex>
 			<div class="panel" vertical layout flex></div>
-			<div class="panel" vertical layout flex two></div>
+			<div class="panel" vertical layout>
+				<unit-doll>
+
+					<div class="layer" style="top:50%; left:50%" x-width="100" x-height="100"></div>
+					<div class="layer" style="top:10%; left:10%" x-width="100" x-height="100"></div>
+					<div class="layer" style="top:10%; left:40%" x-width="100" x-height="100"></div>
+					<div class="layer" style="top:50%; left:80%" x-width="100" x-height="100"></div>
+
+				</unit-doll>
+			</div>
 			<div class="panel" vertical layout flex></div>
 		</div>
 
 	</template>
 
 	<script>
-		Polymer();
+		Polymer({
+
+			created:function(){
+
+			}
+
+		});
 	</script>
 </polymer-element>

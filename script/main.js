@@ -17,6 +17,7 @@ $(function(){
 
 	// initialization part 1: Basic DOM loaded
 	$(function(){
+
 		console.info('Root DOM ready');
 
 		// If this is not IE or its IE 10 - launch the webapp (IE11 and greater aren't having "MSIE" in userAgent)

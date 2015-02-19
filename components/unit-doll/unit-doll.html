@@ -1,0 +1,52 @@
+<polymer-element name="unit-doll" flex on-resize="{{ resize }}">
+	<template>
+		<style>
+			:host {
+				position: relative;
+				overflow: hidden;
+			}
+
+			::content .layer {
+				position: absolute;
+				background-color: red;
+				width:100px;
+				height: 100px;
+				transform-origin: 0 0;
+			}
+		</style>
+
+		<content></content>
+
+	</template>
+
+	<script>
+		Polymer({
+			pixelRatio: 1000, // todo: 1000 is changeable var, depends on actor
+			ratio:1,
+
+			created:function(){
+				var that = this;
+
+				$(window).resize(function(){
+					that.resize()
+				})
+			},
+
+			attached:function(){
+				this.resize();
+			},
+
+			resize:function(){
+				var that = this;
+
+				var frameSize = this.offsetHeight;
+				this.ratio = frameSize / this.pixelRatio;
+
+				$(this).find('.layer').css('transform', 'scale('+ this.ratio +')')
+
+
+				$(this).width(frameSize)
+			}
+		});
+	</script>
+</polymer-element>
