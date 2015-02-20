@@ -183,4 +183,60 @@ class Feed {
 		return Array($shelves, $meta);
 	}
 
+
+
+
+	function get_items($request, $meta = Array()) {
+		global $cfg, $db, $user;
+
+		// defaults
+		$request = load_defaults($request, $request_defaults = Array(
+			'sort' => 'updated',
+			'sort_direction' => 'desc',
+			'filter' => ''
+		));
+
+		$meta = load_defaults($meta, $meta_defaults = Array(
+			'updates_since' => '0' // работает как false, а в SQL-запросах по дате - как 0
+		));
+
+		// режим обновления?
+		$update_mode = !!$meta['updates_since'];
+
+		// are there any updates?
+		$latest_update_date = $db->selectCell('
+			SELECT MAX(updated) FROM ?_items
+			WHERE updated > ?
+				AND shelf_id = ?
+			',
+			$meta['updates_since'],
+			$request['shelf']
+		);
+
+		// if not - return everything as it is
+		if (!$latest_update_date) return Array(Array(), $meta);
+
+		$raw_shelves = $db->select('
+			SELECT
+				itm.id,
+				itm.name,
+				itm.title,
+				itm.cover,
+				itm.z_index
+			FROM ?_items itm
+			WHERE updated > ?
+				AND shelf_id = ?
+			',
+			$meta['updates_since'],
+			$request['shelf']
+		);
+
+		$shelves = sort_by_field($raw_shelves, $request['sort']);
+
+		// milestone for future requests
+		$meta['updates_since'] = $latest_update_date;
+
+		return Array($shelves, $meta);
+	}
+
 }

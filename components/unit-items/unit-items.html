@@ -12,17 +12,17 @@
 			}
 
 			core-toolbar {
-				background-color: #0D904F;
+				background-color: #f3b300;
 			}
 
 			#bookmark {
-				background-color: #0D904F;
+				background-color: #f3b300;
+			}
+
+			paper-fab {
+				background-color: #f3b300;
 			}
 		</style>
-
-		<div id="bookmark" flex hidden?="{{!collapsed}}" on-tap="{{restore}}">
-			<div class="vertical">{{currentModel.title}}</div>
-		</div>
 
 		<core-toolbar class="core-narrow" hidden?="{{collapsed}}">
 			<text-string>items.header</text-string>
@@ -35,6 +35,8 @@
 					<card-model data="{{model}}"></card-model>
 				</template>
 			</div>
+
+			<paper-fab icon="add" on-tap="{{openCreationDialog}}"></paper-fab>
 		</div>
 
 	</template>
@@ -45,26 +47,26 @@
 			subunitName:'items',
 
 			eventDelegates:{
-				'model-selected':'onSelect'
+				'item-selected':'onSelect'
 			},
 
 			ready:function(){
 				this.nodes = [];
-				//this.subscribe();
 			},
 
-			subscribe:function(shelf){
-				this.currentShelf = shelf;
+			subscribe:function(shelfID){
+				this.currentShelfID = shelfID;
 
 				app.connection.subscribe(this, 'items', {
 					feed:'items',
-					agency: shelf.id
+					agency: shelfID
 				}, function(items){
 					this.nodes = items;
 				})
 			},
 
 			onSelect:function(event, data){
+				console.info('selecting item')
 				// todo - load item to a model
 			}
 		});

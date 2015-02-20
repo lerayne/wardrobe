@@ -31,6 +31,11 @@ class Actions {
 			$new_row['author_id'] = 1; // todo login
 
 			$new_shelf_id = $db->query('INSERT INTO ?_shelves (?#) VALUES (?a)', array_keys($new_row), array_values($new_row));
+
+			$model = $db->selectRow('SELECT id, name FROM ?_models WHERE id = ?', $params['model']);
+			$agency = $db->selectRow('SELECT id, name FROM ?_agencies WHERE id = ?', $model['id']);
+
+			$path = './assets/agencies/'.$agency['name'].'/'.$model['name'];
 		} else {
 			$GLOBALS['debug']['error'] = 'name exists!';
 		}

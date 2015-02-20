@@ -7,10 +7,6 @@
 		<link rel="stylesheet" href="../unit-slide-base/unit-slide.css">
 
 		<style>
-			:host {
-
-			}
-
 			core-toolbar {
 				background-color: #0D904F;
 			}
@@ -25,7 +21,7 @@
 		</style>
 
 		<div id="bookmark" flex hidden?="{{!collapsed}}" on-tap="{{restore}}">
-			<div class="vertical">{{currentModel.title}}</div>
+			<div id="vertical">{{currentModel.title}}</div>
 		</div>
 
 		<core-toolbar class="core-narrow" hidden?="{{collapsed}}">
@@ -73,18 +69,18 @@
 			},
 
 			subscribe:function(agencyID){
+				this.super();
+
 				this.currentAgencyID = agencyID;
 
 				app.connection.subscribe(this, 'models', {
 					feed:'models',
 					agency: agencyID
-				}, function(models){
-					this.nodes = models;
-				})
+				}, this.parseUpdates)
 			},
 
 			onSelect:function(event, data){
-				this.collapse();
+				this.super();
 				this.currentModel = data;
 			},
 

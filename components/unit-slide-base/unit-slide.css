@@ -2,6 +2,12 @@
 	position: relative;
 }
 
+:host([loading]) #scrollable {
+	background-image: url(../../assets/design/throbber_big.gif);
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
 #bookmark {
 	width: 30px;
 	cursor: pointer;
@@ -15,13 +21,14 @@
 	background-color: #fff;
 }
 
-.vertical {
+#vertical {
 	transform: rotate(270deg);
 	position: absolute;
 	top: 50%;
-	left: -19px;
+	left: -50%;
 	color: #fff;
 	font-weight: bold;
+	white-space: nowrap;
 }
 
 #scroll {

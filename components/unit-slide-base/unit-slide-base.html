@@ -1,9 +1,20 @@
 <polymer-element name="unit-slide-base" attributes="title" layout flex>
+	<template>
+		<style>
+
+		</style>
+	</template>
+
 	<script>
 		Polymer({
 			publish:{
 				flex:{
 					default:true,
+					reflect:true
+				},
+
+				loading:{
+					default:false,
 					reflect:true
 				}
 			},
@@ -11,6 +22,15 @@
 			computed:{
 				'flex':'!collapsed'
 			},
+
+			created:function(){
+
+				app.funcs.bind(this, [
+					'processNode'
+				]);
+			},
+
+			text:text,
 
 			collapsed:false,
 
@@ -31,6 +51,80 @@
 			restore:function(){
 				this.fire('open-subunit', this);
 				this.open();
+			},
+
+			fixBookmarkText:function(){
+				this.async(function(){
+					var offset = (this.$.vertical.offsetWidth - this.$.bookmark.offsetWidth)/2
+					$(this.$.vertical).css('left', -offset);
+				})
+			},
+
+			onSelect:function(){
+				this.collapse();
+				this.fixBookmarkText();
+			},
+
+			processNode:function(data){
+
+				// находим индекс нужного элемента по id
+				var existingItemIndex = _(this.nodes).findIndex({id: data.id});
+
+				// если такого элемента нет - добавляем новый элемент в коллекцию
+				if (existingItemIndex == -1) {
+
+					// установка this.sortOrder в последний параметр актуальна только для сортировки по времени
+					var sortIndex = app.funcs.getSortIndex(this.nodes, data, this.sortField, this.sortOrder, this.sortOrder);
+
+					// вставляем новый элемент в нужное место
+					if (sortIndex == this.nodes.length) {
+						this.nodes.push(data)
+					} else {
+						this.nodes.splice(sortIndex, 0, data);
+					}
+
+				} else {
+					if (+data.deleted) {
+						// если есть и удален - удаляем из коллекции
+						this.nodes.splice(existingItemIndex, 1)
+					} else {
+						// иначе - мягко обновляем существующий элемент (иначе пересоздается нода, обнуляя все свои свойства)
+						// впрочем, теги и другие вложенные объекты сейчас пересоздаются, так что возможно (todo) создать функцию рекурсивного мягкого обновления
+						for (var key in data) {
+							this.nodes[existingItemIndex][key] = data[key];
+						}
+					}
+				}
+			},
+
+
+			subscribe:function(){
+				if (!this.nodes.length) this.loading = true;
+			},
+
+			parseUpdates:function(newItems){
+				this.loading = false;
+
+				var firstLoad = !this.nodes.length;
+
+				if (firstLoad) {
+					this.nodes = this.sort(newItems, this.sortField, this.sortOrder);
+				} else {
+					_(newItems).each(this.processNode);
+				}
+			},
+
+			// сортировка по поданным параметрам (удобна для декларативного фильтра, который пока не работает)
+			sort:function(input, sortField, sortOrder){
+
+				var array = _(input).sortBy(sortField).value();
+				if (sortOrder == 'desc') array.reverse();
+
+				return array;
+			},
+
+			sortSelf:function(){
+				this.nodes = this.sort(this.nodes, this.sortField, this.sortOrder)
 			}
 		});
 	</script>

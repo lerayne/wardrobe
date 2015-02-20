@@ -7,10 +7,6 @@
 		<link rel="stylesheet" href="../unit-slide-base/unit-slide.css">
 
 		<style>
-			:host {
-
-			}
-
 			core-toolbar {
 				background-color: #6b499f;
 			}
@@ -25,7 +21,7 @@
 		</style>
 
 		<div id="bookmark" flex hidden?="{{!collapsed}}" on-tap="{{restore}}">
-			<div class="vertical">{{currentModel.title}}</div>
+			<div id="vertical">{{currentShelf.title}}</div>
 		</div>
 
 		<core-toolbar class="core-narrow" hidden?="{{collapsed}}">
@@ -70,12 +66,14 @@
 
 	<script>
 		Polymer({
-			text:text,
 
 			subunitName:'shelves',
 
+			sortField:'title',
+			sortOrder:'asc',
+
 			eventDelegates:{
-				'model-selected':'onSelect'
+				'shelf-selected':'onSelect'
 			},
 
 			ready:function(){
@@ -83,18 +81,18 @@
 			},
 
 			subscribe:function(modelID){
+				this.super();
+
 				this.currentModelID = modelID;
 
 				app.connection.subscribe(this, 'shelves', {
 					feed:'shelves',
 					model: modelID
-				}, function(shelves){
-					this.nodes = shelves;
-				})
+				}, this.parseUpdates)
 			},
 
 			onSelect:function(event, data){
-				this.collapse();
+				this.super()
 				this.currentShelf = data;
 			},
 
@@ -103,6 +101,11 @@
 			},
 
 			createShelf:function(){
+
+				if (this.$.inputTitle.value.match(/^\s*$/)) return false;
+				if (this.$.inputName.value.match(/^\s*$/)) return false;
+				if (this.$.inputZ.value.match(/^\s*$/)) return false;
+
 				app.connection.write({
 					action:'add_shelf',
 					model: this.currentModelID,
