@@ -2,8 +2,7 @@
 	<template>
 		<style>
 			:host {
-				position: relative;
-				overflow: hidden;
+
 			}
 
 			::content .layer {
@@ -13,15 +12,23 @@
 				height: 100px;
 				transform-origin: 0 0;
 			}
+
+			#frame {
+				background-color: #fff;
+				position: relative;
+				overflow: hidden;
+			}
 		</style>
 
-		<content></content>
+		<div id="frame">
+			<content></content>
+		</div>
 
 	</template>
 
 	<script>
 		Polymer({
-			pixelRatio: 1000, // todo: 1000 is changeable var, depends on actor
+			pixelRatio: 800, // todo: 1000 is changeable var, depends on actor
 			ratio:1,
 
 			created:function(){
@@ -40,13 +47,14 @@
 				var that = this;
 
 				// todo - make resizing snapped by 10px
-				var frameSize = this.offsetHeight;
+				var frameSize = Math.min(this.offsetHeight, this.pixelRatio);
 				this.ratio = frameSize / this.pixelRatio;
 
 				$(this).find('.layer').css('transform', 'scale('+ this.ratio +')')
 
 
-				$(this).width(frameSize)
+				$(this.$.frame).width(frameSize)
+				$(this.$.frame).height(frameSize)
 			}
 		});
 	</script>
