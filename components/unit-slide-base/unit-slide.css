@@ -1,3 +1,7 @@
+:host {
+	position: relative;
+}
+
 #bookmark {
 	width: 30px;
 	cursor: pointer;
@@ -27,4 +31,10 @@
 
 core-toolbar {
 	color: #fff;
+}
+
+paper-fab {
+	position: absolute;
+	bottom: 15px;
+	right: 35px;
 }

@@ -1,7 +1,7 @@
 <link rel="import" href="../unit-slide-base/unit-slide-base.html">
-<link rel="import" href="../card-shelf/card-shelf.html">
+<link rel="import" href="../card-item/card-item.html">
 
-<polymer-element name="unit-shelves" extends="unit-slide-base" vertical layout flex>
+<polymer-element name="unit-items" extends="unit-slide-base" vertical layout flex>
 	<template>
 
 		<link rel="stylesheet" href="../unit-slide-base/unit-slide.css">
@@ -12,15 +12,11 @@
 			}
 
 			core-toolbar {
-				background-color: #6b499f;
+				background-color: #0D904F;
 			}
 
 			#bookmark {
-				background-color: #6b499f;
-			}
-
-			paper-fab {
-				background-color: #6b499f;
+				background-color: #0D904F;
 			}
 		</style>
 
@@ -29,28 +25,24 @@
 		</div>
 
 		<core-toolbar class="core-narrow" hidden?="{{collapsed}}">
-			<text-string>shelves.header</text-string>
+			<text-string>items.header</text-string>
 		</core-toolbar>
 
 
 		<div id="scrollable" hidden?="{{collapsed}}" flex>
 			<div id="scroll">
 				<template repeat="{{model in nodes}}">
-					<card-agency data="{{model}}"></card-agency>
+					<card-model data="{{model}}"></card-model>
 				</template>
 			</div>
-
-			<paper-fab icon="add"></paper-fab>
 		</div>
-
-
 
 	</template>
 
 	<script>
 		Polymer({
 
-			subunitName:'shelves',
+			subunitName:'items',
 
 			eventDelegates:{
 				'model-selected':'onSelect'
@@ -61,17 +53,19 @@
 				//this.subscribe();
 			},
 
-			subscribe:function(){
-				app.connection.subscribe(this, 'shelves', {
-					feed:'shelves'
-				}, function(shelves){
-					this.nodes = shelves;
+			subscribe:function(shelf){
+				this.currentShelf = shelf;
+
+				app.connection.subscribe(this, 'items', {
+					feed:'items',
+					agency: shelf.id
+				}, function(items){
+					this.nodes = items;
 				})
 			},
 
 			onSelect:function(event, data){
-				this.collapse();
-				this.currentModel = data;
+				// todo - load item to a model
 			}
 		});
 	</script>

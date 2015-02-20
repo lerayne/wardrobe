@@ -1,4 +1,5 @@
 <link rel="import" href="../unit-slide-base/unit-slide-base.html">
+<link rel="import" href="../card-model/card-model.html">
 
 <polymer-element name="unit-models" extends="unit-slide-base" vertical layout flex>
 	<template>
@@ -17,6 +18,10 @@
 			#bookmark {
 				background-color: #0D904F;
 			}
+
+			paper-fab {
+				background-color: #0D904F;
+			}
 		</style>
 
 		<div id="bookmark" flex hidden?="{{!collapsed}}" on-tap="{{restore}}">
@@ -31,9 +36,11 @@
 		<div id="scrollable" hidden?="{{collapsed}}" flex>
 			<div id="scroll">
 				<template repeat="{{model in nodes}}">
-					<card-agency data="{{model}}"></card-agency>
+					<card-model data="{{model}}"></card-model>
 				</template>
 			</div>
+
+			<paper-fab icon="add"></paper-fab>
 		</div>
 
 	</template>
@@ -52,9 +59,12 @@
 				//this.subscribe();
 			},
 
-			subscribe:function(){
+			subscribe:function(agency){
+				this.currentAgency = agency;
+
 				app.connection.subscribe(this, 'models', {
-					feed:'models'
+					feed:'models',
+					agency: agency.id
 				}, function(models){
 					this.nodes = models;
 				})

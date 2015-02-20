@@ -4,5 +4,7 @@
 
 	"agencies.header":"Select an agency",
 
-	"models.header":"Select a model"
+	"models.header":"Select a model",
+
+	"shelves.header":"Select an outfit shelve"
 }

@@ -18,6 +18,10 @@
 			#bookmark {
 				background-color: #00bcd4;
 			}
+
+			paper-fab {
+				background-color: #00bcd4;
+			}
 		</style>
 
 		<div id="bookmark" flex hidden?="{{!collapsed}}" on-tap="{{restore}}">
@@ -35,6 +39,8 @@
 					<card-agency data="{{agency}}"></card-agency>
 				</template>
 			</div>
+
+			<paper-fab icon="add"></paper-fab>
 		</div>
 
 	</template>

@@ -1,6 +1,7 @@
 <link rel="import" href="../unit-agencies/unit-agencies.html">
 <link rel="import" href="../unit-models/unit-models.html">
 <link rel="import" href="../unit-shelves/unit-shelves.html">
+<link rel="import" href="../unit-items/unit-items.html">
 
 <polymer-element name="unit-browse" horizontal layout flex>
 	<template>
@@ -13,25 +14,24 @@
 		<unit-agencies id="agencies"></unit-agencies>
 		<unit-models id="models"></unit-models>
 		<unit-shelves id="shelves"></unit-shelves>
+		<unit-items id="items"></unit-items>
 
 	</template>
 
 	<script>
 		Polymer({
 
-			subunits:['agencies', 'models', 'shelves'],
+			subunits:['agencies', 'models', 'shelves', 'items'],
 
 			eventDelegates:{
 				'open-subunit':'openSubunit',
-				'close-subunit':'closeSubunit'
+				'close-subunit':'closeSubunit',
+
+				'agency-selected':'agencySelected'
 			},
 
 			ready:function(){
-				for (var i=0; i < this.subunits.length; i++){
-					this.$[this.subunits[i]].hidden = true;
-				}
-
-				this.$[this.subunits[0]].hidden = false;
+				this.openSubunit(null, {subunitName:'agencies'})
 			},
 
 			openSubunit:function(event, data){
@@ -39,8 +39,6 @@
 
 				// which sub is being opened
 				var subunitIndex = this.subunits.indexOf(data.subunitName);
-
-				console.log('subunitIndex', subunitIndex);
 
 				// collapse previous
 				for (var i = subunitIndex-1; i > 0; i--){
@@ -64,6 +62,10 @@
 					var nextUnit = this.$[this.subunits[subunitIndex+1]];
 					nextUnit.open();
 				}
+			},
+
+			agencySelected:function(event, data){
+				this.$.models.subscribe(data)
 			}
 		});
 	</script>

@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `ward_test` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `ward_test`;
--- MySQL dump 10.13  Distrib 5.6.13, for Win32 (x86)
+-- MySQL dump 10.13  Distrib 5.6.17, for Win32 (x86)
 --
 -- Host: localhost    Database: ward_test
 -- ------------------------------------------------------
--- Server version	5.6.15-log
+-- Server version	5.5.38-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -33,7 +33,6 @@ CREATE TABLE `wardrobe_agencies` (
   `created` bigint(20) unsigned NOT NULL,
   `updated` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name_UNIQUE` (`name`),
   KEY `author` (`author_id`),
   KEY `updated` (`updated`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
@@ -47,6 +46,161 @@ LOCK TABLES `wardrobe_agencies` WRITE;
 /*!40000 ALTER TABLE `wardrobe_agencies` DISABLE KEYS */;
 INSERT INTO `wardrobe_agencies` VALUES (1,'olympus','Olympus',NULL,1,1424428138239,1424428138239);
 /*!40000 ALTER TABLE `wardrobe_agencies` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wardrobe_item_instances`
+--
+
+DROP TABLE IF EXISTS `wardrobe_item_instances`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wardrobe_item_instances` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` bigint(20) unsigned NOT NULL,
+  `layer_id` bigint(20) unsigned NOT NULL,
+  `file` varchar(45) NOT NULL,
+  `icon` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `layer` (`layer_id`),
+  KEY `item` (`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wardrobe_item_instances`
+--
+
+LOCK TABLES `wardrobe_item_instances` WRITE;
+/*!40000 ALTER TABLE `wardrobe_item_instances` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wardrobe_item_instances` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wardrobe_items`
+--
+
+DROP TABLE IF EXISTS `wardrobe_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wardrobe_items` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `title` varchar(45) NOT NULL,
+  `model_id` int(10) unsigned NOT NULL,
+  `shelf_id` int(10) unsigned NOT NULL,
+  `author_id` int(10) unsigned NOT NULL,
+  `created` bigint(20) unsigned NOT NULL,
+  `updated` bigint(20) unsigned NOT NULL,
+  `z_index` smallint(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `model` (`model_id`),
+  KEY `shelf` (`shelf_id`),
+  KEY `author` (`author_id`),
+  KEY `updated` (`updated`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wardrobe_items`
+--
+
+LOCK TABLES `wardrobe_items` WRITE;
+/*!40000 ALTER TABLE `wardrobe_items` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wardrobe_items` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wardrobe_layers`
+--
+
+DROP TABLE IF EXISTS `wardrobe_layers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wardrobe_layers` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` bigint(20) unsigned NOT NULL,
+  `z_index` smallint(6) NOT NULL,
+  `x_offset` decimal(5,3) NOT NULL,
+  `y_offset` decimal(5,3) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `item` (`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wardrobe_layers`
+--
+
+LOCK TABLES `wardrobe_layers` WRITE;
+/*!40000 ALTER TABLE `wardrobe_layers` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wardrobe_layers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wardrobe_models`
+--
+
+DROP TABLE IF EXISTS `wardrobe_models`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wardrobe_models` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `title` varchar(45) NOT NULL,
+  `agency_id` int(10) unsigned NOT NULL,
+  `author_id` int(10) unsigned NOT NULL,
+  `cover` varchar(255) DEFAULT NULL,
+  `created` bigint(20) unsigned NOT NULL,
+  `updated` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `agency` (`agency_id`),
+  KEY `author` (`author_id`),
+  KEY `updated` (`updated`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wardrobe_models`
+--
+
+LOCK TABLES `wardrobe_models` WRITE;
+/*!40000 ALTER TABLE `wardrobe_models` DISABLE KEYS */;
+INSERT INTO `wardrobe_models` VALUES (1,'aphrodite','Aphrodite',1,1,NULL,1424457875500,1424457875500);
+/*!40000 ALTER TABLE `wardrobe_models` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wardrobe_shelves`
+--
+
+DROP TABLE IF EXISTS `wardrobe_shelves`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wardrobe_shelves` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `title` varchar(45) NOT NULL,
+  `model_id` int(10) unsigned NOT NULL,
+  `author_id` int(10) unsigned NOT NULL,
+  `cover` varchar(255) DEFAULT NULL,
+  `z_index` smallint(6) NOT NULL,
+  `created` bigint(20) unsigned NOT NULL,
+  `updated` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `model` (`model_id`),
+  KEY `author` (`author_id`),
+  KEY `updated` (`updated`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wardrobe_shelves`
+--
+
+LOCK TABLES `wardrobe_shelves` WRITE;
+/*!40000 ALTER TABLE `wardrobe_shelves` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wardrobe_shelves` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -81,7 +235,7 @@ CREATE TABLE `wardrobe_users` (
 
 LOCK TABLES `wardrobe_users` WRITE;
 /*!40000 ALTER TABLE `wardrobe_users` DISABLE KEYS */;
-INSERT INTO `wardrobe_users` VALUES (1,'lerayne',NULL,'lerayne@gmail.com','062ac7c968833af0f79b2ff4a9de644e','2010-03-12 15:48:00',1,'local','2015-02-20 15:16:30','online');
+INSERT INTO `wardrobe_users` VALUES (1,'lerayne',NULL,'lerayne@gmail.com','062ac7c968833af0f79b2ff4a9de644e','2010-03-12 15:48:00',1,'local','2015-02-20 21:51:27','online');
 /*!40000 ALTER TABLE `wardrobe_users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -94,4 +248,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-02-20 15:17:01
+-- Dump completed on 2015-02-20 21:51:41

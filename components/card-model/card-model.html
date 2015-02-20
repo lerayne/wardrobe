@@ -1,0 +1,28 @@
+<polymer-element name="card-model" attributes="data" on-tap="{{onTap}}">
+	<template>
+		<style>
+			:host {
+				display: block;
+				border:1px solid #ccc;
+				margin:2px;
+				padding:5px;
+				cursor: pointer;
+			}
+
+			:host(:hover) {
+				background-color: #eee;
+			}
+		</style>
+
+		<b>{{data.title}}</b>
+
+	</template>
+
+	<script>
+		Polymer({
+			onTap:function(){
+				this.fire('model-selected', this.data)
+			}
+		});
+	</script>
+</polymer-element>
