@@ -2,5 +2,7 @@
 	"navigation.tabs.browser":"Browse & create",
 	"navigation.tabs.saved":"My saved outfits",
 
-	"agencies.header":"Select an agency"
+	"agencies.header":"Select an agency",
+
+	"models.header":"Select a model"
 }

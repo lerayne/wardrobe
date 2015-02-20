@@ -1,7 +1,6 @@
 <link rel="import" href="../unit-slide-base/unit-slide-base.html">
-<link rel="import" href="../card-agency/card-agency.html">
 
-<polymer-element name="unit-agencies" extends="unit-slide-base" vertical layout flex>
+<polymer-element name="unit-shelves" extends="unit-slide-base" vertical layout flex>
 	<template>
 
 		<link rel="stylesheet" href="../unit-slide-base/unit-slide.css">
@@ -12,27 +11,27 @@
 			}
 
 			core-toolbar {
-				background-color: #00bcd4;
+				background-color: #6b499f;
 			}
 
 			#bookmark {
-				background-color: #00bcd4;
+				background-color: #6b499f;
 			}
 		</style>
 
 		<div id="bookmark" flex hidden?="{{!collapsed}}" on-tap="{{restore}}">
-			<div class="vertical">{{currentAgency.title}}</div>
+			<div class="vertical">{{currentModel.title}}</div>
 		</div>
 
 		<core-toolbar class="core-narrow" hidden?="{{collapsed}}">
-			<text-string>agencies.header</text-string>
+			<text-string>shelves.header</text-string>
 		</core-toolbar>
 
 
 		<div id="scrollable" hidden?="{{collapsed}}" flex>
 			<div id="scroll">
-				<template repeat="{{agency in nodes}}">
-					<card-agency data="{{agency}}"></card-agency>
+				<template repeat="{{model in nodes}}">
+					<card-agency data="{{model}}"></card-agency>
 				</template>
 			</div>
 		</div>
@@ -42,30 +41,29 @@
 	<script>
 		Polymer({
 
-			subunitName:'agencies',
+			subunitName:'shelves',
 
 			eventDelegates:{
-				'agency-selected':'onSelect'
+				'model-selected':'onSelect'
 			},
 
 			ready:function(){
 				this.nodes = [];
-				this.subscribe();
+				//this.subscribe();
 			},
 
 			subscribe:function(){
-				app.connection.subscribe(this, 'agencies', {
-					feed:'agencies'
-				}, function(agencies){
-					this.nodes = agencies;
+				app.connection.subscribe(this, 'shelves', {
+					feed:'shelves'
+				}, function(shelves){
+					this.nodes = shelves;
 				})
 			},
 
 			onSelect:function(event, data){
 				this.collapse();
-				this.currentAgency = data;
+				this.currentModel = data;
 			}
-
 		});
 	</script>
 </polymer-element>

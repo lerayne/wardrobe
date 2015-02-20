@@ -1,0 +1,37 @@
+<polymer-element name="unit-slide-base" attributes="title" layout flex>
+	<script>
+		Polymer({
+			publish:{
+				flex:{
+					default:true,
+					reflect:true
+				}
+			},
+
+			computed:{
+				'flex':'!collapsed'
+			},
+
+			collapsed:false,
+
+			collapse:function(){
+				this.fire('close-subunit', this);
+				this.collapsed = true;
+			},
+
+			close:function(){
+				this.hidden = true;
+			},
+
+			open:function(){
+				this.collapsed = false;
+				this.hidden = false;
+			},
+
+			restore:function(){
+				this.fire('open-subunit', this);
+				this.open();
+			}
+		});
+	</script>
+</polymer-element>
