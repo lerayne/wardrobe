@@ -80,14 +80,20 @@
 				this.nodes = [];
 			},
 
+			observe:{
+				currentModelID:'subscribe'
+			},
+
+			selectModel:function(id){
+				this.currentModelID = id;
+			},
+
 			subscribe:function(modelID){
 				this.super();
 
-				this.currentModelID = modelID;
-
 				app.connection.subscribe(this, 'shelves', {
 					feed:'shelves',
-					model: modelID
+					model: this.currentModelID
 				}, this.parseUpdates)
 			},
 

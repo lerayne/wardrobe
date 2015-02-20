@@ -68,14 +68,20 @@
 				this.nodes = [];
 			},
 
-			subscribe:function(agencyID){
-				this.super();
+			observe:{
+				currentAgencyID:'subscribe'
+			},
 
-				this.currentAgencyID = agencyID;
+			selectAgency:function(id){
+				this.currentAgencyID = id;
+			},
+
+			subscribe:function(){
+				this.super();
 
 				app.connection.subscribe(this, 'models', {
 					feed:'models',
-					agency: agencyID
+					agency: this.currentAgencyID
 				}, this.parseUpdates)
 			},
 

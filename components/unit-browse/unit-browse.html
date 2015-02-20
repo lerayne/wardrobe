@@ -67,15 +67,15 @@
 			},
 
 			agencySelected:function(event, data){
-				this.$.models.subscribe(data.id)
+				this.$.models.selectAgency(data.id)
 			},
 
 			modelSelected:function(event, data){
-				this.$.shelves.subscribe(data.id)
+				this.$.shelves.selectModel(data.id)
 			},
 
 			shelfSelected:function(event, data){
-				this.$.items.subscribe(data.id)
+				this.$.items.selectShelf(data.id)
 			}
 		});
 	</script>

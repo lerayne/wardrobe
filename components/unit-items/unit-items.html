@@ -54,12 +54,19 @@
 				this.nodes = [];
 			},
 
+			observe:{
+				currentShelfID:'subscribe'
+			},
+
+			selectShelf:function(id){
+				this.currentShelfID = id;
+			},
+
 			subscribe:function(shelfID){
-				this.currentShelfID = shelfID;
 
 				app.connection.subscribe(this, 'items', {
 					feed:'items',
-					agency: shelfID
+					agency: this.currentShelfID
 				}, function(items){
 					this.nodes = items;
 				})
