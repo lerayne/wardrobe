@@ -35,28 +35,34 @@
 
 		<div id="scrollable" hidden?="{{collapsed}}" flex>
 			<div id="scroll">
-				<template repeat="{{model in nodes}}">
-					<card-agency data="{{model}}"></card-agency>
+				<template repeat="{{shelf in nodes}}">
+					<card-shelf data="{{shelf}}"></card-shelf>
 				</template>
 			</div>
 
 			<paper-fab icon="add" on-tap="{{openCreationDialog}}"></paper-fab>
 		</div>
 
+
+
 		<paper-dialog transition="core-transition-top" id="creationDialog"  heading="{{ text('shelves.creation.header') }}">
 
 			<paper-input-decorator floatingLabel label="{{ text('shelves.creation.title') }}">
-				<input type="text" tabindex="1">
+				<input type="text" tabindex="1" id="inputTitle" on-keyup="{{createName}}">
 			</paper-input-decorator>
 
 			<label>
 				<text-string>shelves.creation.name</text-string>
-				<input type="text" tabindex="1">
+				<input type="text" tabindex="1" id="inputName">
 			</label>
 
 			<paper-input-decorator floatingLabel label="{{ text('shelves.creation.defaultZ') }}">
-				<input type="text" tabindex="1" value="0">
+				<input type="text" tabindex="1" value="0"  id="inputZ">
 			</paper-input-decorator>
+
+			<paper-button self-center raised class="highlight" on-tap="{{ createShelf }}">
+				<text-string>shelves.creation.create</text-string>
+			</paper-button>
 
 		</paper-dialog>
 
@@ -76,9 +82,12 @@
 				this.nodes = [];
 			},
 
-			subscribe:function(){
+			subscribe:function(modelID){
+				this.currentModelID = modelID;
+
 				app.connection.subscribe(this, 'shelves', {
-					feed:'shelves'
+					feed:'shelves',
+					model: modelID
 				}, function(shelves){
 					this.nodes = shelves;
 				})
@@ -86,11 +95,27 @@
 
 			onSelect:function(event, data){
 				this.collapse();
-				this.currentModel = data;
+				this.currentShelf = data;
 			},
 
 			openCreationDialog:function(){
 				this.$.creationDialog.open();
+			},
+
+			createShelf:function(){
+				app.connection.write({
+					action:'add_shelf',
+					model: this.currentModelID,
+					title: this.$.inputTitle.value,
+					name: this.$.inputName.value,
+					z_index: this.$.inputZ.value
+				})
+
+				this.$.creationDialog.close();
+			},
+
+			createName:function(){
+				this.$.inputName.value = app.funcs.createSystemName(this.$.inputTitle.value)
 			}
 		});
 	</script>

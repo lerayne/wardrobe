@@ -9,6 +9,7 @@
 require_once '../includes/backend_initial.php';
 require_once '../includes/funcs.php';
 require_once '../classes/Feed.php';
+require_once '../classes/Actions.php';
 
 
 function parse_request($request) {
@@ -36,11 +37,10 @@ function parse_request($request) {
 		$writes = $request['write'];
 		$now = now('sql');
 
+		$actions = new Actions();
+
 		foreach ($writes as $write_index => $write) {
-			switch ($write['action']) {
-
-
-			}
+			$actions->$write['action']($write);
 		}
 	}
 

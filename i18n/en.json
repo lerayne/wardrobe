@@ -16,5 +16,6 @@
 	"shelves.creation.header":"Create a new shelf",
 	"shelves.creation.title":"Name of a shelf",
 	"shelves.creation.name":"System name",
-	"shelves.creation.defaultZ":"Default z-index"
+	"shelves.creation.defaultZ":"Default z-index",
+	"shelves.creation.create":"Create"
 }

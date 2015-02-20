@@ -70,15 +70,14 @@
 
 			ready:function(){
 				this.nodes = [];
-				//this.subscribe();
 			},
 
-			subscribe:function(agency){
-				this.currentAgency = agency;
+			subscribe:function(agencyID){
+				this.currentAgencyID = agencyID;
 
 				app.connection.subscribe(this, 'models', {
 					feed:'models',
-					agency: agency.id
+					agency: agencyID
 				}, function(models){
 					this.nodes = models;
 				})

@@ -128,4 +128,59 @@ class Feed {
 		return Array($models, $meta);
 	}
 
+
+
+	function get_shelves($request, $meta = Array()) {
+		global $cfg, $db, $user;
+
+		// defaults
+		$request = load_defaults($request, $request_defaults = Array(
+			'sort' => 'updated',
+			'sort_direction' => 'desc',
+			'filter' => ''
+		));
+
+		$meta = load_defaults($meta, $meta_defaults = Array(
+			'updates_since' => '0' // работает как false, а в SQL-запросах по дате - как 0
+		));
+
+		// режим обновления?
+		$update_mode = !!$meta['updates_since'];
+
+		// are there any updates?
+		$latest_update_date = $db->selectCell('
+			SELECT MAX(updated) FROM ?_shelves
+			WHERE updated > ?
+				AND model_id = ?
+			',
+			$meta['updates_since'],
+			$request['model']
+		);
+
+		// if not - return everything as it is
+		if (!$latest_update_date) return Array(Array(), $meta);
+
+		$raw_shelves = $db->select('
+			SELECT
+				slv.id,
+				slv.name,
+				slv.title,
+				slv.cover,
+				slv.z_index
+			FROM ?_shelves slv
+			WHERE updated > ?
+				AND model_id = ?
+			',
+			$meta['updates_since'],
+			$request['model']
+		);
+
+		$shelves = sort_by_field($raw_shelves, $request['sort']);
+
+		// milestone for future requests
+		$meta['updates_since'] = $latest_update_date;
+
+		return Array($shelves, $meta);
+	}
+
 }

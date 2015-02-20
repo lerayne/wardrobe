@@ -187,6 +187,10 @@ Funcs.prototype = {
 		}
 
 		return i;
+	},
+
+	createSystemName:function(input){
+		return input.replace(' ', '-').toLowerCase();
 	}
 }
 

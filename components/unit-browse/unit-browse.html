@@ -27,7 +27,9 @@
 				'open-subunit':'openSubunit',
 				'close-subunit':'closeSubunit',
 
-				'agency-selected':'agencySelected'
+				'agency-selected':'agencySelected',
+				'model-selected':'modelSelected',
+				'shelf-selected':'shelfSelected'
 			},
 
 			ready:function(){
@@ -65,7 +67,15 @@
 			},
 
 			agencySelected:function(event, data){
-				this.$.models.subscribe(data)
+				this.$.models.subscribe(data.id)
+			},
+
+			modelSelected:function(event, data){
+				this.$.shelves.subscribe(data.id)
+			},
+
+			shelfSelected:function(event, data){
+				this.$.items.subscribe(data.id)
 			}
 		});
 	</script>
