@@ -1,0 +1,42 @@
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+
+<polymer-element name="tab-group" vertical layout flex>
+	<template>
+		<style>
+			:host {
+
+			}
+
+			::content .tabbed-content {
+				display:none;
+			}
+
+			paper-tabs::shadow #selectionBar {
+				background-color: red;
+			}
+
+			::content paper-tab::shadow #ink {
+				color: red;
+			}
+		</style>
+
+		<paper-tabs selected="0" id="tabs">
+			<content select="paper-tab"></content>
+		</paper-tabs>
+
+		<div flex>
+			<content select=".tabbed-content"></content>
+		</div>
+
+	</template>
+
+	<script>
+		Polymer({
+
+			attached:function(){
+
+			}
+
+		});
+	</script>
+</polymer-element>

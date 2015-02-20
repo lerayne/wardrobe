@@ -1,4 +1,9 @@
 <link rel="import" href="../unit-doll/unit-doll.html">
+<link rel="import" href="../text-string/text-string.html">
+<link rel="import" href="../tab-group/tab-group.html">
+<link rel="import" href="../unit-browse/unit-browse.html">
+<link rel="import" href="../unit-saved/unit-saved.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 
 <polymer-element name="x-app" vertical layout flex>
 	<template>
@@ -19,6 +24,14 @@
 				color:#fff;
 				padding: 0 10px;
 			}
+
+			paper-tabs::shadow #selectionBar {
+				background-color: red;
+			}
+
+			paper-tab::shadow #ink {
+				color: red;
+			}
 		</style>
 
 		<core-toolbar class="core-narrow">
@@ -26,7 +39,22 @@
 		</core-toolbar>
 
 		<div horizontal layout flex>
-			<div class="panel" vertical layout flex></div>
+			<div class="panel" vertical layout flex>
+
+				<paper-tabs selected="{{navModeId}}">
+					<paper-tab x-unit="browse" on-tap="{{navSelectTab}}"><text-string class="tab">navigation.tabs.browser</text-string></paper-tab>
+					<paper-tab x-unit="saved" on-tap="{{navSelectTab}}"><text-string class="tab">navigation.tabs.saved</text-string></paper-tab>
+				</paper-tabs>
+
+					<div hidden?="{{navMode != 'browse'}}" class="tabbed-content" vertical layout flex>
+						<unit-browse></unit-browse>
+					</div>
+					<div hidden?="{{navMode != 'saved'}}" class="tabbed-content" vertical layout flex>
+						<unit-saved></unit-saved>
+					</div>
+
+			</div>
+
 			<div class="panel" vertical layout>
 				<unit-doll>
 
@@ -37,6 +65,7 @@
 
 				</unit-doll>
 			</div>
+
 			<div class="panel" vertical layout flex></div>
 		</div>
 
@@ -45,8 +74,16 @@
 	<script>
 		Polymer({
 
-			created:function(){
+			navModeId:0,
 
+			created:function(){
+				this.navModes = ['browse', 'saved'];
+				this.navMode = this.navModes[this.navModeId];
+			},
+
+			navSelectTab:function(event, detail, sender){
+				this.navMode = $(sender).attr('x-unit');
+				this.navModeId = this.navModes.indexOf(this.navMode);
 			}
 
 		});

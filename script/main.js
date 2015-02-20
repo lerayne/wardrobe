@@ -4,13 +4,47 @@
 
 $(function(){
 
-	var onPolymerReady = function(){
+	var onDOMReady = function(){
+
+		app.state.windowFocused = document.hasFocus();
+
+		app.connection = new app.class.Connection({
+			server: app.cfg.server_url,
+			autostart: false
+		});
+
+		// поведение при активации и деактивации окна
+		$(window).on('blur', function(){
+
+			if (app.state.windowFocused) {
+				app.state.windowFocused = false;
+				app.connection.setMode('passive');
+			}
+		});
+
+		$(window).on('focus', function(){
+
+			if (!app.state.windowFocused) {
+				app.state.windowFocused = true;
+				app.connection.setMode('active');
+			}
+		});
+
+		// when all pre-startup async calls resolved
+		Promise.all(app.service.startupCalls).then(function(){
+			console.log('all pre-startup async calls resolved')
+
+			// in Polymer you now can create new active elements as easy as this:
+			$('body').append('<x-app>');
+		})
+		
 
 	};
 
-	var onDOMReady = function(){
-		$('body').append('<x-app>');
-	}
+
+	var onPolymerReady = function(){
+		app.connection.start();
+	};
 
 
 

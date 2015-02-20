@@ -153,7 +153,7 @@ app.class.Connection.prototype = {
 		};
 
 		if (args.length > 1) {
-			subscribe({subscriber:args[0], feedName:args[1], feed:args[2]})
+			subscribe({subscriber:args[0], feedName:args[1], feed:args[2], parser:args[3]})
 		} else if (args[0] instanceof Array) {
 			_(args[0]).each(subscribe)
 		} else if (args[0] instanceof Object){
@@ -173,7 +173,6 @@ app.class.Connection.prototype = {
 					if (that.parseCallbacks[id]){
 						that.parseCallbacks[id][feedName](feeds[feedName]);
 					}
-
 				}
 			})
 		}

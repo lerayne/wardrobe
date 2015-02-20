@@ -7,7 +7,7 @@
  */
 
 app.class.strategic.XHRShortPoll = function(server, callback, autostart){
-	tinng.funcs.bind(this);
+	app.funcs.bind(this);
 
 	this.serverURL = server;
 	this.parseCallback = callback;
@@ -38,13 +38,13 @@ app.class.strategic.XHRShortPoll.prototype = {
 
 		switch (mode){
 			case 'active':
-				this.waitTime = tinng.cfg['poll_timer'];
+				this.waitTime = app.cfg['poll_timer'];
 				this.refresh();
 
 				break;
 
 			case 'passive':
-				this.waitTime = tinng.cfg['poll_timer_blurred'];
+				this.waitTime = app.cfg['poll_timer_blurred'];
 
 				break;
 		}
@@ -127,7 +127,7 @@ app.class.strategic.XHRShortPoll.prototype = {
 	// отправка запроса
 	subscriptionSend:function () {
 
-		if (this.active && tinng.cfg.maintenance == 0) {
+		if (this.active && app.cfg.maintenance == 0) {
 			// todo: этот враппер-таймаут нужен из-за несовершенства обертки XHR, баг вылазит во время создания новой темы -
 			// отправка запроса сразу после получения предыдущего происходит до закрытия соединения и новое соединение не проходит
 			setTimeout(this.$_subscriptionSend, 0);
@@ -165,8 +165,8 @@ app.class.strategic.XHRShortPoll.prototype = {
 	query:function(channel, callback, data){
 
 		data.user = {
-			login: tinng.funcs.getCookie('login'),
-			password: tinng.funcs.getCookie('password')
+			login: app.funcs.getCookie('login'),
+			password: app.funcs.getCookie('password')
 		};
 
 		return $.ajax({
@@ -208,7 +208,7 @@ app.class.strategic.XHRShortPoll.prototype = {
 	// Останавливает ротор
 	subscriptionCancel:function () {
 
-		this.timeout = tinng.funcs.advClearTimeout(this.timeout);
+		this.timeout = clearTimeout(this.timeout);
 
 		clearTimeout(this.connectionLossTO);
 

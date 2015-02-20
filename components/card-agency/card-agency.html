@@ -1,0 +1,24 @@
+<polymer-element name="card-agency" attributes="data">
+	<template>
+		<style>
+			:host {
+				display: block;
+				border:1px solid #ccc;
+				margin:2px;
+				padding:5px;
+				cursor: pointer;
+			}
+
+			:host(:hover) {
+				background-color: #eee;
+			}
+		</style>
+
+		{{data.title}} by {{data.author_login || data.author_name}}
+
+	</template>
+
+	<script>
+		Polymer();
+	</script>
+</polymer-element>

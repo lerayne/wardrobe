@@ -8,6 +8,7 @@
 
 require_once '../includes/backend_initial.php';
 require_once '../includes/funcs.php';
+require_once '../classes/Feed.php';
 
 
 function parse_request($request) {

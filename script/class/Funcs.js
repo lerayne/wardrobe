@@ -22,7 +22,7 @@ Funcs.prototype = {
 	log:function (text) {
 
 
-		if (tinng.cfg['logging']) {
+		if (app.cfg['logging']) {
 			var date = new Date(), time;
 
 			if (date.toLocaleFormat) {

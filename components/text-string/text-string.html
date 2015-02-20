@@ -1,0 +1,20 @@
+<polymer-element name="text-string">
+	<template>
+		<content></content>
+	</template>
+
+	<script>
+		Polymer({
+			ready:function(){
+
+				var key = this.innerHTML;
+
+				if (app.lang.textLocalized[key]) {
+					this.innerHTML = app.lang.textLocalized[key];
+				} else if (app.lang.textDefault[key]){
+					this.innerHTML = app.lang.textDefault[key];
+				}
+			}
+		})
+	</script>
+</polymer-element>
