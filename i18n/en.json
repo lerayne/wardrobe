@@ -3,8 +3,18 @@
 	"navigation.tabs.saved":"My saved outfits",
 
 	"agencies.header":"Select an agency",
+	"agencies.creation.header":"Create a new agency",
+	"agencies.creation.title":"Name of an agency",
+	"agencies.creation.name":"System name",
 
 	"models.header":"Select a model",
+	"models.creation.header":"Create a new model",
+	"models.creation.title":"Name of a model",
+	"models.creation.name":"System name",
 
-	"shelves.header":"Select an outfit shelve"
+	"shelves.header":"Select an outfit shelf",
+	"shelves.creation.header":"Create a new shelf",
+	"shelves.creation.title":"Name of a shelf",
+	"shelves.creation.name":"System name",
+	"shelves.creation.defaultZ":"Default z-index"
 }

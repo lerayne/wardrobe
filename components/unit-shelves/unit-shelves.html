@@ -40,15 +40,31 @@
 				</template>
 			</div>
 
-			<paper-fab icon="add"></paper-fab>
+			<paper-fab icon="add" on-tap="{{openCreationDialog}}"></paper-fab>
 		</div>
 
+		<paper-dialog transition="core-transition-top" id="creationDialog"  heading="{{ text('shelves.creation.header') }}">
 
+			<paper-input-decorator floatingLabel label="{{ text('shelves.creation.title') }}">
+				<input type="text" tabindex="1">
+			</paper-input-decorator>
+
+			<label>
+				<text-string>shelves.creation.name</text-string>
+				<input type="text" tabindex="1">
+			</label>
+
+			<paper-input-decorator floatingLabel label="{{ text('shelves.creation.defaultZ') }}">
+				<input type="text" tabindex="1" value="0">
+			</paper-input-decorator>
+
+		</paper-dialog>
 
 	</template>
 
 	<script>
 		Polymer({
+			text:text,
 
 			subunitName:'shelves',
 
@@ -58,7 +74,6 @@
 
 			ready:function(){
 				this.nodes = [];
-				//this.subscribe();
 			},
 
 			subscribe:function(){
@@ -72,6 +87,10 @@
 			onSelect:function(event, data){
 				this.collapse();
 				this.currentModel = data;
+			},
+
+			openCreationDialog:function(){
+				this.$.creationDialog.open();
 			}
 		});
 	</script>

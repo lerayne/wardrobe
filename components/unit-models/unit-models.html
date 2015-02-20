@@ -40,13 +40,27 @@
 				</template>
 			</div>
 
-			<paper-fab icon="add"></paper-fab>
+			<paper-fab icon="add" on-tap="{{openCreationDialog}}"></paper-fab>
 		</div>
+
+		<paper-dialog transition="core-transition-top" id="creationDialog"  heading="{{ text('models.creation.header') }}">
+
+			<paper-input-decorator floatingLabel label="{{ text('models.creation.title') }}">
+				<input type="text" tabindex="1">
+			</paper-input-decorator>
+
+			<label>
+				<text-string>models.creation.name</text-string>
+				<input type="text" tabindex="1">
+			</label>
+
+		</paper-dialog>
 
 	</template>
 
 	<script>
 		Polymer({
+			text:text,
 
 			subunitName:'models',
 
@@ -73,6 +87,10 @@
 			onSelect:function(event, data){
 				this.collapse();
 				this.currentModel = data;
+			},
+
+			openCreationDialog:function(){
+				this.$.creationDialog.open();
 			}
 		});
 	</script>
