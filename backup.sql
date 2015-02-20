@@ -45,7 +45,7 @@ CREATE TABLE `wardrobe_agencies` (
 
 LOCK TABLES `wardrobe_agencies` WRITE;
 /*!40000 ALTER TABLE `wardrobe_agencies` DISABLE KEYS */;
-INSERT INTO `wardrobe_agencies` VALUES (1,'test','Test',NULL,1,1424428138239,1424428138239);
+INSERT INTO `wardrobe_agencies` VALUES (1,'olympus','Olympus',NULL,1,1424428138239,1424428138239);
 /*!40000 ALTER TABLE `wardrobe_agencies` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -81,7 +81,7 @@ CREATE TABLE `wardrobe_users` (
 
 LOCK TABLES `wardrobe_users` WRITE;
 /*!40000 ALTER TABLE `wardrobe_users` DISABLE KEYS */;
-INSERT INTO `wardrobe_users` VALUES (1,'lerayne',NULL,'lerayne@gmail.com','062ac7c968833af0f79b2ff4a9de644e','2010-03-12 15:48:00',1,'local','2015-02-20 14:56:10','online');
+INSERT INTO `wardrobe_users` VALUES (1,'lerayne',NULL,'lerayne@gmail.com','062ac7c968833af0f79b2ff4a9de644e','2010-03-12 15:48:00',1,'local','2015-02-20 15:16:30','online');
 /*!40000 ALTER TABLE `wardrobe_users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -94,4 +94,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-02-20 14:56:27
+-- Dump completed on 2015-02-20 15:17:01

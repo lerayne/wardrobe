@@ -1,4 +1,4 @@
-<polymer-element name="card-agency" attributes="data">
+<polymer-element name="card-agency" attributes="data" on-tap="{{onTap}}">
 	<template>
 		<style>
 			:host {
@@ -14,11 +14,15 @@
 			}
 		</style>
 
-		{{data.title}} by {{data.author_name || data.author_login}}
+		<b>{{data.title}}</b> by {{data.author_name || data.author_login}}
 
 	</template>
 
 	<script>
-		Polymer();
+		Polymer({
+			onTap:function(){
+				this.fire('agency-selected', this.data)
+			}
+		});
 	</script>
 </polymer-element>
