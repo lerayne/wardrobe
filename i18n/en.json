@@ -19,5 +19,11 @@
 	"shelves.creation.defaultZ":"Default z-index",
 	"shelves.creation.create":"Create",
 
-	"items.header":"Select an item"
+	"items.header":"Select an item",
+	"items.creation.header":"Create a new item",
+	"items.creation.title":"Name of an item",
+	"items.creation.name":"System name",
+	"items.creation.defaultZ":"Default z-index for first layer",
+	"items.creation.create":"Create",
+	"items.creation.file":"Image"
 }

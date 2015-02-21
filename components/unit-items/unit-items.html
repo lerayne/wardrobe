@@ -39,6 +39,44 @@
 			<paper-fab icon="add" on-tap="{{openCreationDialog}}"></paper-fab>
 		</div>
 
+
+		<paper-dialog transition="core-transition-top" id="creationDialog"  heading="{{ text('items.creation.header') }}">
+
+			<div horizontal layout>
+				<div flex>
+					<paper-input-decorator floatingLabel label="{{ text('items.creation.title') }}">
+						<input type="text" tabindex="1" id="inputTitle" on-keyup="{{createName}}">
+					</paper-input-decorator>
+
+					<label>
+						<text-string>items.creation.name</text-string>
+						<input type="text" tabindex="1" id="inputName">
+					</label>
+
+					<paper-input-decorator floatingLabel label="{{ text('items.creation.defaultZ') }}">
+						<input type="text" tabindex="1" value="0"  id="inputZ">
+					</paper-input-decorator>
+
+					<label>
+						<text-string>items.creation.file</text-string>
+						<input name="file" type="file" id="inputFile" on-change="{{tempUpload}}">
+					</label>
+				</div>
+
+				<div flex hidden?="{{!file}}">
+					<img src="{{file}}" style="height:300px">
+				</div>
+			</div>
+
+
+			<br>
+
+			<paper-button self-center raised class="highlight" on-tap="{{ createItem }}">
+				<text-string>items.creation.create</text-string>
+			</paper-button>
+
+		</paper-dialog>
+
 	</template>
 
 	<script>
@@ -50,6 +88,14 @@
 				'item-selected':'onSelect'
 			},
 
+			created:function(){
+				this.super();
+
+				app.funcs.bind(this, [
+					'parseTempFile'
+				])
+			},
+
 			ready:function(){
 				this.nodes = [];
 			},
@@ -57,6 +103,8 @@
 			observe:{
 				currentShelfID:'subscribe'
 			},
+
+			file:false,
 
 			selectShelf:function(id){
 				this.currentShelfID = id;
@@ -75,6 +123,43 @@
 			onSelect:function(event, data){
 				console.info('selecting item')
 				// todo - load item to a model
+			},
+
+			openCreationDialog:function(){
+				this.$.creationDialog.open();
+			},
+
+			createItem:function(){
+				if (this.$.inputTitle.value.match(/^\s*$/)) return false;
+				if (this.$.inputName.value.match(/^\s*$/)) return false;
+				if (this.$.inputZ.value.match(/^\s*$/)) return false;
+				if (this.$.inputFile.value.match(/^\s*$/)) return false;
+			},
+
+			tempUpload:function(event, details){
+				var formData = new FormData();
+
+				var file = event.target.files[0];
+
+				formData.append('file', file);
+
+				$.ajax({
+					url: 'server/_upload/index.php',
+					type: 'POST',
+					data: formData,
+					cache: false,
+					processData: false,
+					contentType: false,
+					success:this.parseTempFile
+				})
+			},
+
+			parseTempFile:function(response){
+				var response = JSON.parse(response);
+
+				console.log('file', response, response.data.files[0]);
+
+				this.file = response.data.files[0];
 			}
 		});
 	</script>

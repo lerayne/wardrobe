@@ -6,3 +6,5 @@
 /config.html
 *-v.html
 *-dv.html
+/assets/temp/*
+!/assets/temp/readme.md
