@@ -1,5 +1,6 @@
 <link rel="import" href="../unit-slide-base/unit-slide-base.html">
 <link rel="import" href="../card-item/card-item.html">
+<link rel="import" href="../image-cropper/image-cropper.html">
 
 <polymer-element name="unit-items" extends="unit-slide-base" vertical layout flex>
 	<template>
@@ -63,8 +64,8 @@
 					</label>
 				</div>
 
-				<div flex hidden?="{{!file}}">
-					<img src="{{file}}" style="height:300px">
+				<div hidden?="{{!file}}" class="image-frame">
+					<image-cropper image="{{file}}" on-image-loaded="{{imageLoaded}}"></image-cropper>
 				</div>
 			</div>
 
@@ -85,7 +86,8 @@
 			subunitName:'items',
 
 			eventDelegates:{
-				'item-selected':'onSelect'
+				'item-selected':'onSelect',
+				'image-loaded':'imageLoaded'
 			},
 
 			created:function(){
@@ -156,10 +158,13 @@
 
 			parseTempFile:function(response){
 				var response = JSON.parse(response);
-
-				console.log('file', response, response.data.files[0]);
-
 				this.file = response.data.files[0];
+			},
+
+			imageLoaded:function(){
+				console.log('grandparent catched imgload')
+
+				this.$.creationDialog.updateTargetDimensions();
 			}
 		});
 	</script>

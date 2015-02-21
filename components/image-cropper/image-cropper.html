@@ -1,0 +1,56 @@
+<polymer-element name="image-cropper" attributes="image">
+	<template>
+		<link rel="stylesheet" href="../../bower_components/jcrop/css/jquery.Jcrop.min.css">
+
+		<style>
+			:host {
+
+			}
+
+			img {
+				height:300px;
+			}
+
+			#frame {
+				height:305px;
+				display: block;
+			}
+		</style>
+
+		<iframe src="./iframe.html" id="frame" frameborder="0"></iframe>
+
+	</template>
+
+	<script>
+		Polymer({
+
+			created:function(){
+				app.funcs.bind(this, [
+					'parseFrameMessage'
+				])
+			},
+
+			ready:function(){
+				$(window).on('message', this.parseFrameMessage)
+			},
+
+			parseFrameMessage:function(e){
+				var event =  e.originalEvent.data;
+
+				console.log('parent catched', event)
+
+				switch (event) {
+					case 'image-loaded':
+						console.log(1, this)
+						this.fire('image-loaded');
+						break;
+				}
+			},
+
+			imageChanged:function(old, image){
+				this.$.frame.contentWindow.postMessage(this.image, '*');
+			}
+
+		});
+	</script>
+</polymer-element>

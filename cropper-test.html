@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title></title>
+
+	<link rel="stylesheet" href="bower_components/cropper/dist/cropper.min.css">
+
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/cropper/dist/cropper.min.js"></script>
+
+	<link rel="stylesheet" href="./bower_components/imgareaselect/distfiles/css/imgareaselect-default.css">
+	<script src="./bower_components/imgareaselect/jquery.imgareaselect.min.js"></script>
+
+	<link rel="stylesheet" href="./bower_components/jcrop/css/jquery.Jcrop.min.css">
+	<script src="./bower_components/jcrop/js/jquery.Jcrop.min.js"></script>
+
+	<script>
+		$(function(){
+
+			/*$('.crop img').cropper({
+				aspectRatio:1/1
+			});*/
+
+			$('img').Jcrop({
+				aspectRatio: 1/1,
+				minSize:[30,30],
+				setSelect:[30,30,130,130]
+			});
+
+		})
+	</script>
+
+</head>
+<body>
+
+<div class="crop">
+	<img src="assets/temp/Image0004.JPG" style="height:800px">
+</div>
+
+</body>
+</html>

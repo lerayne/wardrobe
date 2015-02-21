@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title></title>
+
+	<style>
+		body {
+			padding:0;
+			margin:0;
+		}
+
+		img {
+			height:300px;
+		}
+	</style>
+
+	<!--[if lte IE 9]>			<script src="../../bower_components/jquery-compat/dist/jquery.min.js"></script>	<![endif]-->
+	<![if (gt IE 9) | (!IE) ]>	<script src="../../bower_components/jquery/dist/jquery.min.js"></script> 		<![endif]>
+
+	<link rel="stylesheet" href="../../bower_components/jcrop/css/jquery.Jcrop.min.css">
+	<script src="../../bower_components/jcrop/js/jquery.Jcrop.min.js"></script>
+
+	<script>
+		var image = '', cropper;
+
+		$(window).on('message', function(a,b,c){
+			console.log(a.originalEvent.data);
+
+			image = '../../' + a.originalEvent.data;
+			pasteImage();
+
+		});
+
+		function pasteImage(){
+			$('img').attr('src', image)
+		}
+
+		$(function(){
+			pasteImage();
+
+			$('img').load(function(){
+				parent.postMessage('image-loaded', '*');
+
+				if (cropper) {
+					cropper.destroy();
+				}
+
+				$('img').Jcrop({
+					aspectRatio: 1/1,
+					minSize:[30,30],
+					setSelect:[30,30,130,130]
+				}, function(){
+					cropper = this;
+				})
+			})
+		})
+	</script>
+</head>
+<body>
+
+	<img>
+
+</body>
+</html>
