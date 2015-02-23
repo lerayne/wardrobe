@@ -86,9 +86,17 @@
 
 			navModeId:0,
 
+			eventDelegates:{
+				'item-selected':'itemSelected'
+			},
+
 			created:function(){
 				this.navModes = ['browse', 'saved'];
 				this.navMode = this.navModes[this.navModeId];
+			},
+
+			itemSelected:function(event, details, sender){
+				console.log('item selected:', details);
 			},
 
 			navSelectTab:function(event, detail, sender){

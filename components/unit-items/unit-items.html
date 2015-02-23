@@ -124,8 +124,13 @@
 				this.super(arguments);
 
 				if (_(actionsPerformed).find({action:'add_item'}) != 'undefined') {
-					console.log('new item selected:', dataReturned)
+
+					this.async(this.itemSelect, [dataReturned.item_id, {append:false, edit:true}])
 				}
+			},
+
+			itemSelect:function(id, options){
+				this.fire('item-selected', options)
 			},
 
 			onSelect:function(event, data){

@@ -97,6 +97,7 @@ class Actions {
 			$db->query('UPDATE ?_item_instances SET ?a WHERE id = ?', $edit_instance, $new_instance_id);
 
 			$path_data['path'] = $path;
+			$path_data['item_id'] = $new_item_id;
 			$path_data['instance_id'] = $new_instance_id;
 
 			$result['return'] = $path_data;
