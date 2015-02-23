@@ -116,11 +116,11 @@
 				this.currentShelfID = id;
 			},
 
-			subscribe:function(shelfID){
+			subscribe:function(){
 
 				app.connection.subscribe(this, 'items', {
 					feed:'items',
-					agency: this.currentShelfID
+					shelf: this.currentShelfID
 				}, function(items){
 					this.nodes = items;
 				})
