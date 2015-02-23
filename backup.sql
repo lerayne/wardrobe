@@ -93,6 +93,7 @@ CREATE TABLE `wardrobe_items` (
   `created` bigint(20) unsigned NOT NULL,
   `updated` bigint(20) unsigned NOT NULL,
   `z_index` smallint(6) NOT NULL,
+  `cover` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `model` (`model_id`),
   KEY `shelf` (`shelf_id`),
@@ -191,7 +192,7 @@ CREATE TABLE `wardrobe_shelves` (
   KEY `model` (`model_id`),
   KEY `author` (`author_id`),
   KEY `updated` (`updated`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -200,6 +201,7 @@ CREATE TABLE `wardrobe_shelves` (
 
 LOCK TABLES `wardrobe_shelves` WRITE;
 /*!40000 ALTER TABLE `wardrobe_shelves` DISABLE KEYS */;
+INSERT INTO `wardrobe_shelves` VALUES (1,'body','Body',1,1,NULL,0,1424466514,1424466514),(2,'underware','Underware',1,1,NULL,10,1424466921,1424466921),(3,'eyes','Eyes',1,1,NULL,5,1424467445,1424467445),(4,'eyebrows','Eyebrows',1,1,NULL,6,1424467535,1424467535),(5,'nose-and-lips','Nose and lips',1,1,NULL,7,1424467827,1424467827),(6,'skirts','Skirts',1,1,NULL,200,1424467949,1424467949),(7,'pants','Pants',1,1,NULL,150,1424471086,1424471086);
 /*!40000 ALTER TABLE `wardrobe_shelves` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,7 +237,7 @@ CREATE TABLE `wardrobe_users` (
 
 LOCK TABLES `wardrobe_users` WRITE;
 /*!40000 ALTER TABLE `wardrobe_users` DISABLE KEYS */;
-INSERT INTO `wardrobe_users` VALUES (1,'lerayne',NULL,'lerayne@gmail.com','062ac7c968833af0f79b2ff4a9de644e','2010-03-12 15:48:00',1,'local','2015-02-20 21:51:27','online');
+INSERT INTO `wardrobe_users` VALUES (1,'lerayne',NULL,'lerayne@gmail.com','062ac7c968833af0f79b2ff4a9de644e','2010-03-12 15:48:00',1,'local','2015-02-23 02:03:49','online');
 /*!40000 ALTER TABLE `wardrobe_users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -248,4 +250,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-02-20 21:51:41
+-- Dump completed on 2015-02-23  9:25:58
