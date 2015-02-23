@@ -107,7 +107,7 @@
 				if (!this.nodes.length) this.loading = true;
 			},
 
-			parseUpdates:function(newItems){
+			parseUpdates:function(newItems, actionsPerformed, dataReturned){
 				this.loading = false;
 
 				var firstLoad = !this.nodes.length;

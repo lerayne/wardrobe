@@ -80,7 +80,6 @@ function parse_request($request) {
 	return $result;
 }
 
-
-$result = array('data' => parse_request($_REQUEST));
+$result['data'] = parse_request($_REQUEST);
 
 require_once '../includes/backend_final.php';

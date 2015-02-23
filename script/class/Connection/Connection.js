@@ -162,7 +162,7 @@ app.class.Connection.prototype = {
 	},
 
 
-	onResponse:function(result, actions){
+	onResponse:function(result, actions, ret){
 		var that = this;
 
 		if (!!result.feeds){
@@ -171,7 +171,7 @@ app.class.Connection.prototype = {
 
 				for (var feedName in feeds) {
 					if (that.parseCallbacks[id]){
-						that.parseCallbacks[id][feedName](feeds[feedName]);
+						that.parseCallbacks[id][feedName](feeds[feedName], actions, ret);
 					}
 				}
 			})

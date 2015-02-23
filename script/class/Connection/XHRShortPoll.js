@@ -54,7 +54,6 @@ app.class.strategic.XHRShortPoll.prototype = {
 
 		if (params instanceof Array) this.actions = params;
 		else this.actions[0] = params;
-
 	},
 
 	// внутренний класс подписки, которым пользуются внешние классы (пере)подписки и ее изменения
@@ -242,7 +241,7 @@ app.class.strategic.XHRShortPoll.prototype = {
 		}
 
 		// разбираем пришедший пакет и выполняем обновления
-		this.parseCallback(data, this.actions);
+		this.parseCallback(data, this.actions, response.return);
 
 		this.actions = {};
 

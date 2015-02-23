@@ -102,10 +102,6 @@
 				this.nodes = [];
 			},
 
-			imgCropDataChanged:function(old, data){
-				console.log('crop', data);
-			},
-
 			observe:{
 				currentShelfID:'subscribe'
 			},
@@ -121,9 +117,15 @@
 				app.connection.subscribe(this, 'items', {
 					feed:'items',
 					shelf: this.currentShelfID
-				}, function(items){
-					this.nodes = items;
-				})
+				}, this.parseUpdates)
+			},
+
+			parseUpdates:function(newItems, actionsPerformed, dataReturned){
+				this.super(arguments);
+
+				if (_(actionsPerformed).find({action:'add_item'}) != 'undefined') {
+					console.log('new item selected:', dataReturned)
+				}
 			},
 
 			onSelect:function(event, data){
@@ -135,11 +137,8 @@
 				this.$.creationDialog.open();
 			},
 
-			createItem:function(){
-				if (this.$.inputTitle.value.match(/^\s*$/)) return false;
-				if (this.$.inputName.value.match(/^\s*$/)) return false;
-				if (this.$.inputZ.value.match(/^\s*$/)) return false;
-				if (this.$.inputFile.value.match(/^\s*$/)) return false;
+			createName:function(){
+				this.$.inputName.value = app.funcs.createSystemName(this.$.inputTitle.value)
 			},
 
 			tempUpload:function(event, details){
@@ -158,6 +157,25 @@
 					contentType: false,
 					success:this.parseTempFile
 				})
+			},
+
+			createItem:function(){
+				if (this.$.inputTitle.value.match(/^\s*$/)) return false;
+				if (this.$.inputName.value.match(/^\s*$/)) return false;
+				if (this.$.inputZ.value.match(/^\s*$/)) return false;
+
+				app.connection.write({
+					action:'add_item',
+					shelf:this.currentShelfID,
+					title: this.$.inputTitle.value,
+					name: this.$.inputName.value,
+					z_index: this.$.inputZ.value,
+					image: this.file,
+					//bypass_write:1,
+					cropData: this.imgCropData
+				});
+
+				this.$.creationDialog.close();
 			},
 
 			parseTempFile:function(response){
