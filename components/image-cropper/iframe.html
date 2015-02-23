@@ -8,59 +8,96 @@
 		body {
 			padding:0;
 			margin:0;
+
 		}
 
 		img {
 			max-height:300px;
 			max-width:300px;
+			display: block;
+		}
+
+		.container {
+			white-space: nowrap;
+			display: inline-block;
+		}
+
+		.column {
+			display: inline-block;
+			vertical-align: top;
+		}
+
+		.image {
+			position: relative;
+		}
+
+		.preview {
+			width:70px;
+			height:80px;
+			margin-left:10px;
+			border:5px solid #eee;
+			overflow: hidden;
 		}
 	</style>
 
 	<!--[if lte IE 9]>			<script src="../../bower_components/jquery-compat/dist/jquery.min.js"></script>	<![endif]-->
 	<![if (gt IE 9) | (!IE) ]>	<script src="../../bower_components/jquery/dist/jquery.min.js"></script> 		<![endif]>
 
-	<link rel="stylesheet" href="../../bower_components/jcrop/css/jquery.Jcrop.min.css">
-	<script src="../../bower_components/jcrop/js/jquery.Jcrop.min.js"></script>
+	<link rel="stylesheet" href="../../bower_components/cropper/dist/cropper.min.css">
+	<script src="../../bower_components/cropper/dist/cropper.min.js"></script>
 
 	<script>
-		var image = '', cropper;
+		var image = '', imgTag;
 
-		$(window).on('message', function(a,b,c){
-			console.log(a.originalEvent.data);
-
+		$(window).on('message', function(a){
 			image = '../../' + a.originalEvent.data;
 			pasteImage();
-
 		});
 
 		function pasteImage(){
-			$('img').attr('src', image)
+
+			$('.image').children().remove();
+
+			imgTag = $('<img>').appendTo($('.image')).attr('src', image).load(function(){
+
+				$().cropper('destroy');
+
+				imgTag.cropper({
+					aspectRatio: 1/1,
+					guides:false,
+					zoomable:false,
+					preview:'.preview',
+					autoCropArea:0.5,
+					global:false,
+					minContainerWidth:50,
+					minContainerHeight:50,
+					crop:function(data){
+						parent.postMessage({
+							message:'image-cropped',
+							cropData:data
+						}, '*');
+					}
+				});
+
+				parent.postMessage({
+					message:'image-loaded',
+					width:$('.container').width(),
+					height:$('.container').height()
+				}, '*');
+			})
 		}
 
 		$(function(){
 			pasteImage();
-
-			$('img').load(function(){
-				parent.postMessage('image-loaded', '*');
-
-				if (cropper) {
-					cropper.destroy();
-				}
-
-				$('img').Jcrop({
-					aspectRatio: 1/1,
-					minSize:[30,30],
-					setSelect:[30,30,130,130]
-				}, function(){
-					cropper = this;
-				})
-			})
 		})
 	</script>
 </head>
 <body>
 
-	<img>
+	<div class="container">
+		<div class="column image"></div>
+		<div class="column preview"></div>
+	</div>
 
 </body>
 </html>

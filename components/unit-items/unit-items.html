@@ -65,7 +65,7 @@
 				</div>
 
 				<div hidden?="{{!file}}" class="image-frame">
-					<image-cropper image="{{file}}" on-image-loaded="{{imageLoaded}}"></image-cropper>
+					<image-cropper image="{{file}}" cropData="{{imgCropData}}" on-image-loaded="{{imageLoaded}}"></image-cropper>
 				</div>
 			</div>
 
@@ -100,6 +100,10 @@
 
 			ready:function(){
 				this.nodes = [];
+			},
+
+			imgCropDataChanged:function(old, data){
+				console.log('crop', data);
 			},
 
 			observe:{

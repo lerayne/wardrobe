@@ -34,23 +34,27 @@
 
 			collapsed:false,
 
+			silentCollapse:function(){
+				this.collapsed = true;
+			},
+
 			collapse:function(){
 				this.fire('close-subunit', this);
-				this.collapsed = true;
+				this.silentCollapse();
 			},
 
 			close:function(){
 				this.hidden = true;
 			},
 
-			open:function(){
+			silentOpen:function(){
 				this.collapsed = false;
 				this.hidden = false;
 			},
 
-			restore:function(){
+			open:function(){
 				this.fire('open-subunit', this);
-				this.open();
+				this.silentOpen();
 			},
 
 			fixBookmarkText:function(){

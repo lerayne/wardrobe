@@ -4,5 +4,4 @@ body {
 
 body /deep/ paper-dialog .image-frame {
 	margin-left: 25px;
-	border: 1px solid #ccc;
 }

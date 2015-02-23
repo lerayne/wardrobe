@@ -32,6 +32,6 @@
     "paper-input": "Polymer/paper-input#~0.5.4",
     "paper-item": "Polymer/paper-item#~0.5.4",
     "paper-tabs": "Polymer/paper-tabs#~0.5.5",
-    "jcrop": "~0.9.12"
+    "cropper": "~0.8.0"
   }
 }

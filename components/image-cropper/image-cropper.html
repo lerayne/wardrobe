@@ -1,10 +1,10 @@
-<polymer-element name="image-cropper" attributes="image">
+<polymer-element name="image-cropper" attributes="image, cropData">
 	<template>
 		<link rel="stylesheet" href="../../bower_components/jcrop/css/jquery.Jcrop.min.css">
 
 		<style>
 			:host {
-
+				display:block
 			}
 
 			img {
@@ -12,9 +12,7 @@
 			}
 
 			#frame {
-				height:305px;
 				display: block;
-				min-width: 305px;
 			}
 		</style>
 
@@ -24,27 +22,24 @@
 
 	<script>
 		Polymer({
-
-			created:function(){
-				app.funcs.bind(this, [
-					'parseFrameMessage'
-				])
-			},
-
 			ready:function(){
-				$(window).on('message', this.parseFrameMessage)
+				$(window).on('message', this.parseFrameMessage.bind(this))
 			},
 
 			parseFrameMessage:function(e){
 				var event =  e.originalEvent.data;
 
-				console.log('parent catched', event)
-
-				switch (event) {
+				switch (event.message) {
 					case 'image-loaded':
-						console.log(1, this)
+						$(this.$.frame).width(event.width+2).height(event.height+2);
 						this.fire('image-loaded');
 						break;
+
+					case 'image-cropped':
+						this.cropData = event.cropData
+						break;
+
+					default:
 				}
 			},
 
