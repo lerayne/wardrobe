@@ -165,6 +165,8 @@ app.class.Connection.prototype = {
 	onResponse:function(result, actions, ret){
 		var that = this;
 
+		$(window).trigger('stop-loading');
+
 		if (!!result.feeds){
 
 			_(result.feeds).each(function(feeds, id){

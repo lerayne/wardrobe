@@ -6,11 +6,13 @@
 	"agencies.creation.header":"Create a new agency",
 	"agencies.creation.title":"Name of an agency",
 	"agencies.creation.name":"System name",
+	"agencies.creation.create":"Create",
 
 	"models.header":"Select a model",
 	"models.creation.header":"Create a new model",
 	"models.creation.title":"Name of a model",
 	"models.creation.name":"System name",
+	"models.creation.create":"Create",
 
 	"shelves.header":"Select an outfit shelf",
 	"shelves.creation.header":"Create a new shelf",

@@ -5,6 +5,7 @@ ob_start();
 
 $env['rootdir'] = '../';
 $env['includes'] = '../';
+$env['assets'] = '../../';
 
 require_once $env['rootdir'].'config.php'; //конфигурационный файл
 require_once $env['rootdir'].'lib/toolkit.php'; // типа фреймворк)

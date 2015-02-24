@@ -76,10 +76,6 @@
 				'shelf-selected':'onSelect'
 			},
 
-			ready:function(){
-				this.nodes = [];
-			},
-
 			observe:{
 				currentModelID:'subscribe'
 			},
@@ -88,7 +84,7 @@
 				this.currentModelID = id;
 			},
 
-			subscribe:function(modelID){
+			subscribe:function(){
 				this.super();
 
 				app.connection.subscribe(this, 'shelves', {

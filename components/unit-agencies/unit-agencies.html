@@ -37,20 +37,25 @@
 			</div>
 
 			<paper-fab icon="add" on-tap="{{openCreationDialog}}"></paper-fab>
-
-			<paper-dialog transition="core-transition-top" id="creationDialog"  heading="{{ text('agencies.creation.header') }}">
-
-				<paper-input-decorator floatingLabel label="{{ text('agencies.creation.title') }}">
-					<input type="text" tabindex="1">
-				</paper-input-decorator>
-
-				<label>
-					<text-string>agencies.creation.name</text-string>
-					<input type="text" tabindex="1">
-				</label>
-
-			</paper-dialog>
 		</div>
+
+		<paper-dialog transition="core-transition-top" id="creationDialog"  heading="{{ text('agencies.creation.header') }}">
+
+			<paper-input-decorator floatingLabel label="{{ text('agencies.creation.title') }}">
+				<input type="text" tabindex="1" id="inputTitle" on-keyup="{{createName}}">
+			</paper-input-decorator>
+
+			<label>
+				<text-string>agencies.creation.name</text-string>
+				<input type="text" tabindex="1" id="inputName">
+			</label>
+
+			<br>
+			<paper-button self-center raised class="highlight" on-tap="{{ createAgency }}">
+				<text-string>agencies.creation.create</text-string>
+			</paper-button>
+
+		</paper-dialog>
 
 	</template>
 
@@ -65,7 +70,7 @@
 			},
 
 			ready:function(){
-				this.nodes = [];
+				this.super()
 				this.subscribe();
 			},
 
@@ -84,6 +89,32 @@
 
 			openCreationDialog:function() {
 				this.$.creationDialog.open();
+			},
+
+			createName:function(){
+				this.$.inputName.value = app.funcs.createSystemName(this.$.inputTitle.value)
+			},
+
+			createAgency:function(){
+				if (this.$.inputTitle.value.match(/^\s*$/)) return false;
+				if (this.$.inputName.value.match(/^\s*$/)) return false;
+
+				app.connection.write({
+					action: 'add_agency',
+					name:this.$.inputName.value,
+					title:this.$.inputTitle.value
+				})
+
+				this.closeDialog(true);
+			},
+
+			closeDialog:function(clean){
+				this.$.creationDialog.close();
+
+				if (typeof clean != 'undefined' && !!clean) {
+					this.$.inputName.value = '';
+					this.$.inputTitle.value = '';
+				}
 			}
 
 		});

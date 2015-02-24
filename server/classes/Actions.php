@@ -11,10 +11,78 @@ class Actions {
 
 	}
 
-	function add_shelf($params){
+	function add_agency($params) {
+		global $db, $result, $env;
+
 		global $db;
 
-		$name_exists = $db->selectCell('SELECT id FROM ?_shelves WHERE name = ?', $params['name']);
+		$name_exists = $db->selectCell('SELECT id FROM ?_agencies WHERE name = ?', $params['name']);
+
+		if (!$name_exists) {
+
+			$now = now();
+
+			$new_row['name'] = $params['name'];
+			$new_row['title'] = $params['title'];
+			$new_row['created'] = $now;
+			$new_row['updated'] = $now;
+			$new_row['author_id'] = 1; // todo login
+			$new_row['updater'] = 1; // todo login
+			$new_row['update_cause'] = 'this item created';
+
+			$new_agency_id = $db->query('INSERT INTO ?_agencies (?#) VALUES (?a)', array_keys($new_row), array_values($new_row));
+
+			mkdir($env['assets'].'assets/agencies/'.$params['name'], '0777', true);
+
+			$result['return'] = Array('agency_id' => $new_agency_id);
+		} else {
+			$result['error'] = 'name exists!';
+		}
+	}
+
+
+	function add_model($params) {
+		global $db, $result, $env;
+
+		global $db;
+
+		$name_exists = $db->selectCell('SELECT id FROM ?_models WHERE name = ? AND agency_id = ?', $params['name'], $params['agency']);
+
+		if (!$name_exists) {
+
+			$agency = $db->selectRow('SELECT id, name, title FROM ?_agencies WHERE id = ?', $params['agency']);
+
+			$now = now();
+
+			$new_row['name'] = $params['name'];
+			$new_row['title'] = $params['title'];
+			$new_row['created'] = $now;
+			$new_row['updated'] = $now;
+			$new_row['author_id'] = 1; // todo login
+			$new_row['agency_id'] = $params['agency'];
+			$new_row['updater'] = 1; // todo login
+			$new_row['update_cause'] = 'this item created';
+
+			$new_model_id = $db->query('INSERT INTO ?_models (?#) VALUES (?a)', array_keys($new_row), array_values($new_row));
+
+			$time_update['updated'] = $now;
+			$time_update['updater'] = 1; // todo login
+			$time_update['update_cause'] = 'new model ('.$params['name'].') created';
+
+			$db->query('UPDATE ?_agencies SET ?a WHERE id = ?', $time_update, $params['agency']);
+
+			mkdir($env['assets'].'assets/agencies/'.$agency['name'].'/'.$params['name'], '0777', true);
+
+			$result['return'] = Array('model_id' => $new_model_id);
+		} else {
+			$result['error'] = 'name exists!';
+		}
+	}
+
+	function add_shelf($params){
+		global $db, $env;
+
+		$name_exists = $db->selectCell('SELECT id FROM ?_shelves WHERE name = ? AND model_id = ?', $params['name'], $params['model']);
 
 		if (!$name_exists) {
 
@@ -27,21 +95,29 @@ class Actions {
 			$new_row['created'] = $now;
 			$new_row['updated'] = $now;
 			$new_row['author_id'] = 1; // todo login
+			$new_row['updater'] = 1; // todo login
+			$new_row['update_cause'] = 'this item created';
 
 			$new_shelf_id = $db->query('INSERT INTO ?_shelves (?#) VALUES (?a)', array_keys($new_row), array_values($new_row));
 
-			$model = $db->selectRow('SELECT id, name FROM ?_models WHERE id = ?', $params['model']);
-			$agency = $db->selectRow('SELECT id, name FROM ?_agencies WHERE id = ?', $model['id']);
+			$time_update['updated'] = $now;
+			$time_update['updater'] = 1; // todo login
+			$time_update['update_cause'] = 'new shelf ('.$params['name'].') created';
 
-			$path = './assets/agencies/'.$agency['name'].'/'.$model['name'];
+			$db->query('UPDATE ?_models SET ?a WHERE id = ?', $time_update, $params['model']);
+
+			$agency_id = $db->selectCell('SELECT agency_id FROM ?_models WHERE id = ?', $params['model']);
+
+			$db->query('UPDATE ?_agencies SET ?a WHERE id = ?', $time_update, $agency_id);
+
 		} else {
-			$GLOBALS['debug']['error'] = 'name exists!';
+			$result['error'] = 'name exists!';
 		}
 	}
 
 
 	function add_item($params) {
-		global $db, $result;
+		global $db, $result, $env;
 
 		$GLOBALS['debug']['params'] = $params;
 
@@ -68,11 +144,21 @@ class Actions {
 			$new_item['shelf_id'] = $params['shelf'];
 			$new_item['model_id'] = $path_data['model_id'];
 			$new_item['author_id'] = 1; // todo login
+			$new_item['updater'] = 1; // todo login
+			$new_item['update_cause'] = 'this item created';
 			$new_item['z_index'] = $params['z_index'];
 			$new_item['created'] = $now;
 			$new_item['updated'] = $now;
 
 			$new_item_id = $db->query('INSERT INTO ?_items (?#) VALUES (?a)', array_keys($new_item), array_values($new_item));
+
+			$time_update['updated'] = $now;
+			$time_update['updater'] = 1; // todo login
+			$time_update['update_cause'] = 'new item ('.$params['name'].') created';
+
+			$db->query('UPDATE ?_shelves SET ?a WHERE id = ?', $time_update, $params['shelf']);
+			$db->query('UPDATE ?_models SET ?a WHERE id = ?', $time_update, $path_data['model_id']);
+			$db->query('UPDATE ?_agencies SET ?a WHERE id = ?', $time_update, $path_data['agency_id']);
 
 			$new_layer['item_id'] = $new_item_id;
 			$new_layer['z_index'] = $params['z_index'];
@@ -90,7 +176,7 @@ class Actions {
 
 			$path = 'assets/agencies/'.$path_data['agency_name'].'/'.$path_data['model_name'].'/'.dechex($new_instance_id).'.png';
 
-			rename('../../'.$params['image'], '../../'.$path);
+			rename($env['assets'].$params['image'], $env['assets'].$path);
 
 			$edit_instance['file'] = $path;
 
@@ -103,4 +189,7 @@ class Actions {
 			$result['return'] = $path_data;
 		}
 	}
+
+
+
 } 

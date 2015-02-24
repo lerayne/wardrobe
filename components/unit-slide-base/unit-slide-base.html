@@ -25,12 +25,22 @@
 
 			created:function(){
 
+				$(window).on('stop-loading', this.stopLoading.bind(this))
+
 				app.funcs.bind(this, [
 					'processNode'
 				]);
 			},
 
+			ready:function(){
+				this.init();
+			},
+
 			text:text,
+
+			stopLoading:function(){
+				this.loading = false;
+			},
 
 			collapsed:false,
 
@@ -101,15 +111,20 @@
 				}
 			},
 
+			init:function(){
+				this.nodes = [];
+			},
+
+			clean:function(){
+				this.init();
+			},
 
 			subscribe:function(){
-				console.log('subscr', this);
 				if (!this.nodes.length) this.loading = true;
+				this.clean();
 			},
 
 			parseUpdates:function(newItems, actionsPerformed, dataReturned){
-				this.loading = false;
-
 				var firstLoad = !this.nodes.length;
 
 				if (firstLoad) {

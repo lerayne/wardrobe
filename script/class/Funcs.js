@@ -190,7 +190,7 @@ Funcs.prototype = {
 	},
 
 	createSystemName:function(input){
-		return input.replace(' ', '-').toLowerCase();
+		return input.replace(/\s/g, '-').toLowerCase();
 	}
 }
 

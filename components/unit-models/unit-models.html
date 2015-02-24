@@ -42,13 +42,18 @@
 		<paper-dialog transition="core-transition-top" id="creationDialog"  heading="{{ text('models.creation.header') }}">
 
 			<paper-input-decorator floatingLabel label="{{ text('models.creation.title') }}">
-				<input type="text" tabindex="1">
+				<input type="text" tabindex="1" id="inputTitle" on-keyup="{{createName}}">
 			</paper-input-decorator>
 
 			<label>
 				<text-string>models.creation.name</text-string>
-				<input type="text" tabindex="1">
+				<input type="text" tabindex="1" id="inputName">
 			</label>
+
+			<br>
+			<paper-button self-center raised class="highlight" on-tap="{{ createModel }}">
+				<text-string>models.creation.create</text-string>
+			</paper-button>
 
 		</paper-dialog>
 
@@ -62,10 +67,6 @@
 
 			eventDelegates:{
 				'model-selected':'onSelect'
-			},
-
-			ready:function(){
-				this.nodes = [];
 			},
 
 			observe:{
@@ -92,6 +93,33 @@
 
 			openCreationDialog:function(){
 				this.$.creationDialog.open();
+			},
+
+			createName:function(){
+				this.$.inputName.value = app.funcs.createSystemName(this.$.inputTitle.value)
+			},
+
+			createModel:function(){
+				if (this.$.inputTitle.value.match(/^\s*$/)) return false;
+				if (this.$.inputName.value.match(/^\s*$/)) return false;
+
+				app.connection.write({
+					action: 'add_model',
+					name:this.$.inputName.value,
+					title:this.$.inputTitle.value,
+					agency:this.currentAgencyID
+				})
+
+				this.closeDialog(true);
+			},
+
+			closeDialog:function(clean){
+				this.$.creationDialog.close();
+
+				if (typeof clean != 'undefined' && !!clean) {
+					this.$.inputName.value = '';
+					this.$.inputTitle.value = '';
+				}
 			}
 		});
 	</script>
