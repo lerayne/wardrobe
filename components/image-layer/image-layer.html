@@ -16,14 +16,18 @@
 			ready:function(){
 				$(this).css({
 					'z-index': this.data.z_index,
-					'top': this.data.y_offset,
-					'left': this.data.x_offset,
+					'top': this.data.y_offset * this.scale,
+					'left': this.data.x_offset * this.scale,
 					'transform': 'scale('+ this.scale +')'
 				})
 			},
 
 			scaleChanged:function(old, ratio){
-				$(this).css('transform', 'scale('+ ratio +')');
+				$(this).css({
+					'transform': 'scale('+ ratio +')',
+					'top': this.data.y_offset * ratio,
+					'left': this.data.x_offset * ratio
+				});
 			}
 		});
 	</script>
