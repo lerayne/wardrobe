@@ -162,6 +162,7 @@ app.class.strategic.XHRShortPoll.prototype = {
 	},
 
 	query:function(channel, callback, data){
+		var that = this;
 
 		data.user = {
 			login: app.funcs.getCookie('login'),
@@ -191,10 +192,17 @@ app.class.strategic.XHRShortPoll.prototype = {
 			},
 			error: function(a, b, c){
 				console.warn('XHR error:', a, b, c);
+
+				that.queryReset();
 			},
 			dataType:'json',
 			data:data
 		});
+	},
+
+	get:function(subject, data, callback){
+		data.subject = subject;
+		return this.query('get', callback, data)
 	},
 
 	retry:function(){
@@ -243,13 +251,17 @@ app.class.strategic.XHRShortPoll.prototype = {
 		// разбираем пришедший пакет и выполняем обновления
 		this.parseCallback(data, this.actions, response.return);
 
+		this.queryReset();
+
+		// перезапускаем запрос
+		this.timeout = setTimeout(this.subscriptionSend, this.waitTime);
+	},
+
+	queryReset:function(){
 		this.actions = {};
 
 		this.stopIndication(); // индикация ожидания откл
 		this.request = false;
-
-		// перезапускаем запрос
-		this.timeout = setTimeout(this.subscriptionSend, this.waitTime);
 	},
 
 	// Выполняется при принудительном сбросе запроса

@@ -35,6 +35,7 @@ app.class.Connection = function (config) {
 		'subscribe',
 		'rescribe',
 		'unscribe',
+		'get',
 		'stop',
 		'start'
 	];
@@ -61,6 +62,10 @@ app.class.Connection = function (config) {
 	// делает простой запрос на сервер
 	this.query = function(){
 		return wrapped.query.apply(wrapped, arguments);
+	};
+
+	this.get = function(){
+		return wrapped.get.apply(wrapped, arguments);
 	};
 
 	// подписывает объект на новый фид, или редактирует значение существующего, сбрасывая внутренее состояние подписки (meta)
@@ -155,7 +160,7 @@ app.class.Connection.prototype = {
 		if (args.length > 1) {
 			subscribe({subscriber:args[0], feedName:args[1], feed:args[2], parser:args[3]})
 		} else if (args[0] instanceof Array) {
-			_(args[0]).each(subscribe)
+			_.each(args[0], subscribe)
 		} else if (args[0] instanceof Object){
 			subscribe(args[0])
 		}
@@ -169,7 +174,7 @@ app.class.Connection.prototype = {
 
 		if (!!result.feeds){
 
-			_(result.feeds).each(function(feeds, id){
+			_.each(result.feeds, function(feeds, id){
 
 				for (var feedName in feeds) {
 					if (that.parseCallbacks[id]){

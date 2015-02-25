@@ -17,9 +17,9 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "^2.1.1",
-    "jquery-compat": "jquery#^1.11",
-    "lodash": "^2.4.1",
+    "jquery": "^2",
+    "jquery-compat": "jquery#^1",
+    "lodash": "^3",
     "es6-promise-polyfill": "^1.0.0",
     "polymer": "Polymer/polymer#^0.5.4",
     "core-iconset": "Polymer/core-iconset#^0.5.4",

@@ -79,6 +79,16 @@
 				this.fixBookmarkText();
 			},
 
+			parseUpdates:function(newItems, actionsPerformed, dataReturned){
+				var firstLoad = !this.nodes.length;
+
+				if (firstLoad) {
+					this.nodes = this.sort(newItems, this.sortField, this.sortOrder);
+				} else {
+					_.each(newItems, this.processNode);
+				}
+			},
+
 			processNode:function(data){
 
 				// находим индекс нужного элемента по id
@@ -122,16 +132,6 @@
 			subscribe:function(){
 				if (!this.nodes.length) this.loading = true;
 				this.clean();
-			},
-
-			parseUpdates:function(newItems, actionsPerformed, dataReturned){
-				var firstLoad = !this.nodes.length;
-
-				if (firstLoad) {
-					this.nodes = this.sort(newItems, this.sortField, this.sortOrder);
-				} else {
-					_(newItems).each(this.processNode);
-				}
 			},
 
 			// сортировка по поданным параметрам (удобна для декларативного фильтра, который пока не работает)

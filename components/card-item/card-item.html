@@ -1,4 +1,4 @@
-<polymer-element name="card-item" attributes="data" on-tap="{{onTap}}">
+<polymer-element name="card-item" attributes="data" on-tap="{{select}}">
 	<template>
 		<style>
 			:host {
@@ -12,6 +12,10 @@
 			:host(:hover) {
 				background-color: #eee;
 			}
+
+			:host([selected]) {
+				background-color: lemonchiffon;
+			}
 		</style>
 
 		<b>{{data.title}}</b>
@@ -20,8 +24,25 @@
 
 	<script>
 		Polymer({
-			onTap:function(){
-				this.fire('item-selected', this.data)
+			publish:{
+				selected:{
+					default:false,
+					reflect:true
+				}
+			},
+
+			computed:{
+				selected:'data.selected'
+			},
+
+			attached:function(){
+				if (this.data.selected){
+					this.select()
+				}
+			},
+
+			select:function(){
+				this.fire('item-selected', this.data);
 			}
 		});
 	</script>

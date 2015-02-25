@@ -139,6 +139,7 @@ class Actions {
 		if ($path_data['model_id'] && !$params['bypass_write']) {
 			$now = now();
 
+			// write item
 			$new_item['name'] = $params['name'];
 			$new_item['title'] = $params['title'];
 			$new_item['shelf_id'] = $params['shelf'];
@@ -152,6 +153,7 @@ class Actions {
 
 			$new_item_id = $db->query('INSERT INTO ?_items (?#) VALUES (?a)', array_keys($new_item), array_values($new_item));
 
+			//update times
 			$time_update['updated'] = $now;
 			$time_update['updater'] = 1; // todo login
 			$time_update['update_cause'] = 'new item ('.$params['name'].') created';
@@ -160,6 +162,7 @@ class Actions {
 			$db->query('UPDATE ?_models SET ?a WHERE id = ?', $time_update, $path_data['model_id']);
 			$db->query('UPDATE ?_agencies SET ?a WHERE id = ?', $time_update, $path_data['agency_id']);
 
+			// write default layer
 			$new_layer['item_id'] = $new_item_id;
 			$new_layer['z_index'] = $params['z_index'];
 			$new_layer['x_offset'] = 0;
@@ -167,22 +170,29 @@ class Actions {
 
 			$new_layer_id = $db->query('INSERT INTO ?_layers (?#) VALUES (?a)', array_keys($new_layer), array_values($new_layer));
 
+			//write default instance
 			$new_instance['item_id'] = $new_item_id;
-			$new_instance['layer_id'] = $new_layer_id;
 			$new_instance['file'] = '';
 			$new_instance['icon'] = '';
+			$new_instance['title'] = 'Default';
 
 			$new_instance_id = $db->query('INSERT INTO ?_item_instances (?#) VALUES (?a)', array_keys($new_instance), array_values($new_instance));
 
-			$path = 'assets/agencies/'.$path_data['agency_name'].'/'.$path_data['model_name'].'/'.dechex($new_instance_id).'.png';
+			// save main file
+			$filename = $params['name'].'.'.dechex($new_instance_id);
 
-			rename($env['assets'].$params['image'], $env['assets'].$path);
+			$filepath = 'assets/agencies/'.$path_data['agency_name'].'/'.$path_data['model_name'].'/'.$filename;
+			$filepath_layer = $filepath.'.'.dechex($new_layer_id).'.png';
 
-			$edit_instance['file'] = $path;
+			rename($env['assets'].$params['image'], $env['assets'].$filepath_layer);
+
+			// update instance (write files paths)
+			$edit_instance['file'] = $filepath;
 
 			$db->query('UPDATE ?_item_instances SET ?a WHERE id = ?', $edit_instance, $new_instance_id);
 
-			$path_data['path'] = $path;
+			// make returned data
+			$path_data['filepath'] = $filepath_layer;
 			$path_data['item_id'] = $new_item_id;
 			$path_data['instance_id'] = $new_instance_id;
 

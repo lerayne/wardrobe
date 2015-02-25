@@ -66,14 +66,7 @@
 			</div>
 
 			<div class="panel" vertical layout>
-				<unit-doll>
-
-					<div class="layer" style="top:50%; left:50%;"></div>
-					<div class="layer" style="top:10%; left:10%;"></div>
-					<div class="layer" style="top:10%; left:40%;"></div>
-					<div class="layer" style="top:50%; left:80%;"></div>
-
-				</unit-doll>
+				<unit-doll id="doll"></unit-doll>
 			</div>
 
 			<div class="panel" vertical layout flex></div>
@@ -87,7 +80,7 @@
 			navModeId:0,
 
 			eventDelegates:{
-				'item-selected':'itemSelected'
+				'item-selected':'onItemSelected'
 			},
 
 			created:function(){
@@ -95,8 +88,25 @@
 				this.navMode = this.navModes[this.navModeId];
 			},
 
-			itemSelected:function(event, details, sender){
-				console.log('item selected:', details);
+			onItemSelected:function(event, data, sender){
+				console.log('x-app catched select:', data);
+
+				app.connection.get('item', {id:data.id}, this.parseItem.bind(this))
+			},
+
+			parseItem:function(data){
+				_.each(data.instances, function(instance, i){
+					instance.layers = [];
+
+					_.each(data.layers, function(layer, l){
+
+						var processedLayer = layer;
+						processedLayer.file = instance.file + '.' + (+layer.id).toString(16) + '.png';
+						instance.layers.push(processedLayer)
+					}, this)
+				}, this);
+
+				this.$.doll.pushItem(data.instances[0]);
 			},
 
 			navSelectTab:function(event, detail, sender){

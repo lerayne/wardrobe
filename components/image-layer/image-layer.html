@@ -1,0 +1,30 @@
+<polymer-element name="image-layer" attributes="data, scale">
+	<template>
+		<style>
+			:host {
+				position: absolute;
+				transform-origin: 0 0;
+			}
+		</style>
+
+		<img src="{{ data.file }}">
+
+	</template>
+
+	<script>
+		Polymer({
+			ready:function(){
+				$(this).css({
+					'z-index': this.data.z_index,
+					'top': this.data.y_offset,
+					'left': this.data.x_offset,
+					'transform': 'scale('+ this.scale +')'
+				})
+			},
+
+			scaleChanged:function(old, ratio){
+				$(this).css('transform', 'scale('+ ratio +')');
+			}
+		});
+	</script>
+</polymer-element>

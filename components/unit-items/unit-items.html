@@ -33,7 +33,7 @@
 		<div id="scrollable" hidden?="{{collapsed}}" flex>
 			<div id="scroll">
 				<template repeat="{{model in nodes}}">
-					<card-model data="{{model}}"></card-model>
+					<card-item data="{{model}}"></card-item>
 				</template>
 			</div>
 
@@ -86,7 +86,7 @@
 			subunitName:'items',
 
 			eventDelegates:{
-				'item-selected':'onSelect',
+				'item-selected':'onItemSelected',
 				'image-loaded':'imageLoaded'
 			},
 
@@ -118,21 +118,32 @@
 			},
 
 			parseUpdates:function(newItems, actionsPerformed, dataReturned){
-				this.super(arguments);
 
-				if (_(actionsPerformed).find({action:'add_item'}) != 'undefined') {
+				var itemCreated = typeof _(actionsPerformed).find({action:'add_item'}) != 'undefined';
 
-					this.async(this.itemSelect, [dataReturned.item_id, {append:false, edit:true}])
+				if (itemCreated) {
+					var i = _(newItems).findIndex(function(item){
+						return item.id == dataReturned.item_id
+					})
+
+					newItems[i].editMode = true;
+					newItems[i].selected = true;
 				}
+
+				this.super(arguments);
 			},
 
-			itemSelect:function(id, options){
-				this.fire('item-selected', options)
-			},
+			onItemSelected:function(event, data, sender){
+				_.each(this.nodes, function(el, i){
 
-			onSelect:function(event, data){
-				console.info('selecting item')
-				// todo - load item to a model
+					if (el.id != data.id){
+						el.selected = false;
+					} else {
+						el.selected = true;
+					}
+				}, this);
+
+				this.selectedItem = data;
 			},
 
 			openCreationDialog:function(){

@@ -1,3 +1,5 @@
+<link rel="import" href="../image-layer/image-layer.html">
+
 <polymer-element name="unit-doll" flex on-resize="{{ resize }}">
 	<template>
 		<style>
@@ -10,7 +12,7 @@
 				background-color: red;
 				width:100px;
 				height: 100px;
-				transform-origin: 0 0;
+
 			}
 
 			#frame {
@@ -21,18 +23,22 @@
 		</style>
 
 		<div id="frame">
-			<content></content>
+			<template repeat="{{ layer in layers }}">
+				<image-layer data="{{ layer }}" scale="{{ratio}}"></image-layer>
+			</template>
 		</div>
 
 	</template>
 
 	<script>
 		Polymer({
-			pixelRatio: 800, // todo: 1000 is changeable var, depends on actor
+			pixelRatio: 1000, // todo: 1000 is changeable var, depends on actor
 			ratio:1,
 
 			created:function(){
 				var that = this;
+
+				this.layers = [];
 
 				$(window).resize(function(){
 					that.resize()
@@ -50,11 +56,18 @@
 				var frameSize = Math.min(this.offsetHeight, this.pixelRatio);
 				this.ratio = frameSize / this.pixelRatio;
 
-				$(this).find('.layer').css('transform', 'scale('+ this.ratio +')')
+				$(this).find('.layer').css('transform', 'scale('+ this.ratio +')');
 
+				$(this.$.frame).width(frameSize);
+				$(this.$.frame).height(frameSize);
+			},
 
-				$(this.$.frame).width(frameSize)
-				$(this.$.frame).height(frameSize)
+			pushItem:function(data){
+				console.log('instance push', data)
+
+				_.each(data.layers, function(layer){
+					this.layers.push(layer)
+				}, this)
 			}
 		});
 	</script>
