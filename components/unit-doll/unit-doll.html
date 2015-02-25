@@ -19,6 +19,7 @@
 				background-color: #fff;
 				position: relative;
 				overflow: hidden;
+				transform-origin: 0 0;
 			}
 		</style>
 
@@ -46,6 +47,9 @@
 			},
 
 			attached:function(){
+				$(this.$.frame).width(this.pixelRatio);
+				$(this.$.frame).height(this.pixelRatio);
+
 				this.resize();
 			},
 
@@ -56,10 +60,8 @@
 				var frameSize = Math.min(this.offsetHeight, this.pixelRatio);
 				this.ratio = frameSize / this.pixelRatio;
 
-				$(this).find('.layer').css('transform', 'scale('+ this.ratio +')');
-
-				$(this.$.frame).width(frameSize);
-				$(this.$.frame).height(frameSize);
+				$(this.$.frame).css('transform', 'scale('+ this.ratio +')');
+				$(this).css('width', frameSize);
 			},
 
 			pushItem:function(data){
