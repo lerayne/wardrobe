@@ -50,6 +50,10 @@
 				<input type="text" tabindex="1" id="inputName">
 			</label>
 
+			<paper-input-decorator floatingLabel label="{{ text('models.creation.original') }}">
+				<input type="text" tabindex="1" id="inputSize" value="1000">
+			</paper-input-decorator>
+
 			<br>
 			<paper-button self-center raised class="highlight" on-tap="{{ createModel }}">
 				<text-string>models.creation.create</text-string>
@@ -102,12 +106,14 @@
 			createModel:function(){
 				if (this.$.inputTitle.value.match(/^\s*$/)) return false;
 				if (this.$.inputName.value.match(/^\s*$/)) return false;
+				if (this.$.inputSize.value.match(/^\s*$/)) return false;
 
 				app.connection.write({
 					action: 'add_model',
 					name:this.$.inputName.value,
 					title:this.$.inputTitle.value,
-					agency:this.currentAgencyID
+					agency:this.currentAgencyID,
+					size:this.$.inputSize.value
 				})
 
 				this.closeDialog(true);

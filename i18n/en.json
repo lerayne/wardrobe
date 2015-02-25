@@ -13,6 +13,7 @@
 	"models.creation.title":"Name of a model",
 	"models.creation.name":"System name",
 	"models.creation.create":"Create",
+	"models.creation.original":"Original canvas size, px (must be square)",
 
 	"shelves.header":"Select an outfit shelf",
 	"shelves.creation.header":"Create a new shelf",

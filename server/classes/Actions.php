@@ -56,6 +56,7 @@ class Actions {
 
 			$new_row['name'] = $params['name'];
 			$new_row['title'] = $params['title'];
+			$new_row['size'] = $params['size'];
 			$new_row['created'] = $now;
 			$new_row['updated'] = $now;
 			$new_row['author_id'] = 1; // todo login
