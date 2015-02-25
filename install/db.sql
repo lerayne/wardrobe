@@ -51,13 +51,12 @@ DROP TABLE IF EXISTS `wardrobe_item_instances`;
 CREATE TABLE `wardrobe_item_instances` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `item_id` bigint(20) unsigned NOT NULL,
-  `layer_id` bigint(20) unsigned NOT NULL,
-  `file` varchar(45) NOT NULL,
+  `file` varchar(512) NOT NULL,
   `icon` varchar(45) DEFAULT NULL,
+  `title` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `layer` (`layer_id`),
   KEY `item` (`item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -85,7 +84,7 @@ CREATE TABLE `wardrobe_items` (
   KEY `shelf` (`shelf_id`),
   KEY `author` (`author_id`),
   KEY `updated` (`updated`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -103,7 +102,7 @@ CREATE TABLE `wardrobe_layers` (
   `y_offset` decimal(5,3) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `item` (`item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -154,7 +153,7 @@ CREATE TABLE `wardrobe_shelves` (
   KEY `model` (`model_id`),
   KEY `author` (`author_id`),
   KEY `updated` (`updated`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -192,4 +191,4 @@ CREATE TABLE `wardrobe_users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-02-24 12:45:01
+-- Dump completed on 2015-02-25 15:09:53
