@@ -55,7 +55,7 @@
 					</label>
 
 					<paper-input-decorator floatingLabel label="{{ text('items.creation.defaultZ') }}">
-						<input type="text" tabindex="1" value="0"  id="inputZ">
+						<input type="text" tabindex="1"  id="inputZ" value="{{parentZ}}">
 					</paper-input-decorator>
 
 					<label>
@@ -103,6 +103,7 @@
 			},
 
 			file:false,
+			parentZ:0,
 
 			selectShelf:function(id){
 				this.currentShelfID = id;
@@ -110,6 +111,8 @@
 
 			subscribe:function(){
 				this.super();
+
+				this.parentZ = app.currentState.shelf.z_index;
 
 				app.connection.subscribe(this, 'items', {
 					feed:'items',

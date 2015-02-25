@@ -1,0 +1,46 @@
+<polymer-element name="card-base" attributes="data" on-tap="{{ select }}">
+	<template>
+		<style>
+			:host {
+				display: block;
+				border:1px solid #ccc;
+				margin:2px;
+				padding:5px;
+				cursor: pointer;
+			}
+
+			:host(:hover) {
+				background-color: #eee;
+			}
+
+			:host([selected]) {
+				background-color: lemonchiffon;
+			}
+		</style>
+
+	</template>
+
+	<script>
+		Polymer({
+
+			publish:{
+				selected:{
+					default:false,
+					reflect:true
+				}
+			},
+
+			computed:{
+				selected:'data.selected'
+			},
+
+			attached:function(){
+				if (this.data.selected){
+					this.select()
+				}
+			},
+
+			select:function(){}
+		});
+	</script>
+</polymer-element>

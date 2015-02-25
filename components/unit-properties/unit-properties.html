@@ -1,0 +1,15 @@
+<link rel="import" href="./unit-properties-item.html">
+
+<polymer-element name="unit-properties" attributes="data, object" vertical layout flex>
+	<template>
+
+		<template if="{{object == 'item'}}">
+			<unit-properties-item data="{{data}}"></unit-properties-item>
+		</template>
+
+	</template>
+
+	<script>
+		Polymer();
+	</script>
+</polymer-element>

@@ -27,9 +27,14 @@
 				'open-subunit':'openSubunit',
 				'close-subunit':'closeSubunit',
 
-				'agency-selected':'agencySelected',
-				'model-selected':'modelSelected',
-				'shelf-selected':'shelfSelected'
+				'agency-selected':'onAgencySelected',
+				'model-selected':'onModelSelected',
+				'shelf-selected':'onShelfSelected',
+				'item-selected':'onItemSelected'
+			},
+
+			created:function(){
+				this.currentState = {};
 			},
 
 			ready:function(){
@@ -37,7 +42,7 @@
 			},
 
 			openSubunit:function(event, data){
-				console.log('open', data.subunitName);
+				//console.log('open', data.subunitName);
 
 				// which sub is being opened
 				var subunitIndex = this.subunits.indexOf(data.subunitName);
@@ -54,7 +59,7 @@
 			},
 
 			closeSubunit:function(event, data){
-				console.log('close', data.subunitName);
+				//console.log('close', data.subunitName);
 
 				// which sub is being closed
 				var subunitIndex = this.subunits.indexOf(data.subunitName);
@@ -66,16 +71,23 @@
 				}
 			},
 
-			agencySelected:function(event, data){
+			onAgencySelected:function(event, data){
+				this.currentState.agency = data;
 				this.$.models.selectAgency(data.id)
 			},
 
-			modelSelected:function(event, data){
+			onModelSelected:function(event, data){
+				this.currentState.model = data;
 				this.$.shelves.selectModel(data.id)
 			},
 
-			shelfSelected:function(event, data){
+			onShelfSelected:function(event, data){
+				this.currentState.shelv = data;
 				this.$.items.selectShelf(data.id)
+			},
+
+			onItemSelected:function(event, data){
+				this.currentState.index = data;
 			}
 		});
 	</script>

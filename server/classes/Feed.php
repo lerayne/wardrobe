@@ -111,7 +111,8 @@ class Feed {
 				mdl.id,
 				mdl.name,
 				mdl.title,
-				mdl.cover
+				mdl.cover,
+				mdl.size
 			FROM ?_models mdl
 			WHERE updated > ?
 				AND agency_id = ?

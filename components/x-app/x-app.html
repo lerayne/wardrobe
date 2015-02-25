@@ -10,6 +10,8 @@
 <link rel="import" href="../tab-group/tab-group.html">
 <link rel="import" href="../unit-browse/unit-browse.html">
 <link rel="import" href="../unit-saved/unit-saved.html">
+<link rel="import" href="../unit-saved/unit-saved.html">
+<link rel="import" href="../unit-properties/unit-properties.html">
 
 <polymer-element name="x-app" vertical layout flex>
 	<template>
@@ -69,7 +71,16 @@
 				<unit-doll id="doll"></unit-doll>
 			</div>
 
-			<div class="panel" vertical layout flex></div>
+			<div class="panel" vertical layout flex>
+				<paper-tabs selected="{{propsModeId}}">
+					<paper-tab x-unit="properties" on-tap="{{propsSelectTab}}"><text-string class="tab">navigation.tabs.properties</text-string></paper-tab>
+				</paper-tabs>
+
+				<div hidden?="{{propsMode != 'properties'}}" class="tabbed-content" vertical layout flex>
+					<unit-properties data="{{currentObject}}" object="{{currentObjectType}}"></unit-properties>
+				</div>
+
+			</div>
 		</div>
 
 	</template>
@@ -77,24 +88,75 @@
 	<script>
 		Polymer({
 
-			navModeId:0,
-
 			eventDelegates:{
-				'item-selected':'onItemSelected'
+				'item-selected':'onItemSelected',
+				'shelf-selected':'onShelfSelected',
+				'model-selected':'onModelSelected',
+				'agency-selected':'onAgencySelected'
 			},
 
 			created:function(){
 				this.navModes = ['browse', 'saved'];
 				this.navMode = this.navModes[this.navModeId];
+				this.propsModes = ['properties'];
+				this.propsMode = this.propsModes[this.propsModeId];
+				this.currentObjectType = '';
+				this.currentObject = {};
+
+				app.currentState = {};
 			},
 
-			onItemSelected:function(event, data, sender){
-				console.log('x-app catched select:', data);
+			navModeId:0,
+			propsModeId:0,
+
+			navSelectTab:function(event, detail, sender){
+				this.navMode = $(sender).attr('x-unit');
+				this.navModeId = this.navModes.indexOf(this.navMode);
+			},
+
+			propsSelectTab:function(event, detail, sender){
+				this.propsMode = $(sender).attr('x-unit');
+				this.propsModeId = this.propsModes.indexOf(this.propsMode);
+			},
+
+			onAgencySelected:function(event, data){
+				this.currentObjectType = 'agency';
+				this.currentObject = data;
+				app.currentState.agency = data;
+			},
+
+			onModelSelected:function(event, data){
+				this.currentObjectType = 'model';
+				this.currentObject = data;
+				app.currentState.model = data;
+
+				this.$.doll.initModel(data);
+
+				app.connection.get('default_item', {model:data.id}, this.selectDefault.bind(this))
+			},
+
+			selectDefault:function(data){
+				console.log(data);
+
+				if (data.id){
+					this.onItemSelected(null, data)
+				}
+			},
+
+			onShelfSelected:function(event, data){
+				this.currentObjectType = 'shelf';
+				this.currentObject = data;
+				app.currentState.shelf = data;
+			},
+
+			onItemSelected:function(event, data){
+				app.currentState.item = data;
 
 				app.connection.get('item', {id:data.id}, this.parseItem.bind(this))
 			},
 
 			parseItem:function(data){
+
 				_.each(data.instances, function(instance, i){
 					instance.layers = [];
 
@@ -106,12 +168,11 @@
 					}, this)
 				}, this);
 
-				this.$.doll.pushItem(data.instances[0]);
-			},
+				this.currentObjectType = 'item';
+				this.currentObject = data;
+				app.currentState.item = data;
 
-			navSelectTab:function(event, detail, sender){
-				this.navMode = $(sender).attr('x-unit');
-				this.navModeId = this.navModes.indexOf(this.navMode);
+				this.$.doll.pushItem(data);
 			}
 
 		});

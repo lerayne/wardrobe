@@ -25,7 +25,7 @@
 
 		<div id="frame">
 			<template repeat="{{ layer in layers }}">
-				<image-layer data="{{ layer }}" scale="{{ratio}}"></image-layer>
+				<image-layer data="{{ layer }}"></image-layer>
 			</template>
 		</div>
 
@@ -33,13 +33,11 @@
 
 	<script>
 		Polymer({
-			pixelRatio: 1000, // todo: 1000 is changeable var, depends on actor
+			canvasSize: 1000, // todo: 1000 is changeable var, depends on actor
 			ratio:1,
 
 			created:function(){
 				var that = this;
-
-				this.layers = [];
 
 				$(window).resize(function(){
 					that.resize()
@@ -47,8 +45,23 @@
 			},
 
 			attached:function(){
-				$(this.$.frame).width(this.pixelRatio);
-				$(this.$.frame).height(this.pixelRatio);
+				this.initModel();
+			},
+
+			observe:{
+				items:'createLayers'
+			},
+
+			initModel:function(data){
+				this.layers = [];
+				this.items = {};
+
+				$(this.$.frame).width(this.canvasSize);
+				$(this.$.frame).height(this.canvasSize);
+
+				if (typeof data != 'undefined'){
+					this.canvasSize = +data.size;
+				}
 
 				this.resize();
 			},
@@ -57,19 +70,32 @@
 				var that = this;
 
 				// todo - make resizing snapped by 10px
-				var frameSize = Math.min(this.offsetHeight, this.pixelRatio);
-				this.ratio = frameSize / this.pixelRatio;
+				var frameSize = Math.min(this.offsetHeight, this.canvasSize);
+				this.ratio = frameSize / this.canvasSize;
 
 				$(this.$.frame).css('transform', 'scale('+ this.ratio +')');
 				$(this).css('width', frameSize);
 			},
 
-			pushItem:function(data){
-				console.log('instance push', data)
+			pushItem:function(data, instanceId){
+				if (typeof instanceId == 'undefined') { instanceId = 0; }
 
-				_.each(data.layers, function(layer){
-					this.layers.push(layer)
-				}, this)
+				this.items[data.item.shelf_id] = data.instances[instanceId];
+
+				this.createLayers();
+			},
+
+			createLayers:function(){
+				var newLayers = [];
+
+				_.each(this.items, function(instance){
+
+					if (instance.layers){
+						newLayers = newLayers.concat(instance.layers)
+					}
+				});
+
+				this.layers = newLayers;
 			}
 		});
 	</script>

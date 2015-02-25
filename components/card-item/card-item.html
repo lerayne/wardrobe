@@ -1,22 +1,7 @@
-<polymer-element name="card-item" attributes="data" on-tap="{{select}}">
+<link rel="import" href="../card-base/card-base.html">
+
+<polymer-element name="card-item" extends="card-base">
 	<template>
-		<style>
-			:host {
-				display: block;
-				border:1px solid #ccc;
-				margin:2px;
-				padding:5px;
-				cursor: pointer;
-			}
-
-			:host(:hover) {
-				background-color: #eee;
-			}
-
-			:host([selected]) {
-				background-color: lemonchiffon;
-			}
-		</style>
 
 		<b>{{data.title}}</b>
 
@@ -24,23 +9,6 @@
 
 	<script>
 		Polymer({
-			publish:{
-				selected:{
-					default:false,
-					reflect:true
-				}
-			},
-
-			computed:{
-				selected:'data.selected'
-			},
-
-			attached:function(){
-				if (this.data.selected){
-					this.select()
-				}
-			},
-
 			select:function(){
 				this.fire('item-selected', this.data);
 			}

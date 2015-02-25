@@ -1,6 +1,7 @@
 {
 	"navigation.tabs.browser":"Browse & create",
 	"navigation.tabs.saved":"My saved outfits",
+	"navigation.tabs.properties":"Properties",
 
 	"agencies.header":"Select an agency",
 	"agencies.creation.header":"Create a new agency",
