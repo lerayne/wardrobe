@@ -1,3 +1,5 @@
+<link rel="import" href="../image-cropper/image-cropper.html">
+
 <polymer-element name="unit-properties-item" attributes="data" vertical layout flex>
 	<template>
 		<style>
@@ -51,6 +53,7 @@
 				height: 40px;
 				cursor:pointer;
 				text-align: center;
+				margin-right:5px;
 			}
 
 			.instance img {
@@ -88,14 +91,16 @@
 		<div class="instances" horizontal layout center>
 			<template repeat="{{instance in data.instances}}">
 				<div class="instance" on-tap="{{selectInstance}}">
-					<img _src="{{instance.layers[0].file}}">
+					<img _src="{{instance.layers[0].file}}" title="{{instance.title}}">
 				</div>
 			</template>
 
 			<span flex></span>
 
-			<paper-fab icon="add" mini></paper-fab>
+			<paper-fab icon="add" mini on-tap="{{openNewInstanceDialog}}"></paper-fab>
 		</div>
+
+
 
 		<div class="layers">
 			<template repeat="{{layer, index in data.layers}}">
@@ -130,12 +135,43 @@
 			</div>
 		</div>
 
+
+		<paper-dialog transition="core-transition-top" id="instanceCreationDialog"  heading="{{ text('props.item.instanceCreation.header') }}">
+
+			<div horizontal layout>
+				<div flex>
+					<paper-input-decorator floatingLabel label="{{ text('props.item.instanceCreation.title') }}">
+						<input type="text" tabindex="1" id="inputTitle">
+					</paper-input-decorator>
+
+					<label>
+						<text-string>props.item.instanceCreation.file</text-string>
+						<input name="file" type="file" id="inputFile" on-change="{{tempUpload}}">
+					</label>
+				</div>
+
+				<div hidden?="{{!file}}" class="image-frame">
+					<image-cropper image="{{file}}" cropData="{{imgCropData}}" on-image-loaded="{{imageLoaded}}"></image-cropper>
+				</div>
+			</div>
+
+			<br>
+
+			<paper-button self-center raised class="highlight" on-tap="{{ createInstance }}">
+				<text-string>props.item.instanceCreation.create</text-string>
+			</paper-button>
+
+		</paper-dialog>
+
 	</template>
 
 	<script>
 		Polymer({
 
+			text:text,
+
 			editMode:false,
+			file:false,
 
 			enterEditMode:function(){
 				this.editMode = true
@@ -147,6 +183,56 @@
 
 			save:function(){
 				this.exitEditMode();
+			},
+
+			openNewInstanceDialog:function(){
+				this.$.instanceCreationDialog.open();
+			},
+
+			imageLoaded:function(){
+				console.log('grandparent catched imgload')
+
+				this.$.instanceCreationDialog.updateTargetDimensions();
+			},
+
+			tempUpload:function(event, details){
+				var formData = new FormData();
+
+				var file = event.target.files[0];
+
+				formData.append('file', file);
+
+				$.ajax({
+					url: 'server/_upload/index.php',
+					type: 'POST',
+					data: formData,
+					cache: false,
+					processData: false,
+					contentType: false,
+					success:this.parseTempFile.bind(this)
+				})
+			},
+
+			parseTempFile:function(response){
+				var response = JSON.parse(response);
+				this.file = response.data.files[0];
+			},
+
+			createInstance:function(){
+				if (this.$.inputTitle.value.match(/^\s*$/)) return false;
+				if (!this.file) return false;
+
+				app.connection.write({
+					action:'add_instance',
+					title: this.$.inputTitle.value,
+					image: this.file,
+					item: this.data.item.id,
+					layer: this.data.layers[0].id,
+					//bypass_write:1,
+					cropData: this.imgCropData
+				});
+
+				this.$.instanceCreationDialog.close();
 			}
 
 		});

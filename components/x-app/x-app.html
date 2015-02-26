@@ -167,11 +167,12 @@
 
 					_.each(data.layers, function(layer, l){
 
-						var processedLayer = layer;
+						var processedLayer = _(layer).clone();
+
 						processedLayer.file = instance.file + '.' + (+layer.id).toString(16) + '.png';
-						instance.layers.push(processedLayer)
-					}, this)
-				}, this);
+						instance.layers.push(processedLayer);
+					})
+				});
 
 				this.pushItem(data);
 			},
@@ -202,13 +203,13 @@
 			pushItem:function(data, instanceId){
 				if (typeof instanceId == 'undefined') { instanceId = 0; }
 
-				this.items[data.item.shelf_id] = data.instances[instanceId];
-
-				this.createLayers();
-
 				this.currentObjectType = 'item';
 				this.currentObject = this.current.item = data;
 				app.currentState.item = data;
+
+				this.items[data.item.shelf_id] = this.current.item.instances[instanceId];
+
+				this.createLayers();
 			},
 
 			createLayers:function(){

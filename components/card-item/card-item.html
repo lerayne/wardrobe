@@ -1,7 +1,26 @@
 <link rel="import" href="../card-base/card-base.html">
 
-<polymer-element name="card-item" extends="card-base">
+<polymer-element name="card-item" extends="card-base" horizontal layout center>
 	<template>
+
+		<style>
+			.thumbnail {
+				width:50px;
+				height:50px;
+				text-align: center;
+				border:1px solid #ddd;
+				margin-right: 10px;
+			}
+
+			.thumbnail img {
+				max-height: 50px;
+				max-width: 50px;
+			}
+		</style>
+
+		<div class="thumbnail">
+			<img _src="{{data.cover}}">
+		</div>
 
 		<b>{{data.title}}</b>
 
@@ -11,7 +30,11 @@
 		Polymer({
 			select:function(){
 				this.fire('item-selected', this.data);
-			}
+			},
+
+			computed:{
+				preview:'getPreview'
+			},
 		});
 	</script>
 </polymer-element>

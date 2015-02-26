@@ -7,5 +7,5 @@
 *-v.html
 *-dv.html
 /assets/temp/*
-/assets/agencies/*
+#/assets/agencies/*
 !/assets/temp/readme.md

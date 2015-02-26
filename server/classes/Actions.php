@@ -202,5 +202,47 @@ class Actions {
 	}
 
 
+	function add_instance($params) {
+		global $db, $result, $env;
 
+		// get agency and model
+		$path_data = $db->selectRow('
+			SELECT
+				itm.id AS item_id,
+				itm.name AS item_name,
+				mdl.id AS model_id,
+				mdl.name AS model_name,
+				ags.id AS agency_id,
+				ags.name AS agency_name
+			FROM ?_items itm
+			LEFT JOIN ?_shelves slv ON itm.shelf_id = slv.id
+			LEFT JOIN ?_models mdl ON slv.model_id = mdl.id
+			LEFT JOIN ?_agencies ags ON mdl.agency_id = ags.id
+			WHERE itm.id = ?
+			',
+			$params['item']
+		);
+
+		$layer_id = $db->selectCell('SELECT id FROM ?_layers WHERE item_id = ? ORDER BY id LIMIT 1', $params['item']);
+
+		$new_item['item_id'] = $params['item'];
+		$new_item['title'] = $params['title'];
+		$new_item['file'] = '';
+		$new_item['icon'] = '';
+
+		$new_instance_id = $db->query('INSERT INTO ?_item_instances (?#) VALUES (?a)', array_keys($new_item), array_values($new_item));
+
+		// save main file
+		$filename = $path_data['item_name'].'.'.dechex($new_instance_id);
+
+		$filepath = 'assets/agencies/'.$path_data['agency_name'].'/'.$path_data['model_name'].'/'.$filename;
+		$filepath_layer = $filepath.'.'.dechex($layer_id).'.png';
+
+		rename($env['assets'].$params['image'], $env['assets'].$filepath_layer);
+
+		// update instance (write files paths)
+		$edit_instance['file'] = $filepath;
+
+		$db->query('UPDATE ?_item_instances SET ?a WHERE id = ?', $edit_instance, $new_instance_id);
+	}
 } 

@@ -179,6 +179,7 @@
 				if (this.$.inputTitle.value.match(/^\s*$/)) return false;
 				if (this.$.inputName.value.match(/^\s*$/)) return false;
 				if (this.$.inputZ.value.match(/^\s*$/)) return false;
+				if (!this.file) return false;
 
 				app.connection.write({
 					action:'add_item',

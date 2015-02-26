@@ -34,5 +34,9 @@
 	"props.item.layerHeader":"Layer",
 	"props.item.z_index":"Z-index",
 	"props.item.x_offset":"X",
-	"props.item.y_offset":"Y"
+	"props.item.y_offset":"Y",
+	"props.item.instanceCreation.header":"Create new instance",
+	"props.item.instanceCreation.title":"Neme of an instance",
+	"props.item.instanceCreation.file":"Image",
+	"props.item.instanceCreation.create":"Upload"
 }
