@@ -29,5 +29,10 @@
 	"items.creation.name":"System name",
 	"items.creation.defaultZ":"Default z-index for first layer",
 	"items.creation.create":"Create",
-	"items.creation.file":"Image"
+	"items.creation.file":"Image",
+
+	"props.item.layerHeader":"Layer",
+	"props.item.z_index":"Z-index",
+	"props.item.x_offset":"X",
+	"props.item.y_offset":"Y"
 }

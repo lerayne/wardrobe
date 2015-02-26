@@ -68,7 +68,7 @@
 			</div>
 
 			<div class="panel" vertical layout>
-				<unit-doll id="doll"></unit-doll>
+				<unit-doll id="doll" layers="{{layers}}" canvasSize="{{dollCanvasSize}}"></unit-doll>
 			</div>
 
 			<div class="panel" vertical layout flex>
@@ -88,6 +88,7 @@
 	<script>
 		Polymer({
 
+			// POLYMER
 			eventDelegates:{
 				'item-selected':'onItemSelected',
 				'shelf-selected':'onShelfSelected',
@@ -100,12 +101,19 @@
 				this.navMode = this.navModes[this.navModeId];
 				this.propsModes = ['properties'];
 				this.propsMode = this.propsModes[this.propsModeId];
-				this.currentObjectType = '';
-				this.currentObject = {};
 
 				app.currentState = {};
+
+				this.currentObjectType = '';
+				this.currentObject = {};
+				this.current = {};
+				this.initModel();
 			},
 
+
+
+
+			// TABS MANAGEMENT
 			navModeId:0,
 			propsModeId:0,
 
@@ -119,33 +127,30 @@
 				this.propsModeId = this.propsModes.indexOf(this.propsMode);
 			},
 
+
+
+
+			// ON SELECTED
 			onAgencySelected:function(event, data){
 				this.currentObjectType = 'agency';
-				this.currentObject = data;
+				this.currentObject = this.current.agency = data;
 				app.currentState.agency = data;
 			},
 
 			onModelSelected:function(event, data){
-				this.currentObjectType = 'model';
-				this.currentObject = data;
-				app.currentState.model = data;
-
-				this.$.doll.initModel(data);
-
-				app.connection.get('default_item', {model:data.id}, this.selectDefault.bind(this))
-			},
-
-			selectDefault:function(data){
-				console.log(data);
-
-				if (data.id){
-					this.onItemSelected(null, data)
+				if (!this.current.model || this.current.model.id != data.id){
+					this.initModel(data);
+					app.connection.get('default_item', {model:data.id}, this.selectDefault.bind(this))
 				}
+
+				this.currentObjectType = 'model';
+				this.currentObject = this.current.model = data;
+				app.currentState.model = data;
 			},
 
 			onShelfSelected:function(event, data){
 				this.currentObjectType = 'shelf';
-				this.currentObject = data;
+				this.currentObject = this.current.shelf = data;
 				app.currentState.shelf = data;
 			},
 
@@ -168,11 +173,55 @@
 					}, this)
 				}, this);
 
-				this.currentObjectType = 'item';
-				this.currentObject = data;
-				app.currentState.item = data;
+				this.pushItem(data);
+			},
 
-				this.$.doll.pushItem(data);
+
+
+			//PROPS
+			dollCanvasSize:1000,
+
+
+
+			//MAIN CODE
+			initModel:function(data){
+				this.layers = [];
+				this.items = {};
+
+				if (typeof data != 'undefined'){
+					this.dollCanvasSize = +data.size;
+				}
+			},
+
+			selectDefault:function(data){
+				if (data.id){
+					this.onItemSelected(null, data)
+				}
+			},
+
+			pushItem:function(data, instanceId){
+				if (typeof instanceId == 'undefined') { instanceId = 0; }
+
+				this.items[data.item.shelf_id] = data.instances[instanceId];
+
+				this.createLayers();
+
+				this.currentObjectType = 'item';
+				this.currentObject = this.current.item = data;
+				app.currentState.item = data;
+			},
+
+			createLayers:function(){
+				var newLayers = [];
+
+				_.each(this.items, function(instance){
+
+					if (instance.layers){
+						newLayers = newLayers.concat(instance.layers)
+					}
+				});
+
+				this.layers = newLayers;
 			}
 
 		});

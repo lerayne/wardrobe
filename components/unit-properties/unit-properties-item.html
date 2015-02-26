@@ -8,15 +8,147 @@
 			core-toolbar {
 				padding:0 20px;
 			}
+
+			.layers {
+				margin:5px;
+			}
+
+			.layer {
+				border:1px solid #eee;
+			}
+
+			.layer label {
+				padding:5px 10px;
+				display: block;
+			}
+
+			.layer header {
+				padding:5px 10px;
+				background-color: #00bcd4;
+				color:#fff;
+				font-weight: bold;
+			}
+
+			input.small {
+				width:50px;
+			}
+
+			input[type="text"][disabled] {
+				background:transparent;
+				border:none;
+				padding:3px 2px;
+			}
+
+			.instances {
+				height:66px;
+				padding: 0 10px;
+			}
+
+			.instance {
+				display: inline-block;
+				border:3px solid #ddd;
+				width: 40px;
+				height: 40px;
+				cursor:pointer;
+				text-align: center;
+			}
+
+			.instance img {
+				max-width: 40px;
+				max-height: 40px;
+			}
+
+			.instance:hover {
+				border-color: #bbb;
+			}
+
+			.layer-preview {
+				width:80px;
+				height:80px;
+				text-align: center;
+				border:1px solid #ddd;
+				margin:5px;
+			}
+
+			.layer-preview img {
+				max-height: 80px;
+				max-width: 80px;
+			}
+
 		</style>
 
 		<core-toolbar class="core-narrow">
 			{{data.item.title}}
+			<span flex></span>
+			<paper-icon-button icon="create" on-tap="{{enterEditMode}}" hidden?="{{editMode}}"></paper-icon-button>
+			<paper-icon-button icon="check-circle" on-tap="{{save}}" hidden?="{{!editMode}}"></paper-icon-button>
+			<paper-icon-button icon="cancel" on-tap="{{exitEditMode}}" hidden?="{{!editMode}}"></paper-icon-button>
 		</core-toolbar>
+
+		<div class="instances" horizontal layout center>
+			<template repeat="{{instance in data.instances}}">
+				<div class="instance" on-tap="{{selectInstance}}">
+					<img _src="{{instance.layers[0].file}}">
+				</div>
+			</template>
+
+			<span flex></span>
+
+			<paper-fab icon="add" mini></paper-fab>
+		</div>
+
+		<div class="layers">
+			<template repeat="{{layer, index in data.layers}}">
+				<div class="layer">
+					<header><text-string>props.item.layerHeader</text-string> {{index+1}}</header>
+
+					<div horizontal layout>
+						<div class="layer-preview">
+							<img _src="{{data.instances[0].layers[index].file}}">
+						</div>
+						<div>
+							<label>
+								<text-string>props.item.z_index</text-string>
+								<input type="text" value="{{layer.z_index}}" disabled?="{{!editMode}}" class="small">
+							</label>
+							<label>
+								<text-string>props.item.x_offset</text-string>
+								<input type="text" value="{{layer.x_offset}}" disabled?="{{!editMode}}" class="small">
+							</label>
+							<label>
+								<text-string>props.item.y_offset</text-string>
+								<input type="text" value="{{layer.y_offset}}" disabled?="{{!editMode}}" class="small">
+							</label>
+						</div>
+					</div>
+
+				</div>
+			</template>
+
+			<div horizontal layout end-justified>
+				<paper-fab style="margin:10px 5px" icon="note-add" mini></paper-fab>
+			</div>
+		</div>
 
 	</template>
 
 	<script>
-		Polymer();
+		Polymer({
+
+			editMode:false,
+
+			enterEditMode:function(){
+				this.editMode = true
+			},
+
+			exitEditMode:function(){
+				this.editMode = false;
+			},
+
+			save:function(){
+				this.exitEditMode();
+			}
+
+		});
 	</script>
 </polymer-element>

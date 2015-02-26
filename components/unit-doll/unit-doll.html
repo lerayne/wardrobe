@@ -1,6 +1,6 @@
 <link rel="import" href="../image-layer/image-layer.html">
 
-<polymer-element name="unit-doll" flex on-resize="{{ resize }}">
+<polymer-element name="unit-doll" attributes="layers, canvasSize" flex on-resize="{{ resize }}">
 	<template>
 		<style>
 			:host {
@@ -49,19 +49,13 @@
 			},
 
 			observe:{
-				items:'createLayers'
+				items:'createLayers',
+				canvasSize:'initModel'
 			},
 
 			initModel:function(data){
-				this.layers = [];
-				this.items = {};
-
 				$(this.$.frame).width(this.canvasSize);
 				$(this.$.frame).height(this.canvasSize);
-
-				if (typeof data != 'undefined'){
-					this.canvasSize = +data.size;
-				}
 
 				this.resize();
 			},
@@ -75,27 +69,6 @@
 
 				$(this.$.frame).css('transform', 'scale('+ this.ratio +')');
 				$(this).css('width', frameSize);
-			},
-
-			pushItem:function(data, instanceId){
-				if (typeof instanceId == 'undefined') { instanceId = 0; }
-
-				this.items[data.item.shelf_id] = data.instances[instanceId];
-
-				this.createLayers();
-			},
-
-			createLayers:function(){
-				var newLayers = [];
-
-				_.each(this.items, function(instance){
-
-					if (instance.layers){
-						newLayers = newLayers.concat(instance.layers)
-					}
-				});
-
-				this.layers = newLayers;
 			}
 		});
 	</script>
