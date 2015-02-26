@@ -89,7 +89,7 @@
 		</core-toolbar>
 
 		<div class="instances" horizontal layout center>
-			<template repeat="{{instance in data.instances}}">
+			<template repeat="{{instance, index in data.instances}}">
 				<div class="instance" on-tap="{{selectInstance}}">
 					<img _src="{{instance.layers[0].file}}" title="{{instance.title}}">
 				</div>
@@ -103,26 +103,26 @@
 
 
 		<div class="layers">
-			<template repeat="{{layer, index in data.layers}}">
+			<template repeat="{{layer, index in data.instances[data.activeInstance].layers}}">
 				<div class="layer">
 					<header><text-string>props.item.layerHeader</text-string> {{index+1}}</header>
 
 					<div horizontal layout>
 						<div class="layer-preview">
-							<img _src="{{data.instances[0].layers[index].file}}">
+							<img _src="{{data.instances[data.activeInstance].layers[index].file}}">
 						</div>
 						<div>
 							<label>
 								<text-string>props.item.z_index</text-string>
-								<input type="text" value="{{layer.z_index}}" disabled?="{{!editMode}}" class="small">
+								<input type="text" value="{{layer.z_index}}" class="small">
 							</label>
 							<label>
 								<text-string>props.item.x_offset</text-string>
-								<input type="text" value="{{layer.x_offset}}" disabled?="{{!editMode}}" class="small">
+								<input type="text" value="{{layer.x_offset}}" class="small">
 							</label>
 							<label>
 								<text-string>props.item.y_offset</text-string>
-								<input type="text" value="{{layer.y_offset}}" disabled?="{{!editMode}}" class="small">
+								<input type="text" value="{{layer.y_offset}}" class="small">
 							</label>
 						</div>
 					</div>
@@ -151,7 +151,7 @@
 				</div>
 
 				<div hidden?="{{!file}}" class="image-frame">
-					<image-cropper image="{{file}}" cropData="{{imgCropData}}" on-image-loaded="{{imageLoaded}}"></image-cropper>
+					<image-cropper plase="props" image="{{file}}" cropData="{{imgCropData}}" on-image-loaded="{{imageLoaded}}"></image-cropper>
 				</div>
 			</div>
 
@@ -167,7 +167,6 @@
 
 	<script>
 		Polymer({
-
 			text:text,
 
 			editMode:false,
@@ -190,12 +189,14 @@
 			},
 
 			imageLoaded:function(){
-				console.log('grandparent catched imgload')
+				console.log('unit-props catched imgload');
 
 				this.$.instanceCreationDialog.updateTargetDimensions();
 			},
 
 			tempUpload:function(event, details){
+				console.log('unit-props tempUpload')
+
 				var formData = new FormData();
 
 				var file = event.target.files[0];
@@ -233,6 +234,12 @@
 				});
 
 				this.$.instanceCreationDialog.close();
+			},
+
+			selectInstance:function(event, detail, sender){
+				var index = event.target.templateInstance.model.index;
+
+				this.fire('instance-selected', index);
 			}
 
 		});

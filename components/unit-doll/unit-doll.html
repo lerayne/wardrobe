@@ -1,6 +1,6 @@
 <link rel="import" href="../image-layer/image-layer.html">
 
-<polymer-element name="unit-doll" attributes="layers, canvasSize" flex on-resize="{{ resize }}">
+<polymer-element name="unit-doll" attributes="instances, canvasSize" flex on-resize="{{ resize }}">
 	<template>
 		<style>
 			:host {
@@ -24,8 +24,10 @@
 		</style>
 
 		<div id="frame">
-			<template repeat="{{ layer in layers }}">
-				<image-layer data="{{ layer }}"></image-layer>
+			<template repeat="{{ instance in instances }}">
+				<template repeat="{{layer in instance.layers}}">
+					<image-layer data="{{ layer }}"></image-layer>
+				</template>
 			</template>
 		</div>
 

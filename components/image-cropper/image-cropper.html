@@ -22,8 +22,10 @@
 
 	<script>
 		Polymer({
-			ready:function(){
-				$(window).on('message', this.parseFrameMessage.bind(this))
+			attached:function(){
+				// todo - think on some way to use several croppers (right now each next attached one rewrites onMessage to itself)
+				// maybe change postMessage for something moe useful, since cross-domain is not needed
+				$(window).off('message').on('message', this.parseFrameMessage.bind(this))
 			},
 
 			parseFrameMessage:function(e){

@@ -22,10 +22,17 @@ switch ($_REQUEST['subject']){
 
 		break;
 
-	case 'default_item':
+	case 'default_items':
 
 		// assume that the first item created will be the default
-		$result['id'] = $db->selectCell('SELECT id FROM ?_items WHERE model_id = ? ORDER BY id LIMIT 1', $_REQUEST['model']);
+		$result = $db->selectCol('
+			SELECT itm.id
+			FROM ?_shelves slv
+			JOIN ?_items itm ON slv.id = itm.shelf_id AND itm.default = 1
+			WHERE slv.model_id = ?
+			',
+			$_REQUEST['model']
+		);
 
 		break;
 }

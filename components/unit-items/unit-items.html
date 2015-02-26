@@ -136,7 +136,7 @@
 				this.super(arguments);
 			},
 
-			onItemSelected:function(event, data, sender){
+			onItemSelected:function(event, data){
 				_.each(this.nodes, function(el, i){
 
 					if (el.id != data.id){
@@ -201,7 +201,7 @@
 			},
 
 			imageLoaded:function(){
-				console.log('grandparent catched imgload')
+				console.log('unit-items catched imgload')
 
 				this.$.creationDialog.updateTargetDimensions();
 			}

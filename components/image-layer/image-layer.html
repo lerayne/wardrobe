@@ -14,11 +14,21 @@
 	<script>
 		Polymer({
 			ready:function(){
+				this.place();
+			},
+
+			place:function(){
 				$(this).css({
 					'z-index': this.data.z_index,
 					'top': this.data.y_offset * 1,
 					'left': this.data.x_offset * 1
 				})
+			},
+
+			observe:{
+				'data.x_offset':'place',
+				'data.y_offset':'place',
+				'data.z_index':'place'
 			}
 		});
 	</script>

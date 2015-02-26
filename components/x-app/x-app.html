@@ -68,7 +68,7 @@
 			</div>
 
 			<div class="panel" vertical layout>
-				<unit-doll id="doll" layers="{{layers}}" canvasSize="{{dollCanvasSize}}"></unit-doll>
+				<unit-doll id="doll" instances="{{instances}}" canvasSize="{{dollCanvasSize}}"></unit-doll>
 			</div>
 
 			<div class="panel" vertical layout flex>
@@ -90,6 +90,7 @@
 
 			// POLYMER
 			eventDelegates:{
+				'instance-selected':'onInstanceSelected',
 				'item-selected':'onItemSelected',
 				'shelf-selected':'onShelfSelected',
 				'model-selected':'onModelSelected',
@@ -140,7 +141,7 @@
 			onModelSelected:function(event, data){
 				if (!this.current.model || this.current.model.id != data.id){
 					this.initModel(data);
-					app.connection.get('default_item', {model:data.id}, this.selectDefault.bind(this))
+					app.connection.get('default_items', {model:data.id}, this.selectDefaults.bind(this))
 				}
 
 				this.currentObjectType = 'model';
@@ -160,6 +161,34 @@
 				app.connection.get('item', {id:data.id}, this.parseItem.bind(this))
 			},
 
+			onInstanceSelected:function(event, index){
+				this.pushInstance(this.current.item.item.shelf_id, index)
+			},
+
+
+
+			//PROPS
+			dollCanvasSize:1000,
+
+
+
+			//MAIN CODE
+			initModel:function(data){
+				this.instances = [];
+
+				if (typeof data != 'undefined'){
+					this.dollCanvasSize = +data.size;
+				}
+			},
+
+			selectDefaults:function(data){
+				console.log('def', data);
+
+				for (var i=0; i < data.length; i++) {
+					this.onItemSelected(null, {id:data[i]})
+				}
+			},
+
 			parseItem:function(data){
 
 				_.each(data.instances, function(instance, i){
@@ -177,52 +206,25 @@
 				this.pushItem(data);
 			},
 
-
-
-			//PROPS
-			dollCanvasSize:1000,
-
-
-
-			//MAIN CODE
-			initModel:function(data){
-				this.layers = [];
-				this.items = {};
-
-				if (typeof data != 'undefined'){
-					this.dollCanvasSize = +data.size;
-				}
-			},
-
-			selectDefault:function(data){
-				if (data.id){
-					this.onItemSelected(null, data)
-				}
-			},
-
-			pushItem:function(data, instanceId){
-				if (typeof instanceId == 'undefined') { instanceId = 0; }
-
+			pushItem:function(data){
 				this.currentObjectType = 'item';
 				this.currentObject = this.current.item = data;
 				app.currentState.item = data;
 
-				this.items[data.item.shelf_id] = this.current.item.instances[instanceId];
-
-				this.createLayers();
+				this.pushInstance(data.item.shelf_id, 0);
 			},
 
-			createLayers:function(){
-				var newLayers = [];
+			pushInstance:function(id, index){
+				this.current.item.activeInstance = index;
 
-				_.each(this.items, function(instance){
+				var i = _(this.instances).findIndex({shelf:id});
 
-					if (instance.layers){
-						newLayers = newLayers.concat(instance.layers)
-					}
-				});
+				var deleteCount = i >= 0 ? 1 : 0;
 
-				this.layers = newLayers;
+				this.instances.splice(i, deleteCount, {
+					shelf:id,
+					layers: this.current.item.instances[index].layers
+				})
 			}
 
 		});

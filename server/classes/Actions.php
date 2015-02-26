@@ -192,6 +192,9 @@ class Actions {
 
 			$db->query('UPDATE ?_item_instances SET ?a WHERE id = ?', $edit_instance, $new_instance_id);
 
+			// todo temp thunbnail
+			$db->query('UPDATE ?_items SET cover = ? WHERE id = ?', $filepath_layer, $new_item_id);
+
 			// make returned data
 			$path_data['filepath'] = $filepath_layer;
 			$path_data['item_id'] = $new_item_id;
