@@ -66,7 +66,7 @@ CREATE TABLE `wardrobe_item_instances` (
   `title` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `item` (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,7 +75,7 @@ CREATE TABLE `wardrobe_item_instances` (
 
 LOCK TABLES `wardrobe_item_instances` WRITE;
 /*!40000 ALTER TABLE `wardrobe_item_instances` DISABLE KEYS */;
-INSERT INTO `wardrobe_item_instances` VALUES (1,1,'assets/agencies/olympus/aphrodite/normal-body.1','','Default'),(2,2,'assets/agencies/olympus/aphrodite/high-boots.2','','Default'),(3,3,'assets/agencies/olympus/aphrodite/alien-body.3','','Default'),(4,4,'assets/agencies/olympus/aphrodite/standard.4','','Default'),(5,1,'assets/agencies/olympus/aphrodite/normal-body.5','','Light skin'),(6,1,'assets/agencies/olympus/aphrodite/normal-body.6','','Swarthy'),(7,4,'assets/agencies/olympus/aphrodite/standard.7','','Black'),(8,4,'assets/agencies/olympus/aphrodite/standard.8','','White'),(11,2,'assets/agencies/olympus/aphrodite/high-boots.b','','White'),(12,2,'assets/agencies/olympus/aphrodite/high-boots.c','','Light-blue'),(13,5,'assets/agencies/olympus/aphrodite/american-belly.d','','Default'),(14,5,'assets/agencies/olympus/aphrodite/american-belly.e','','White'),(15,5,'assets/agencies/olympus/aphrodite/american-belly.f','','Light-blue'),(16,6,'assets/agencies/olympus/aphrodite/skewed-mini.10','','Default'),(17,7,'assets/agencies/olympus/aphrodite/black.11','','Default'),(18,7,'assets/agencies/olympus/aphrodite/black.12','','50 den'),(19,7,'assets/agencies/olympus/aphrodite/black.13','','90 den'),(20,7,'assets/agencies/olympus/aphrodite/black.14','','30 den'),(21,8,'assets/agencies/olympus/aphrodite/white.15','','Default'),(22,8,'assets/agencies/olympus/aphrodite/white.16','','35 den'),(23,8,'assets/agencies/olympus/aphrodite/white.17','','75 den'),(24,9,'assets/agencies/olympus/aphrodite/brown.18','','Default'),(25,10,'assets/agencies/olympus/aphrodite/candies.19','','Default'),(26,10,'assets/agencies/olympus/aphrodite/candies.1a','','Green'),(27,10,'assets/agencies/olympus/aphrodite/candies.1b','','Teal'),(28,10,'assets/agencies/olympus/aphrodite/candies.1c','','Red'),(29,10,'assets/agencies/olympus/aphrodite/candies.1d','','Blue'),(30,10,'assets/agencies/olympus/aphrodite/candies.1e','','Violet');
+INSERT INTO `wardrobe_item_instances` VALUES (1,1,'assets/agencies/olympus/aphrodite/normal-body.1','','Default'),(2,2,'assets/agencies/olympus/aphrodite/high-boots.2','','Default'),(3,3,'assets/agencies/olympus/aphrodite/alien-body.3','','Default'),(4,4,'assets/agencies/olympus/aphrodite/standard.4','','Default'),(5,1,'assets/agencies/olympus/aphrodite/normal-body.5','','Light skin'),(6,1,'assets/agencies/olympus/aphrodite/normal-body.6','','Swarthy'),(7,4,'assets/agencies/olympus/aphrodite/standard.7','','Black'),(8,4,'assets/agencies/olympus/aphrodite/standard.8','','White'),(11,2,'assets/agencies/olympus/aphrodite/high-boots.b','','White'),(12,2,'assets/agencies/olympus/aphrodite/high-boots.c','','Light-blue'),(13,5,'assets/agencies/olympus/aphrodite/american-belly.d','','Default'),(14,5,'assets/agencies/olympus/aphrodite/american-belly.e','','White'),(15,5,'assets/agencies/olympus/aphrodite/american-belly.f','','Light-blue'),(16,6,'assets/agencies/olympus/aphrodite/skewed-mini.10','','Default'),(17,7,'assets/agencies/olympus/aphrodite/black.11','','Default'),(18,7,'assets/agencies/olympus/aphrodite/black.12','','50 den'),(19,7,'assets/agencies/olympus/aphrodite/black.13','','90 den'),(20,7,'assets/agencies/olympus/aphrodite/black.14','','30 den'),(21,8,'assets/agencies/olympus/aphrodite/white.15','','Default'),(22,8,'assets/agencies/olympus/aphrodite/white.16','','35 den'),(23,8,'assets/agencies/olympus/aphrodite/white.17','','75 den'),(24,9,'assets/agencies/olympus/aphrodite/brown.18','','Default'),(25,10,'assets/agencies/olympus/aphrodite/candies.19','','Default'),(26,10,'assets/agencies/olympus/aphrodite/candies.1a','','Green'),(27,10,'assets/agencies/olympus/aphrodite/candies.1b','','Teal'),(28,10,'assets/agencies/olympus/aphrodite/candies.1c','','Red'),(29,10,'assets/agencies/olympus/aphrodite/candies.1d','','Blue'),(30,10,'assets/agencies/olympus/aphrodite/candies.1e','','Violet'),(31,6,'assets/agencies/olympus/aphrodite/skewed-mini.1f','','White');
 /*!40000 ALTER TABLE `wardrobe_item_instances` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -251,7 +251,7 @@ CREATE TABLE `wardrobe_users` (
 
 LOCK TABLES `wardrobe_users` WRITE;
 /*!40000 ALTER TABLE `wardrobe_users` DISABLE KEYS */;
-INSERT INTO `wardrobe_users` VALUES (1,'lerayne',NULL,'lerayne@gmail.com','062ac7c968833af0f79b2ff4a9de644e','2010-03-12 15:48:00',1,'local','2015-02-26 15:34:58','online');
+INSERT INTO `wardrobe_users` VALUES (1,'lerayne',NULL,'lerayne@gmail.com','062ac7c968833af0f79b2ff4a9de644e','2010-03-12 15:48:00',1,'local','2015-02-26 15:40:34','online');
 /*!40000 ALTER TABLE `wardrobe_users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -264,4 +264,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-02-26 15:35:14
+-- Dump completed on 2015-02-26 15:41:05
