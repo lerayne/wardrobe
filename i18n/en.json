@@ -22,6 +22,8 @@
 	"shelves.creation.name":"System name",
 	"shelves.creation.defaultZ":"Default z-index",
 	"shelves.creation.create":"Create",
+	"shelves.creation.required":"Required",
+	"shelves.creation.requiredDescription":"At least one item of this shelf must be selected (useful for age restrictions, such as mandatory underware item)",
 
 	"items.header":"Select an item",
 	"items.creation.header":"Create a new item",

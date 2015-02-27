@@ -191,6 +191,10 @@ Funcs.prototype = {
 
 	createSystemName:function(input){
 		return input.replace(/\s/g, '-').toLowerCase();
+	},
+
+	getFullFile:function(file, layer_id){
+		return file + '.' + parseInt(layer_id, 10).toString(16) + '.png';
 	}
 }
 

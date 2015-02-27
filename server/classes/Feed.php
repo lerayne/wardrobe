@@ -167,7 +167,8 @@ class Feed {
 				slv.name,
 				slv.title,
 				slv.cover,
-				slv.z_index
+				slv.z_index,
+				slv.required
 			FROM ?_shelves slv
 			WHERE updated > ?
 				AND model_id = ?

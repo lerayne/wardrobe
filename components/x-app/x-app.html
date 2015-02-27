@@ -187,7 +187,7 @@
 				for (var i=0; i < data.length; i++) {
 					var layer = data[i];
 					var shelf_index = _(newInstances).findIndex({shelf:layer.shelf_id});
-					layer.file += '.' + _.parseInt(layer.layer_id).toString(16) + '.png';
+					layer.file = app.funcs.getFullFile(layer.file, layer.layer_id);
 
 					if (shelf_index < 0) {
 						newInstances.push({
@@ -211,7 +211,7 @@
 
 						var processedLayer = _(layer).clone();
 
-						processedLayer.file = instance.file + '.' + (+layer.id).toString(16) + '.png';
+						processedLayer.file = app.funcs.getFullFile(instance.file, layer.id);
 						instance.layers.push(processedLayer);
 					})
 				});

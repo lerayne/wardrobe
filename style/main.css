@@ -5,3 +5,8 @@ body {
 body /deep/ paper-dialog .image-frame {
 	margin-left: 25px;
 }
+
+body /deep/ .subtext {
+	color:#777;
+	font-size: 85%;
+}

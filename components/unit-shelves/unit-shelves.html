@@ -56,6 +56,12 @@
 				<input type="text" tabindex="1" value="0"  id="inputZ">
 			</paper-input-decorator>
 
+			<label>
+				<input type="checkbox" id="inputRequired">
+				<text-string>shelves.creation.required</text-string>
+				<div class="subtext" style="padding:5px; width:300px"><text-string>shelves.creation.requiredDescription</text-string></div>
+			</label>
+
 			<paper-button self-center raised class="highlight" on-tap="{{ createShelf }}">
 				<text-string>shelves.creation.create</text-string>
 			</paper-button>
@@ -113,7 +119,8 @@
 					model: this.currentModelID,
 					title: this.$.inputTitle.value,
 					name: this.$.inputName.value,
-					z_index: this.$.inputZ.value
+					z_index: this.$.inputZ.value,
+					required: this.$.inputRequired.checked ? 1 : 0
 				})
 
 				this.$.creationDialog.close();

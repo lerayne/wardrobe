@@ -98,6 +98,7 @@ class Actions {
 			$new_row['author_id'] = 1; // todo login
 			$new_row['updater'] = 1; // todo login
 			$new_row['update_cause'] = 'this item created';
+			$new_row['required'] = $params['required'];
 
 			$new_shelf_id = $db->query('INSERT INTO ?_shelves (?#) VALUES (?a)', array_keys($new_row), array_values($new_row));
 
