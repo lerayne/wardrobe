@@ -182,11 +182,24 @@
 			},
 
 			selectDefaults:function(data){
-				console.log('def', data);
+				var newInstances = [];
 
 				for (var i=0; i < data.length; i++) {
-					this.onItemSelected(null, {id:data[i]})
+					var layer = data[i];
+					var shelf_index = _(newInstances).findIndex({shelf:layer.shelf_id});
+					layer.file += '.' + _.parseInt(layer.layer_id).toString(16) + '.png';
+
+					if (shelf_index < 0) {
+						newInstances.push({
+							shelf: layer.shelf_id,
+							layers:[layer]
+						})
+					} else {
+						newInstances[shelf_index].layers.push(layer)
+					}
 				}
+
+				this.instances = newInstances;
 			},
 
 			parseItem:function(data){

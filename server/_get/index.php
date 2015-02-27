@@ -25,11 +25,21 @@ switch ($_REQUEST['subject']){
 	case 'default_items':
 
 		// assume that the first item created will be the default
-		$result = $db->selectCol('
-			SELECT itm.id
-			FROM ?_shelves slv
-			JOIN ?_items itm ON slv.id = itm.shelf_id AND itm.default = 1
-			WHERE slv.model_id = ?
+		$result = $db->select('
+			SELECT
+				ins.id AS ins_id,
+				lrs.id AS layer_id,
+				lrs.x_offset,
+				lrs.y_offset,
+				lrs.z_index,
+				ins.file,
+				slv.id AS shelf_id
+			FROM ?_layers lrs
+			JOIN ?_items itm ON lrs.item_id = itm.id AND itm.default = 1
+			JOIN ?_item_instances ins ON ins.item_id = itm.id
+			JOIN ?_shelves slv ON itm.shelf_id = slv.id
+			WHERE itm.model_id = ?
+			GROUP BY lrs.id
 			',
 			$_REQUEST['model']
 		);
