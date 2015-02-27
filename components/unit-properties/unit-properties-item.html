@@ -167,11 +167,22 @@
 
 	<script>
 		Polymer({
+
+			observe:{
+				'data':'subscribe'
+			},
+
 			text:text,
 
 			editMode:false,
 			file:false,
 
+			subscribe:function(){
+				console.log('subscribe', this.data.item)
+			},
+
+
+			// EDIT MODE
 			enterEditMode:function(){
 				this.editMode = true
 			},
@@ -184,6 +195,8 @@
 				this.exitEditMode();
 			},
 
+
+			// NEW INSTANCE
 			openNewInstanceDialog:function(){
 				this.$.instanceCreationDialog.open();
 			},
@@ -236,6 +249,8 @@
 				this.$.instanceCreationDialog.close();
 			},
 
+
+			//
 			selectInstance:function(event, detail, sender){
 				var index = event.target.templateInstance.model.index;
 
