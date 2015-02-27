@@ -10,3 +10,7 @@ body /deep/ .subtext {
 	color:#777;
 	font-size: 85%;
 }
+
+body /deep/ #creationDialog label {
+	display: block;
+}

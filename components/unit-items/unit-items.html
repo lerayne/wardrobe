@@ -58,9 +58,19 @@
 						<input type="text" tabindex="1"  id="inputZ" value="{{parentZ}}">
 					</paper-input-decorator>
 
+					<paper-input-decorator floatingLabel label="{{ text('items.creation.defaultInstanceTitle') }}">
+						<input type="text" tabindex="1"  id="inputInstanceTitle">
+					</paper-input-decorator>
+
 					<label>
 						<text-string>items.creation.file</text-string>
 						<input name="file" type="file" id="inputFile" on-change="{{tempUpload}}">
+					</label>
+
+					<label style="margin-top:10px">
+						<input type="checkbox" id="inputDefault">
+						<text-string>items.creation.default</text-string>
+						<div class="subtext" style="padding:5px; width:300px"><text-string>items.creation.defaultDescription</text-string></div>
 					</label>
 				</div>
 
@@ -189,7 +199,9 @@
 					z_index: this.$.inputZ.value,
 					image: this.file,
 					//bypass_write:1,
-					cropData: this.imgCropData
+					cropData: this.imgCropData,
+					default: this.$.inputDefault.checked ? 1 : 0,
+					instanceTitle: this.$.inputInstanceTitle.value
 				});
 
 				this.$.creationDialog.close();

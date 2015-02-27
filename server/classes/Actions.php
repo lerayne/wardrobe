@@ -155,6 +155,12 @@ class Actions {
 
 			$new_item_id = $db->query('INSERT INTO ?_items (?#) VALUES (?a)', array_keys($new_item), array_values($new_item));
 
+			if ($params['default']) {
+				$GLOBALS['debug']['set_as_Default'] = true;
+				$db->query('UPDATE ?_items SET `default` = 0 WHERE shelf_id = ?', $params['shelf']);
+				$db->query('UPDATE ?_items SET `default` = 1 WHERE id = ?', $new_item_id);
+			}
+
 			//update times
 			$time_update['updated'] = $now;
 			$time_update['updater'] = 1; // todo login

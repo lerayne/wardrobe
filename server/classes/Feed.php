@@ -224,7 +224,8 @@ class Feed {
 				itm.name,
 				itm.title,
 				itm.cover,
-				itm.z_index
+				itm.z_index,
+				itm.default
 			FROM ?_items itm
 			WHERE updated > ?
 				AND shelf_id = ?

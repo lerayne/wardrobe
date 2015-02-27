@@ -32,6 +32,9 @@
 	"items.creation.defaultZ":"Default z-index for first layer",
 	"items.creation.create":"Create",
 	"items.creation.file":"Image",
+	"items.creation.default":"Default shelf item",
+	"items.creation.defaultDescription":"Item (first instance of it) will be loaded on model's selection",
+	"items.creation.defaultInstanceTitle":"Default instance title ('Default' if omited)",
 
 	"props.item.layerHeader":"Layer",
 	"props.item.z_index":"Z-index",
