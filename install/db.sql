@@ -1,10 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `ward_test` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `ward_test`;
--- MySQL dump 10.13  Distrib 5.6.13, for Win32 (x86)
+-- MySQL dump 10.13  Distrib 5.6.17, for Win32 (x86)
 --
--- Host: localhost    Database: ward_test
+-- Host: 127.0.0.1    Database: ward_test
 -- ------------------------------------------------------
--- Server version	5.6.15-log
+-- Server version	5.6.22-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -32,7 +30,7 @@ CREATE TABLE `wardrobe_agencies` (
   `author_id` int(10) unsigned NOT NULL,
   `created` bigint(20) unsigned NOT NULL,
   `updated` bigint(20) unsigned NOT NULL,
-  `update_cause` varchar(45) DEFAULT NULL,
+  `update_cause` varchar(255) DEFAULT NULL,
   `updater` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`),
@@ -56,7 +54,7 @@ CREATE TABLE `wardrobe_item_instances` (
   `title` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `item` (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,7 +75,7 @@ CREATE TABLE `wardrobe_items` (
   `updated` bigint(20) unsigned NOT NULL,
   `z_index` smallint(6) NOT NULL,
   `cover` varchar(255) DEFAULT NULL,
-  `update_cause` varchar(45) DEFAULT NULL,
+  `update_cause` varchar(255) DEFAULT NULL,
   `updater` int(10) unsigned NOT NULL,
   `default` int(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -86,7 +84,7 @@ CREATE TABLE `wardrobe_items` (
   KEY `author` (`author_id`),
   KEY `updated` (`updated`),
   KEY `default` (`default`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,7 +102,7 @@ CREATE TABLE `wardrobe_layers` (
   `y_offset` int(4) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `item` (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,7 +121,7 @@ CREATE TABLE `wardrobe_models` (
   `cover` varchar(255) DEFAULT NULL,
   `created` bigint(20) unsigned NOT NULL,
   `updated` bigint(20) unsigned NOT NULL,
-  `update_cause` varchar(45) DEFAULT NULL,
+  `update_cause` varchar(255) DEFAULT NULL,
   `updater` int(10) unsigned NOT NULL,
   `size` int(4) unsigned NOT NULL,
   PRIMARY KEY (`id`),
@@ -150,13 +148,14 @@ CREATE TABLE `wardrobe_shelves` (
   `z_index` smallint(6) NOT NULL,
   `created` bigint(20) unsigned NOT NULL,
   `updated` bigint(20) unsigned NOT NULL,
-  `update_cause` varchar(45) DEFAULT NULL,
+  `update_cause` varchar(255) DEFAULT NULL,
   `updater` int(10) unsigned NOT NULL,
+  `required` int(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `model` (`model_id`),
   KEY `author` (`author_id`),
   KEY `updated` (`updated`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -194,4 +193,4 @@ CREATE TABLE `wardrobe_users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-02-26 15:35:34
+-- Dump completed on 2015-02-28  4:24:50
