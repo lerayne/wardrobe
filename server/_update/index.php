@@ -40,7 +40,7 @@ function parse_request($request) {
 		$actions = new Actions();
 
 		foreach ($writes as $write_index => $write) {
-			$actions->$write['action']($write);
+			$result['return'] = $actions->$write['action']($write);
 		}
 	}
 

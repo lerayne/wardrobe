@@ -249,7 +249,7 @@ app.class.strategic.XHRShortPoll.prototype = {
 		}
 
 		// разбираем пришедший пакет и выполняем обновления
-		this.parseCallback(data, this.actions, response.return);
+		this.parseCallback(data, this.actions, data.return);
 
 		this.queryReset();
 

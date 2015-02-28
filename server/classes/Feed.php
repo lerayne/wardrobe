@@ -179,6 +179,10 @@ class Feed {
 
 		$shelves = sort_by_field($raw_shelves, $request['sort']);
 
+		foreach ($shelves as $i => $shelf) {
+			$shelves[$i]['z_index'] = (int) $shelves[$i]['z_index'];
+		}
+
 		// milestone for future requests
 		$meta['updates_since'] = $latest_update_date;
 
@@ -240,6 +244,41 @@ class Feed {
 		$meta['updates_since'] = $latest_update_date;
 
 		return Array($shelves, $meta);
+	}
+
+
+	function get_item_props ($request, $meta = Array()){
+		global $cfg, $db, $user;
+
+		// defaults
+		$request = load_defaults($request, $request_defaults = Array(
+
+		));
+
+		$meta = load_defaults($meta, $meta_defaults = Array(
+			'updates_since' => '0' // работает как false, а в SQL-запросах по дате - как 0
+		));
+
+		$latest_update_date = $db->selectCell('
+			SELECT updated
+			FROM ?_items
+			WHERE id = ? AND updated > ?
+			',
+			$request['id'],
+			$meta['updates_since']
+		);
+
+		// if not - return everything as it is
+		if (!$latest_update_date) return Array(Array(), $meta);
+
+		$props['item'] = $db->selectRow('SELECT * FROM ?_items WHERE id = ?', $request['id']);
+		$props['layers'] = $db->select('SELECT * FROM ?_layers WHERE item_id = ?', $request['id']);
+		$props['instances'] = $db->select('SELECT * FROM ?_item_instances WHERE item_id = ?', $request['id']);
+
+		// milestone for future requests
+		$meta['updates_since'] = $latest_update_date;
+
+		return Array($props, $meta);
 	}
 
 }

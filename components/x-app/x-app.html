@@ -92,6 +92,7 @@
 			eventDelegates:{
 				'instance-selected':'onInstanceSelected',
 				'item-selected':'onItemSelected',
+				'item-loaded':'onItemLoaded',
 				'shelf-selected':'onShelfSelected',
 				'model-selected':'onModelSelected',
 				'agency-selected':'onAgencySelected'
@@ -131,7 +132,7 @@
 
 
 
-			// ON SELECTED
+			// ON SELECTED/UPDATED
 			onAgencySelected:function(event, data){
 				this.currentObjectType = 'agency';
 				this.currentObject = this.current.agency = data;
@@ -157,8 +158,9 @@
 
 			onItemSelected:function(event, data){
 				app.currentState.item = data;
+				this.current.item = data;
 
-				app.connection.get('item', {id:data.id}, this.parseItem.bind(this))
+				this.subscribe();
 			},
 
 			onInstanceSelected:function(event, index){
@@ -202,7 +204,18 @@
 				this.instances = newInstances;
 			},
 
+			//ITEM SELECT QUEUE
+			subscribe:function(){
+				console.log('subscribe on', this.current.item.id);
+
+				app.connection.subscribe(this, 'item-properties', {
+					feed:'item_props',
+					id: this.current.item.id
+				}, this.parseItem)
+			},
+
 			parseItem:function(data){
+				console.log('item loaded', data);
 
 				_.each(data.instances, function(instance, i){
 					instance.layers = [];
@@ -220,11 +233,14 @@
 			},
 
 			pushItem:function(data){
+				// preserve instance on update
+				data.activeInstance = this.current.item.activeInstance ? this.current.item.activeInstance : 0;
+
 				this.currentObjectType = 'item';
 				this.currentObject = this.current.item = data;
 				app.currentState.item = data;
 
-				this.pushInstance(data.item.shelf_id, 0);
+				this.pushInstance(data.item.shelf_id, this.current.item.activeInstance);
 			},
 
 			pushInstance:function(id, index){

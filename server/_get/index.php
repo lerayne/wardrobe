@@ -16,6 +16,7 @@ $rootdir = '../../';
 switch ($_REQUEST['subject']){
 	case 'item':
 
+		// todo - unify subscription and usual selects
 		$result['item'] = $db->selectRow('SELECT * FROM ?_items WHERE id = ?', $_REQUEST['id']);
 		$result['layers'] = $db->select('SELECT * FROM ?_layers WHERE item_id = ?', $_REQUEST['id']);
 		$result['instances'] = $db->select('SELECT * FROM ?_item_instances WHERE item_id = ?', $_REQUEST['id']);

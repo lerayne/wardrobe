@@ -100,6 +100,8 @@
 				'image-loaded':'imageLoaded'
 			},
 
+			//sortField:'z_index',
+
 			created:function(){
 				this.super();
 
@@ -194,14 +196,14 @@
 				app.connection.write({
 					action:'add_item',
 					shelf:this.currentShelfID,
-					title: this.$.inputTitle.value,
-					name: this.$.inputName.value,
+					item_title: this.$.inputTitle.value,
+					item_name: this.$.inputName.value,
 					z_index: this.$.inputZ.value,
 					image: this.file,
 					//bypass_write:1,
-					cropData: this.imgCropData,
+					item_crop_data: this.imgCropData,
 					default: this.$.inputDefault.checked ? 1 : 0,
-					instanceTitle: this.$.inputInstanceTitle.value
+					instance_title: this.$.inputInstanceTitle.value
 				});
 
 				this.$.creationDialog.close();

@@ -168,18 +168,10 @@
 	<script>
 		Polymer({
 
-			observe:{
-				'data':'subscribe'
-			},
-
 			text:text,
 
 			editMode:false,
 			file:false,
-
-			subscribe:function(){
-				console.log('subscribe', this.data.item)
-			},
 
 
 			// EDIT MODE
@@ -238,7 +230,7 @@
 
 				app.connection.write({
 					action:'add_instance',
-					title: this.$.inputTitle.value,
+					instance_title: this.$.inputTitle.value,
 					image: this.file,
 					item: this.data.item.id,
 					layer: this.data.layers[0].id,
