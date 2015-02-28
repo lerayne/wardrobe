@@ -160,7 +160,12 @@
 				app.currentState.item = data;
 				this.current.item = data;
 
-				this.subscribe();
+				if (data.id > 0) {
+					this.subscribe();
+				} else {
+					this.unscribe();
+					this.removeInstance();
+				}
 			},
 
 			onInstanceSelected:function(event, index){
@@ -214,6 +219,12 @@
 				}, this.parseItem)
 			},
 
+			unscribe:function(){
+				app.connection.unscribe(this, 'item-properties');
+				this.currentObject = false;
+				this.currentObjectType = false;
+			},
+
 			parseItem:function(data){
 				console.log('item loaded', data);
 
@@ -254,6 +265,14 @@
 					shelf:id,
 					layers: this.current.item.instances[index].layers
 				})
+			},
+
+			removeInstance:function(){
+				var i = _(this.instances).findIndex({shelf: this.current.shelf.id});
+
+				if (i >= 0) {
+					this.instances.splice(i, 1)
+				}
 			}
 
 		});

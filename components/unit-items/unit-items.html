@@ -32,6 +32,7 @@
 
 		<div id="scrollable" hidden?="{{collapsed}}" flex>
 			<div id="scroll">
+				<card-item hidden?="{{requiredShelf}}" data="{{ noneItem }}"></card-item>
 				<template repeat="{{model in nodes}}">
 					<card-item data="{{model}}"></card-item>
 				</template>
@@ -116,6 +117,7 @@
 
 			file:false,
 			parentZ:0,
+			requiredShelf:false,
 
 			selectShelf:function(id){
 				this.currentShelfID = id;
@@ -149,6 +151,7 @@
 			},
 
 			onItemSelected:function(event, data){
+
 				_.each(this.nodes, function(el, i){
 
 					if (el.id != data.id){
