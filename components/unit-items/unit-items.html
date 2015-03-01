@@ -32,7 +32,7 @@
 
 		<div id="scrollable" hidden?="{{collapsed}}" flex>
 			<div id="scroll">
-				<card-item hidden?="{{requiredShelf}}" data="{{ noneItem }}"></card-item>
+				<card-item hidden?="{{currentShelf.required != '0'}}" data="{{ noneItem }}"></card-item>
 				<template repeat="{{model in nodes}}">
 					<card-item data="{{model}}"></card-item>
 				</template>
@@ -112,15 +112,15 @@
 			},
 
 			observe:{
-				currentShelfID:'subscribe'
+				currentShelf:'subscribe'
 			},
 
 			file:false,
 			parentZ:0,
 			requiredShelf:false,
 
-			selectShelf:function(id){
-				this.currentShelfID = id;
+			selectShelf:function(data){
+				this.currentShelf = data;
 			},
 
 			subscribe:function(){
@@ -130,7 +130,7 @@
 
 				app.connection.subscribe(this, 'items', {
 					feed:'items',
-					shelf: this.currentShelfID
+					shelf: this.currentShelf.id
 				}, this.parseUpdates)
 			},
 
@@ -198,7 +198,7 @@
 
 				app.connection.write({
 					action:'add_item',
-					shelf:this.currentShelfID,
+					shelf:this.currentShelf.id,
 					item_title: this.$.inputTitle.value,
 					item_name: this.$.inputName.value,
 					z_index: this.$.inputZ.value,

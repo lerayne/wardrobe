@@ -83,11 +83,11 @@
 			},
 
 			observe:{
-				currentModelID:'subscribe'
+				currentModel:'subscribe'
 			},
 
-			selectModel:function(id){
-				this.currentModelID = id;
+			selectModel:function(data){
+				this.currentModel = data;
 			},
 
 			subscribe:function(){
@@ -95,7 +95,7 @@
 
 				app.connection.subscribe(this, 'shelves', {
 					feed:'shelves',
-					model: this.currentModelID
+					model: this.currentModel.id
 				}, this.parseUpdates)
 			},
 
@@ -116,7 +116,7 @@
 
 				app.connection.write({
 					action:'add_shelf',
-					model: this.currentModelID,
+					model: this.currentModel.id,
 					title: this.$.inputTitle.value,
 					name: this.$.inputName.value,
 					z_index: this.$.inputZ.value,

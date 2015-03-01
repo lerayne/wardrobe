@@ -74,11 +74,11 @@
 			},
 
 			observe:{
-				currentAgencyID:'subscribe'
+				'currentAgency':'subscribe'
 			},
 
-			selectAgency:function(id){
-				this.currentAgencyID = id;
+			selectAgency:function(data){
+				this.currentAgency = data;
 			},
 
 			subscribe:function(){
@@ -86,7 +86,7 @@
 
 				app.connection.subscribe(this, 'models', {
 					feed:'models',
-					agency: this.currentAgencyID
+					agency: this.currentAgency.id
 				}, this.parseUpdates)
 			},
 
@@ -112,7 +112,7 @@
 					action: 'add_model',
 					name:this.$.inputName.value,
 					title:this.$.inputTitle.value,
-					agency:this.currentAgencyID,
+					agency:this.currentAgency.id,
 					size:this.$.inputSize.value
 				})
 

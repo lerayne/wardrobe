@@ -73,17 +73,17 @@
 
 			onAgencySelected:function(event, data){
 				this.currentState.agency = data;
-				this.$.models.selectAgency(data.id)
+				this.$.models.selectAgency(data);
 			},
 
 			onModelSelected:function(event, data){
 				this.currentState.model = data;
-				this.$.shelves.selectModel(data.id)
+				this.$.shelves.selectModel(data)
 			},
 
 			onShelfSelected:function(event, data){
 				this.currentState.shelv = data;
-				this.$.items.selectShelf(data.id)
+				this.$.items.selectShelf(data);
 			},
 
 			onItemSelected:function(event, data){
