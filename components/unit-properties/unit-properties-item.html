@@ -78,6 +78,10 @@
 				max-width: 80px;
 			}
 
+			paper-slider {
+				clear: both;
+			}
+
 		</style>
 
 		<core-toolbar class="core-narrow">
@@ -107,22 +111,29 @@
 				<div class="layer">
 					<header><text-string>props.item.layerHeader</text-string> {{index+1}}</header>
 
-					<div horizontal layout>
+					<div vertical layout>
 						<div class="layer-preview">
 							<img _src="{{data.instances[data.activeInstance].layers[index].file}}">
 						</div>
-						<div>
-							<label>
-								<text-string>props.item.z_index</text-string>
-								<input type="text" value="{{layer.z_index}}" class="small">
-							</label>
-							<label>
+						<div class="measurements">
+
+							<label horizontal layout center>
 								<text-string>props.item.x_offset</text-string>
-								<input type="text" value="{{layer.x_offset}}" class="small">
+								<paper-icon-button icon="remove-circle" on-tap="{{subX}}"></paper-icon-button>
+								<paper-slider flex value="[[layer.x_offset]]" editable pin min="0" max="1000" immediateValue="{{layer.x_offset}}"></paper-slider>
+								<paper-icon-button icon="add-circle" on-tap="{{addX}}"></paper-icon-button>
 							</label>
-							<label>
+							<label horizontal layout center>
 								<text-string>props.item.y_offset</text-string>
-								<input type="text" value="{{layer.y_offset}}" class="small">
+								<paper-icon-button icon="remove-circle" on-tap="{{subY}}"></paper-icon-button>
+								<paper-slider flex value="[[layer.y_offset]]" editable pin min="0" max="1000" immediateValue="{{layer.y_offset}}"></paper-slider>
+								<paper-icon-button icon="add-circle" on-tap="{{addY}}"></paper-icon-button>
+							</label>
+							<label horizontal layout center>
+								<text-string>props.item.z_index</text-string>
+								<paper-icon-button icon="remove-circle" on-tap="{{subZ}}"></paper-icon-button>
+								<paper-slider flex value="[[layer.z_index]]" editable pin min="-2000" max="2000" immediateValue="{{layer.z_index}}"></paper-slider>
+								<paper-icon-button icon="add-circle" on-tap="{{addZ}}"></paper-icon-button>
 							</label>
 						</div>
 					</div>
@@ -185,6 +196,31 @@
 
 			save:function(){
 				this.exitEditMode();
+			},
+
+
+			addX:function(event){
+				event.target.templateInstance.model.layer.x_offset +=1;
+			},
+
+			subX:function(event){
+				event.target.templateInstance.model.layer.x_offset -=1;
+			},
+
+			addY:function(event){
+				event.target.templateInstance.model.layer.y_offset +=1;
+			},
+
+			subY:function(event){
+				event.target.templateInstance.model.layer.y_offset -=1;
+			},
+
+			addZ:function(event){
+				event.target.templateInstance.model.layer.z_index +=1;
+			},
+
+			subZ:function(event){
+				event.target.templateInstance.model.layer.z_index -=1;
 			},
 
 

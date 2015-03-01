@@ -37,7 +37,7 @@
 	"items.creation.defaultInstanceTitle":"Default instance title ('Default' if omited)",
 
 	"props.item.layerHeader":"Layer",
-	"props.item.z_index":"Z-index",
+	"props.item.z_index":"Z",
 	"props.item.x_offset":"X",
 	"props.item.y_offset":"Y",
 	"props.item.instanceCreation.header":"Create new instance",

@@ -14,3 +14,7 @@ body /deep/ .subtext {
 body /deep/ #creationDialog label {
 	display: block;
 }
+
+body /deep/ .clearfix {
+	clear:both
+}
