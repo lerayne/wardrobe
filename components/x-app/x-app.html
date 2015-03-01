@@ -163,8 +163,10 @@
 				if (data.id > 0) {
 					this.subscribe();
 				} else {
+					console.log('deselect', data);
+
 					this.unscribe();
-					this.removeInstance();
+					this.removeInstance(data.shelf_id);
 				}
 			},
 
@@ -267,8 +269,8 @@
 				})
 			},
 
-			removeInstance:function(){
-				var i = _(this.instances).findIndex({shelf: this.current.shelf.id});
+			removeInstance:function(shelfID){
+				var i = _(this.instances).findIndex({shelf: shelfID});
 
 				if (i >= 0) {
 					this.instances.splice(i, 1)

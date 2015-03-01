@@ -94,14 +94,10 @@
 	<script>
 		Polymer({
 
-			subunitName:'items',
-
 			eventDelegates:{
 				'item-selected':'onItemSelected',
 				'image-loaded':'imageLoaded'
 			},
-
-			//sortField:'z_index',
 
 			created:function(){
 				this.super();
@@ -112,8 +108,14 @@
 			},
 
 			observe:{
-				currentShelf:'subscribe'
+				'currentShelf':'subscribe'
 			},
+
+			computed:{
+				'noneItem.shelf_id':'currentShelf.shelf_id'
+			},
+
+			subunitName:'items',
 
 			file:false,
 			parentZ:0,
@@ -125,6 +127,8 @@
 
 			subscribe:function(){
 				this.super();
+
+				this.noneItem.shelf_id = this.currentShelf.id;
 
 				this.parentZ = app.currentState.shelf.z_index;
 
