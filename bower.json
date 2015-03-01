@@ -32,6 +32,8 @@
     "paper-input": "Polymer/paper-input#~0.5.4",
     "paper-item": "Polymer/paper-item#~0.5.4",
     "paper-tabs": "Polymer/paper-tabs#~0.5.5",
-    "cropper": "~0.8.0"
+    "cropper": "~0.8.0",
+    "jquery-ui": "~1.11.3",
+    "paper-spinner": "Polymer/paper-spinner#~0.5.5"
   }
 }

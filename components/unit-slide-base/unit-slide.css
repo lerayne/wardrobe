@@ -2,10 +2,16 @@
 	position: relative;
 }
 
-:host([loading]) #scrollable {
+/*:host([loading]) #scrollable {
 	background-image: url(../../assets/design/throbber_big.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
+}*/
+
+paper-spinner {
+	position: absolute;
+	top: 52%;
+	left: 47%;
 }
 
 #bookmark {
