@@ -82,6 +82,15 @@
 				clear: both;
 			}
 
+			.measurements paper-input {
+				width:40px;
+				margin-left:10px;
+			}
+
+			.measurements paper-input::shadow input {
+				text-align: center;
+			}
+
 		</style>
 
 		<core-toolbar class="core-narrow">
@@ -119,20 +128,23 @@
 
 							<label horizontal layout center>
 								<text-string>props.item.x_offset</text-string>
+								<paper-input value="{{layer.x_offset}}"></paper-input>
 								<paper-icon-button icon="remove-circle" on-tap="{{subX}}"></paper-icon-button>
-								<paper-slider flex value="[[layer.x_offset]]" editable pin min="0" max="1000" immediateValue="{{layer.x_offset}}"></paper-slider>
+								<paper-slider flex value="[[layer.x_offset]]" min="0" max="1000" immediateValue="{{layer.x_offset}}"></paper-slider>
 								<paper-icon-button icon="add-circle" on-tap="{{addX}}"></paper-icon-button>
 							</label>
 							<label horizontal layout center>
 								<text-string>props.item.y_offset</text-string>
+								<paper-input value="{{layer.y_offset}}"></paper-input>
 								<paper-icon-button icon="remove-circle" on-tap="{{subY}}"></paper-icon-button>
-								<paper-slider flex value="[[layer.y_offset]]" editable pin min="0" max="1000" immediateValue="{{layer.y_offset}}"></paper-slider>
+								<paper-slider flex value="[[layer.y_offset]]" min="0" max="1000" immediateValue="{{layer.y_offset}}"></paper-slider>
 								<paper-icon-button icon="add-circle" on-tap="{{addY}}"></paper-icon-button>
 							</label>
 							<label horizontal layout center>
 								<text-string>props.item.z_index</text-string>
+								<paper-input value="{{layer.z_index}}"></paper-input>
 								<paper-icon-button icon="remove-circle" on-tap="{{subZ}}"></paper-icon-button>
-								<paper-slider flex value="[[layer.z_index]]" editable pin min="-2000" max="2000" immediateValue="{{layer.z_index}}"></paper-slider>
+								<paper-slider flex value="[[layer.z_index]]" min="-2000" max="2000" immediateValue="{{layer.z_index}}"></paper-slider>
 								<paper-icon-button icon="add-circle" on-tap="{{addZ}}"></paper-icon-button>
 							</label>
 						</div>
