@@ -25,7 +25,11 @@
 		</div>
 
 		<core-toolbar class="core-narrow" hidden?="{{collapsed}}">
-			<text-string>shelves.header</text-string>
+			<text-string flex>shelves.header</text-string>
+			<paper-button on-tap="{{undress}}">
+				<core-icon icon="accessibility"></core-icon>
+				<text-string>shelves.undress</text-string>
+			</paper-button>
 		</core-toolbar>
 
 

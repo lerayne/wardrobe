@@ -12,11 +12,8 @@
 			}
 
 			.layers {
-				margin:5px;
-			}
-
-			.layer {
-				border:1px solid #eee;
+				margin:7px;
+				border:1px solid #ddd;
 			}
 
 			.layer label {
@@ -91,6 +88,14 @@
 				text-align: center;
 			}
 
+			paper-tab::shadow #ink {
+				color: red;
+			}
+
+			paper-tabs::shadow #selectionBar {
+				background-color: red;
+			}
+
 		</style>
 
 		<core-toolbar class="core-narrow">
@@ -110,42 +115,53 @@
 
 			<span flex></span>
 
-			<paper-fab icon="add" mini on-tap="{{openNewInstanceDialog}}"></paper-fab>
+			<paper-fab icon="add" mini on-tap="{{openNewInstanceDialog}}" style="margin-right: 4px;"></paper-fab>
 		</div>
 
 
 
+
+
 		<div class="layers">
+
+			<div horizontal layout>
+				<paper-tabs selected="0" flex>
+					<template repeat="{{layer, index in data.layers}}">
+						<paper-tab><text-string>props.item.layerHeader</text-string> &nbsp; {{index+1}}</paper-tab>
+					</template>
+				</paper-tabs>
+				<paper-fab hidden?="{{data.layers.length >= 3}}" style="margin:5px" icon="note-add" mini on-tap="{{addLayer}}"></paper-fab>
+			</div>
+
 			<template repeat="{{layer, index in data.instances[data.activeInstance].layers}}">
 				<div class="layer">
-					<header><text-string>props.item.layerHeader</text-string> {{index+1}}</header>
 
 					<div vertical layout>
 						<div class="layer-preview">
 							<img _src="{{data.instances[data.activeInstance].layers[index].file}}">
 						</div>
-						<div class="measurements">
+						<div class="measurements" on-mouseup="{{stopMovement}}">
 
 							<label horizontal layout center>
 								<text-string>props.item.x_offset</text-string>
 								<paper-input value="{{layer.x_offset}}"></paper-input>
-								<paper-icon-button icon="remove-circle" on-tap="{{subX}}"></paper-icon-button>
+								<paper-icon-button icon="remove-circle" on-mousedown="{{subX}}"></paper-icon-button>
 								<paper-slider flex value="[[layer.x_offset]]" min="0" max="1000" immediateValue="{{layer.x_offset}}"></paper-slider>
-								<paper-icon-button icon="add-circle" on-tap="{{addX}}"></paper-icon-button>
+								<paper-icon-button icon="add-circle" on-mousedown="{{addX}}"></paper-icon-button>
 							</label>
 							<label horizontal layout center>
 								<text-string>props.item.y_offset</text-string>
 								<paper-input value="{{layer.y_offset}}"></paper-input>
-								<paper-icon-button icon="remove-circle" on-tap="{{subY}}"></paper-icon-button>
+								<paper-icon-button icon="remove-circle" on-mousedown="{{subY}}"></paper-icon-button>
 								<paper-slider flex value="[[layer.y_offset]]" min="0" max="1000" immediateValue="{{layer.y_offset}}"></paper-slider>
-								<paper-icon-button icon="add-circle" on-tap="{{addY}}"></paper-icon-button>
+								<paper-icon-button icon="add-circle" on-mousedown="{{addY}}"></paper-icon-button>
 							</label>
 							<label horizontal layout center>
 								<text-string>props.item.z_index</text-string>
 								<paper-input value="{{layer.z_index}}"></paper-input>
-								<paper-icon-button icon="remove-circle" on-tap="{{subZ}}"></paper-icon-button>
+								<paper-icon-button icon="remove-circle" on-mousedown="{{subZ}}"></paper-icon-button>
 								<paper-slider flex value="[[layer.z_index]]" min="-2000" max="2000" immediateValue="{{layer.z_index}}"></paper-slider>
-								<paper-icon-button icon="add-circle" on-tap="{{addZ}}"></paper-icon-button>
+								<paper-icon-button icon="add-circle" on-mousedown="{{addZ}}"></paper-icon-button>
 							</label>
 						</div>
 					</div>
@@ -154,7 +170,7 @@
 			</template>
 
 			<div horizontal layout end-justified>
-				<paper-fab style="margin:10px 5px" icon="note-add" mini></paper-fab>
+
 			</div>
 		</div>
 
@@ -211,28 +227,47 @@
 			},
 
 
+			stopMovement:function(e){
+				clearTimeout(this.sliderTO);
+				clearInterval(this.sliderInterval);
+			},
+
+			startMovement:function(e, axis, summand){
+				var meas = e.target.templateInstance.model.layer;
+
+				var move = (function(){
+					meas[axis] += summand;
+				});
+
+				move();
+
+				this.sliderTO = this.async(function(){
+					this.sliderInterval = setInterval(move, 50);
+				}, null, 500)
+			},
+
 			addX:function(event){
-				event.target.templateInstance.model.layer.x_offset +=1;
+				this.startMovement(event, 'x_offset', 1)
 			},
 
 			subX:function(event){
-				event.target.templateInstance.model.layer.x_offset -=1;
+				this.startMovement(event, 'x_offset', -1)
 			},
 
 			addY:function(event){
-				event.target.templateInstance.model.layer.y_offset +=1;
+				this.startMovement(event, 'y_offset', 1)
 			},
 
 			subY:function(event){
-				event.target.templateInstance.model.layer.y_offset -=1;
+				this.startMovement(event, 'y_offset', -1)
 			},
 
 			addZ:function(event){
-				event.target.templateInstance.model.layer.z_index +=1;
+				this.startMovement(event, 'z_index', 1)
 			},
 
 			subZ:function(event){
-				event.target.templateInstance.model.layer.z_index -=1;
+				this.startMovement(event, 'z_index', -1)
 			},
 
 
@@ -295,6 +330,10 @@
 				var index = event.target.templateInstance.model.index;
 
 				this.fire('instance-selected', index);
+			},
+
+			addLayer:function(){
+				this.data.layers.push(1)
 			}
 
 		});

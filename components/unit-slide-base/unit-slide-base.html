@@ -151,6 +151,10 @@
 
 			sortSelf:function(){
 				this.nodes = this.sort(this.nodes, this.sortField, this.sortOrder)
+			},
+
+			undress:function(){
+				this.fire('model-undress');
 			}
 		});
 	</script>

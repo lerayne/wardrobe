@@ -30,7 +30,8 @@
 				'agency-selected':'onAgencySelected',
 				'model-selected':'onModelSelected',
 				'shelf-selected':'onShelfSelected',
-				'item-selected':'onItemSelected'
+				'item-selected':'onItemSelected',
+				'model-undress':'undress'
 			},
 
 			created:function(){
@@ -88,6 +89,22 @@
 
 			onItemSelected:function(event, data){
 				this.currentState.index = data;
+			},
+
+			undress:function(){
+
+				_.each(this.$.shelves.nodes, function(shelf){
+
+					if (!+shelf.required){
+
+						this.fire('item-selected', {
+							id:0,
+							title:'None',
+							default:false,
+							shelf_id:shelf.id
+						})
+					}
+				}, this)
 			}
 		});
 	</script>

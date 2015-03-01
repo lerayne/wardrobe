@@ -14,6 +14,10 @@ paper-spinner {
 	left: 47%;
 }
 
+paper-button text-string {
+	font-size: 13px;
+}
+
 #bookmark {
 	width: 30px;
 	cursor: pointer;

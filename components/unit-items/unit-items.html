@@ -26,7 +26,11 @@
 		</style>
 
 		<core-toolbar class="core-narrow" hidden?="{{collapsed}}">
-			<text-string>items.header</text-string>
+			<text-string flex>items.header</text-string>
+			<paper-button on-tap="{{undress}}">
+				<core-icon icon="accessibility"></core-icon>
+				<text-string>items.undress</text-string>
+			</paper-button>
 		</core-toolbar>
 
 

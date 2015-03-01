@@ -35,7 +35,7 @@ class Feed {
 		// are there any updates?
 		$latest_update_date = $db->selectCell('
 			SELECT MAX(updated) FROM ?_agencies
-			WHERE updated > ?
+			WHERE updated > ? AND active = 1
 			',
 			$meta['updates_since']
 		);
@@ -56,7 +56,7 @@ class Feed {
 				usr.display_name AS author_name
 			FROM ?_agencies ags
 			LEFT JOIN ?_users usr ON ags.author_id = usr.id
-			WHERE updated > ?
+			WHERE updated > ? AND active = 1
 			',
 			$meta['updates_since']
 		);
