@@ -16,7 +16,7 @@
 	"models.creation.create":"Create",
 	"models.creation.original":"Original canvas size, px (must be square)",
 
-	"shelves.undress":"Undress model",
+	"shelves.undress":"Undress",
 	"shelves.header":"Select an outfit shelf",
 	"shelves.creation.header":"Create a new shelf",
 	"shelves.creation.title":"Name of a shelf",
@@ -27,7 +27,7 @@
 	"shelves.creation.requiredDescription":"At least one item of this shelf must be selected (useful for age restrictions, such as mandatory underware item)",
 
 	"items.header":"Select an item",
-	"items.undress":"Undress model",
+	"items.undress":"Undress",
 	"items.creation.header":"Create a new item",
 	"items.creation.title":"Name of an item",
 	"items.creation.name":"System name",
