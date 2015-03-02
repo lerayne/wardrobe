@@ -45,5 +45,8 @@
 	"props.item.instanceCreation.header":"Create new instance",
 	"props.item.instanceCreation.title":"Neme of an instance",
 	"props.item.instanceCreation.file":"Image",
-	"props.item.instanceCreation.create":"Upload"
+	"props.item.instanceCreation.create":"Upload",
+
+	"current.header":"Current items",
+	"saved.header":"My saved outfits"
 }

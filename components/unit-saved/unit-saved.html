@@ -2,15 +2,34 @@
 
 <polymer-element name="unit-saved" attributes="data" vertical layout flex>
 	<template>
+
+		<link rel="stylesheet" href="../unit-slide-base/unit-slide.css">
+
 		<style>
 			:host {
 				background-color: #fff;
 			}
 		</style>
 
-		<template repeat="{{instance in data}}">
-			<card-current-instance data="{{instance}}"></card-current-instance>
-		</template>
+		<div hidden?="{{!data[0]}}" vertical layout flex>
+			<core-toolbar class="core-narrow">
+				<text-string>current.header</text-string>
+			</core-toolbar>
+
+			<div id="scrollable" hidden?="{{collapsed}}" flex>
+				<div id="scroll">
+					<template repeat="{{instance in data}}">
+						<card-current-instance data="{{instance}}"></card-current-instance>
+					</template>
+				</div>
+			</div>
+		</div>
+
+		<div vertical layout flex>
+			<core-toolbar class="core-narrow">
+				<text-string>saved.header</text-string>
+			</core-toolbar>
+		</div>
 
 	</template>
 

@@ -26,6 +26,7 @@
 			eventDelegates:{
 				'open-subunit':'openSubunit',
 				'close-subunit':'closeSubunit',
+				'subunit-back':'subunitBack',
 
 				'agency-selected':'onAgencySelected',
 				'model-selected':'onModelSelected',
@@ -69,6 +70,20 @@
 				if (this.subunits[subunitIndex+1]){
 					var nextUnit = this.$[this.subunits[subunitIndex+1]];
 					nextUnit.silentOpen();
+				}
+			},
+
+			subunitBack:function(event, data){
+				console.log(data)
+
+				// which sub is being closed
+				var subunitIndex = this.subunits.indexOf(data.subunitName);
+
+				this.$[this.subunits[subunitIndex]].close();
+
+				if (this.subunits[subunitIndex-1]){
+					var prevUnit = this.$[this.subunits[subunitIndex-1]];
+					prevUnit.silentOpen();
 				}
 			},
 
