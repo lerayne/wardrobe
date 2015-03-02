@@ -28,7 +28,7 @@ paper-button text-string {
 
 #scrollable {
 	overflow-y: scroll;
-	background-color: #fff;
+	background-color: #f1f1f1;
 }
 
 #vertical {
@@ -42,7 +42,7 @@ paper-button text-string {
 }
 
 #scroll {
-	padding: 15px 5px 1px 15px;
+	padding: 15px 8px 1px 15px;
 	position: relative;
 }
 

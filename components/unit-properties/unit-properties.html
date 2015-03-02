@@ -3,6 +3,12 @@
 <polymer-element name="unit-properties" attributes="data, object" vertical layout flex>
 	<template>
 
+		<style>
+			:host {
+				background-color: #f1f1f1;
+			}
+		</style>
+
 		<template if="{{object == 'item'}}">
 			<unit-properties-item data="{{data}}"></unit-properties-item>
 		</template>

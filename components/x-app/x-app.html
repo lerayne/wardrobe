@@ -19,13 +19,15 @@
 	<template>
 		<style>
 			:host {
-				background:#eee;
+				background:#fff;
 			}
 
 			.panel {
-				margin:5px;
-				border:1px solid #ccc;
-				background-color: #eee;
+				background-color: #f1f1f1;
+			}
+
+			.side.panel {
+				min-width: 380px;
 			}
 
 			core-toolbar {
@@ -36,7 +38,7 @@
 			}
 
 			paper-tabs {
-				background-color: #fff;
+				background-color: #eee;
 			}
 
 			paper-tabs::shadow #selectionBar {
@@ -53,7 +55,7 @@
 		</core-toolbar>-->
 
 		<div horizontal layout flex>
-			<div class="panel" vertical layout flex>
+			<div class="side panel" vertical layout flex>
 
 				<paper-tabs selected="{{navModeId}}">
 					<paper-tab x-unit="browse" on-tap="{{navSelectTab}}"><text-string class="tab">navigation.tabs.browser</text-string></paper-tab>
@@ -73,7 +75,7 @@
 				<unit-doll id="doll" instances="{{instances}}" canvasSize="{{dollCanvasSize}}"></unit-doll>
 			</div>
 
-			<div class="panel" vertical layout flex>
+			<div class="side panel" vertical layout flex>
 				<paper-tabs selected="{{propsModeId}}">
 					<paper-tab x-unit="properties" on-tap="{{propsSelectTab}}"><text-string class="tab">navigation.tabs.properties</text-string></paper-tab>
 				</paper-tabs>

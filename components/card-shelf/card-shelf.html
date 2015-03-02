@@ -1,10 +1,16 @@
 <link rel="import" href="../card-base/card-base.html">
 
-<polymer-element name="card-shelf" extends="card-base">
+<polymer-element name="card-shelf" extends="card-base" horizontal layout center>
 	<template>
 
-		<b>{{data.title}}</b> (z-index: {{data.z_index}})
-		<i hidden?="{{data.required == 0}}">Required</i>
+		<b>{{data.title}}</b>
+		&nbsp; <i class="subtext" hidden?="{{data.required == 0}}">Required</i>
+
+		<span flex></span>
+
+		<span class="subtext">z-index: [[data.z_index]]</span>
+
+
 
 	</template>
 
