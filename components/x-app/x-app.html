@@ -245,6 +245,10 @@
 					})
 				});
 
+				_.each(data.layers, function(layer){
+					layer.original = _(layer).clone();
+				})
+
 				this.pushItem(data);
 			},
 

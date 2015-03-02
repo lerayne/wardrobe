@@ -96,6 +96,10 @@
 				background-color: red;
 			}
 
+			paper-button text-string {
+				font-size: 13px;
+			}
+
 		</style>
 
 		<core-toolbar class="core-narrow">
@@ -137,9 +141,18 @@
 				<div class="layer">
 
 					<div vertical layout>
-						<div class="layer-preview">
-							<img _src="{{data.instances[data.activeInstance].layers[index].file}}">
+
+						<div horizontal layout>
+							<div class="layer-preview">
+								<img _src="{{data.instances[data.activeInstance].layers[index].file}}">
+							</div>
+							<span flex></span>
+							<paper-button self-end on-tap="{{resetAll}}" style="margin-right:8px">
+								<text-string>props.layer.resetAll</text-string> &nbsp;
+								<core-icon icon="refresh"></core-icon>
+							</paper-button>
 						</div>
+
 						<div class="measurements" on-mouseup="{{stopMovement}}">
 
 							<label horizontal layout center>
@@ -148,6 +161,7 @@
 								<paper-icon-button icon="remove-circle" on-mousedown="{{subX}}"></paper-icon-button>
 								<paper-slider flex value="[[layer.x_offset]]" min="0" max="1000" immediateValue="{{layer.x_offset}}"></paper-slider>
 								<paper-icon-button icon="add-circle" on-mousedown="{{addX}}"></paper-icon-button>
+								<paper-icon-button icon="refresh" on-tap="{{resetX}}"></paper-icon-button>
 							</label>
 							<label horizontal layout center>
 								<text-string>props.item.y_offset</text-string>
@@ -155,6 +169,7 @@
 								<paper-icon-button icon="remove-circle" on-mousedown="{{subY}}"></paper-icon-button>
 								<paper-slider flex value="[[layer.y_offset]]" min="0" max="1000" immediateValue="{{layer.y_offset}}"></paper-slider>
 								<paper-icon-button icon="add-circle" on-mousedown="{{addY}}"></paper-icon-button>
+								<paper-icon-button icon="refresh" on-tap="{{resetY}}"></paper-icon-button>
 							</label>
 							<label horizontal layout center>
 								<text-string>props.item.z_index</text-string>
@@ -162,6 +177,7 @@
 								<paper-icon-button icon="remove-circle" on-mousedown="{{subZ}}"></paper-icon-button>
 								<paper-slider flex value="[[layer.z_index]]" min="-2000" max="2000" immediateValue="{{layer.z_index}}"></paper-slider>
 								<paper-icon-button icon="add-circle" on-mousedown="{{addZ}}"></paper-icon-button>
+								<paper-icon-button icon="refresh" on-tap="{{resetZ}}"></paper-icon-button>
 							</label>
 						</div>
 					</div>
@@ -246,6 +262,14 @@
 				}, null, 500)
 			},
 
+			resetCoord:function(event, axis){
+				var meas = event.target.templateInstance.model.layer;
+				var i = event.target.templateInstance.model.index;
+
+				meas[axis] = this.data.layers[i].original[axis];
+
+			},
+
 			addX:function(event){
 				this.startMovement(event, 'x_offset', 1)
 			},
@@ -268,6 +292,24 @@
 
 			subZ:function(event){
 				this.startMovement(event, 'z_index', -1)
+			},
+
+			resetX:function(event){
+				this.resetCoord(event, 'x_offset');
+			},
+
+			resetY:function(event){
+				this.resetCoord(event, 'y_offset');
+			},
+
+			resetZ:function(event){
+				this.resetCoord(event, 'z_index');
+			},
+
+			resetAll:function(event){
+				this.resetX(event);
+				this.resetY(event);
+				this.resetZ(event);
 			},
 
 

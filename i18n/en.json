@@ -46,6 +46,7 @@
 	"props.item.instanceCreation.title":"Neme of an instance",
 	"props.item.instanceCreation.file":"Image",
 	"props.item.instanceCreation.create":"Upload",
+	"props.layer.resetAll":"Reset all",
 
 	"current.header":"Current items",
 	"saved.header":"My saved outfits"
