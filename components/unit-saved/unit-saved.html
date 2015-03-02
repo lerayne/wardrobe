@@ -1,10 +1,16 @@
-<polymer-element name="unit-saved">
+<link rel="import" href="../card-current-instance/card-current-instance.html">
+
+<polymer-element name="unit-saved" attributes="data" vertical layout flex>
 	<template>
 		<style>
 			:host {
-
+				background-color: #fff;
 			}
 		</style>
+
+		<template repeat="{{instance in data}}">
+			<card-current-instance data="{{instance}}"></card-current-instance>
+		</template>
 
 	</template>
 

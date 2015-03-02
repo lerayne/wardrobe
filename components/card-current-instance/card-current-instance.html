@@ -1,0 +1,56 @@
+<link rel="import" href="../card-base/card-base.html">
+
+<polymer-element name="card-current-instance" extends="card-base" attributes="data" horizontal layout center>
+	<template>
+		<style>
+			:host {
+
+			}
+
+			.image {
+				height: 50px;
+				width: 50px;
+				border:1px solid #ddd;
+				text-align: center;
+			}
+
+			img {
+				max-height: 50px;
+				max-width: 50px;
+			}
+		</style>
+
+		<div class="image">
+			<img src="{{data.layers[0].file}}">
+		</div>
+		<span flex></span>
+		<paper-icon-button hidden?="{{data.shelf.required == 1}}" icon="cancel" on-tap="{{remove}}"></paper-icon-button>
+
+	</template>
+
+	<script>
+		Polymer({
+
+			eventDelegates:{
+				'tap':'select'
+			},
+
+			attached:function(){
+				console.log(this.data)
+			},
+
+			select:function(){
+				//this.fire('shelf-selected', this.data.shelf);
+			},
+
+			remove:function(){
+				this.fire('item-selected', {
+					id:0,
+					title:'None',
+					default:false,
+					shelf_id: this.data.shelf_id
+				})
+			}
+		});
+	</script>
+</polymer-element>

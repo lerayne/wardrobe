@@ -34,7 +34,12 @@ switch ($_REQUEST['subject']){
 				lrs.y_offset,
 				lrs.z_index,
 				ins.file,
-				slv.id AS shelf_id
+				slv.id AS shelf_id,
+				slv.name AS shelf_name,
+				slv.title AS shelf_title,
+				slv.cover AS shelf_cover,
+				slv.z_index AS shelf_z_index,
+				slv.required AS shelf_required
 			FROM ?_layers lrs
 			JOIN ?_items itm ON lrs.item_id = itm.id AND itm.default = 1
 			JOIN ?_item_instances ins ON ins.item_id = itm.id
@@ -44,6 +49,26 @@ switch ($_REQUEST['subject']){
 			',
 			$_REQUEST['model']
 		);
+
+		foreach ($result as $i => $item) {
+			$result[$i]['shelf'] = Array(
+				'id' => $item['shelf_id'],
+				'name' => $item['shelf_name'],
+				'title' => $item['shelf_title'],
+				'cover' => $item['shelf_cover'],
+				'z_index' => $item['shelf_z_index'],
+				'required' => $item['shelf_required'],
+			);
+
+			unset(
+				$result[$i]['shelf_id'],
+				$result[$i]['shelf_name'],
+				$result[$i]['shelf_title'],
+				$result[$i]['shelf_cover'],
+				$result[$i]['shelf_z_index'],
+				$result[$i]['shelf_required']
+			);
+		}
 
 		break;
 }

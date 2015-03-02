@@ -64,7 +64,7 @@
 						<unit-browse></unit-browse>
 					</div>
 					<div hidden?="{{navMode != 'saved'}}" class="tabbed-content" vertical layout flex>
-						<unit-saved></unit-saved>
+						<unit-saved data="{{instances}}"></unit-saved>
 					</div>
 
 			</div>
@@ -197,12 +197,13 @@
 
 				for (var i=0; i < data.length; i++) {
 					var layer = data[i];
-					var shelf_index = _(newInstances).findIndex({shelf:layer.shelf_id});
+					var shelf_index = _(newInstances).findIndex({shelf:layer.shelf.id});
 					layer.file = app.funcs.getFullFile(layer.file, layer.layer_id);
 
 					if (shelf_index < 0) {
 						newInstances.push({
-							shelf: layer.shelf_id,
+							shelf_id: layer.shelf.id,
+							shelf: layer.shelf,
 							layers:[layer]
 						})
 					} else {
@@ -261,18 +262,19 @@
 			pushInstance:function(id, index){
 				this.current.item.activeInstance = index;
 
-				var i = _(this.instances).findIndex({shelf:id});
+				var i = _(this.instances).findIndex({shelf_id:id});
 
 				var deleteCount = i >= 0 ? 1 : 0;
 
 				this.instances.splice(i, deleteCount, {
-					shelf:id,
+					shelf_id:id,
+					shelf: this.current.shelf,
 					layers: this.current.item.instances[index].layers
 				})
 			},
 
 			removeInstance:function(shelfID){
-				var i = _(this.instances).findIndex({shelf: shelfID});
+				var i = _(this.instances).findIndex({shelf_id: shelfID});
 
 				if (i >= 0) {
 					this.instances.splice(i, 1)
