@@ -128,7 +128,7 @@
 
 			<div horizontal layout>
 				<paper-tabs selected="0" flex>
-					<template repeat="{{layer, index in data.layers}}">
+					<template repeat="{{layer, index in data.instances[data.activeInstance].layers}}">
 						<paper-tab><text-string>props.item.layerHeader</text-string> &nbsp; {{index+1}}</paper-tab>
 					</template>
 				</paper-tabs>
@@ -136,7 +136,7 @@
 			</div>
 
 			<template repeat="{{layer, index in data.instances[data.activeInstance].layers}}">
-				<div class="layer">
+				<div class="layer" hidden?="{{index > 0}}">
 
 					<div vertical layout>
 
@@ -373,7 +373,36 @@
 			},
 
 			addLayer:function(){
-				this.data.layers.push(1)
+				console.log('adding_layer');
+
+				app.connection.write({
+					action:'add_layer',
+					item: this.data.item.id,
+					z_index: 0
+				}, function(actions, ret){
+
+					var actionIndex = _(actions).findKey({action:'add_layer'});
+
+					console.log('adding_layer', actions, ret, actionIndex);
+
+					// todo - layer addition does not update the item time ('cause its very minor change) so we have to add it here manually
+					// todo - think this over. Alternative is to force resubscription on this item by making next:
+					//this.fire('item-selected', this.data.item)
+
+					if (typeof actionIndex != 'undefined'){
+						var ai = parseInt(actionIndex, 10);
+						var layer_id = ret[ai];
+
+						this.data.instances[this.data.activeInstance].layers.push({
+							id:layer_id,
+							item_id: this.data.item.id,
+							z_index:0,
+							x_offset:0,
+							y_offset:0
+						})
+					}
+
+				}, this);
 			}
 
 		});

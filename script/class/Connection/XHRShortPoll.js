@@ -14,7 +14,6 @@ app.class.strategic.XHRShortPoll = function(server, callback, autostart){
 
 	this.active = autostart;
 	this.setMode('passive');
-	this.request = false; // запрос
 	this.timeout = false; // текущий таймаут
 	this.connectionLossTO = false; // таймаут обрыва связи
 
@@ -23,8 +22,9 @@ app.class.strategic.XHRShortPoll = function(server, callback, autostart){
 
 	this.subscriptions = {};
 	this.meta = {};
-	this.actions = {};
 	this.latest_change = 0;
+
+	this.queryReset();
 }
 
 app.class.strategic.XHRShortPoll.prototype = {
@@ -50,10 +50,21 @@ app.class.strategic.XHRShortPoll.prototype = {
 		}
 	},
 
-	write:function(params){
+	write:function(params, writeCallback, context){
 
-		if (params instanceof Array) this.actions = params;
-		else this.actions[0] = params;
+		if (params instanceof Array) {
+			this.actions = params;
+		} else {
+			this.actions[0] = params;
+		}
+
+		if (typeof writeCallback == 'function'){
+			if (typeof context == 'undefined') {
+				context = this;
+			}
+
+			this.writeCallback = writeCallback.bind(context);
+		}
 	},
 
 	// внутренний класс подписки, которым пользуются внешние классы (пере)подписки и ее изменения
@@ -250,6 +261,7 @@ app.class.strategic.XHRShortPoll.prototype = {
 
 		// разбираем пришедший пакет и выполняем обновления
 		this.parseCallback(data, this.actions, data.return);
+		this.writeCallback(this.actions, data.return);
 
 		this.queryReset();
 
@@ -259,6 +271,7 @@ app.class.strategic.XHRShortPoll.prototype = {
 
 	queryReset:function(){
 		this.actions = {};
+		this.writeCallback = function(){};
 
 		this.stopIndication(); // индикация ожидания откл
 		this.request = false;

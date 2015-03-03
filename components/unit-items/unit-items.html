@@ -149,11 +149,12 @@
 
 			parseUpdates:function(newItems, actionsPerformed, dataReturned){
 
-				var itemCreated = typeof _(actionsPerformed).find({action:'add_item'}) != 'undefined';
+				var createActionIndex = _(actionsPerformed).findKey({action:'add_item'});
 
-				if (itemCreated) {
+				if (typeof createActionIndex != 'undefined') {
+					var ai = parseInt(createActionIndex, 10);
 					var i = _(newItems).findIndex(function(item){
-						return item.id == dataReturned.item_id
+						return item.id == dataReturned[ai].item_id
 					})
 
 					newItems[i].editMode = true;
