@@ -162,22 +162,10 @@ class Actions {
 				$db->query('UPDATE ?_items SET `default` = 1 WHERE id = ?', $new_item_id);
 			}
 
-			//update times
-			$time_update['updated'] = $now;
-			$time_update['updater'] = 1; // todo login
-			$time_update['update_cause'] = 'new item ('.$params['item_name'].') created';
-
-			$db->query('UPDATE ?_shelves SET ?a WHERE id = ?', $time_update, $params['shelf']);
-			$db->query('UPDATE ?_models SET ?a WHERE id = ?', $time_update, $path_data['model_id']);
-			$db->query('UPDATE ?_agencies SET ?a WHERE id = ?', $time_update, $path_data['agency_id']);
-
 			// write default layer
-			$new_layer['item_id'] = $new_item_id;
-			$new_layer['z_index'] = $params['z_index'];
-			$new_layer['x_offset'] = 0;
-			$new_layer['y_offset'] = 0;
-
-			$new_layer_id = $db->query('INSERT INTO ?_layers (?#) VALUES (?a)', array_keys($new_layer), array_values($new_layer));
+			$new_layer_id = $this->add_layer(array_merge($params, Array(
+				'item' => $new_item_id
+			)));
 
 			//write default instance
 			$instance_data = $this->add_instance(array_merge($params, Array(
@@ -199,6 +187,26 @@ class Actions {
 			$created = array_merge($path_data, $instance_data);
 
 			return $created;
+		}
+	}
+
+
+	function add_layer($params){
+		global $db;
+
+		$layers_count = $db->selectCell('SELECT COUNT(id) FROM ?_layers WHERE item_id = ?', $params['item']);
+
+		if ($layers_count <= 3) {
+			$new_layer['item_id'] = $params['item'];
+			$new_layer['z_index'] = $params['z_index'];
+			$new_layer['x_offset'] = 0;
+			$new_layer['y_offset'] = 0;
+
+			$new_layer_id = $db->query('INSERT INTO ?_layers (?#) VALUES (?a)', array_keys($new_layer), array_values($new_layer));
+
+			return $new_layer_id;
+		} else {
+			return "item's layer cap of 3 reached";
 		}
 	}
 
