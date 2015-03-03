@@ -10,7 +10,7 @@ $cfg['posts_per_page'] = 20;
 // адрес базы данных
 //$safecfg['db'] = 'mysql://tinng_main:tinng_demo@localhost/tinng';
 //$safecfg['db'] = 'mysql://roninpho_tinng:eTgwbRu8Tw2o@localhost/roninpho_tinng2';
-$safecfg['db'] = 'mysql://root:toor@localhost'  /*.':4040'*/  .'/ward_test';
+$safecfg['db'] = 'mysql://root:toor@localhost'  /*.':4040'*/  .'/wardrobe';
 
 // в течении какого времени с момента последней активности юзер считается онлайн (сек)
 // для корректной работы должно быть больше, чем время поллинга, а так же больше чем время максимально долгого ответа от
