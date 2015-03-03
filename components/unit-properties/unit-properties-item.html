@@ -145,6 +145,11 @@
 								<img _src="{{data.instances[data.activeInstance].layers[index].file}}">
 							</div>
 							<span flex></span>
+
+							<paper-button self-end hidden?="{{index == 0}}">
+								<text-string>props.item.deleteLayer</text-string>
+							</paper-button>
+
 							<paper-button self-end on-tap="{{resetAll}}" style="margin-right:8px">
 								<text-string>props.layer.resetAll</text-string> &nbsp;
 								<core-icon icon="refresh"></core-icon>

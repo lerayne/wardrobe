@@ -47,6 +47,7 @@
 	"props.item.instanceCreation.file":"Image",
 	"props.item.instanceCreation.create":"Upload",
 	"props.layer.resetAll":"Reset all",
+	"props.item.deleteLayer":"Delete layer",
 
 	"current.header":"Current items",
 	"saved.header":"My saved outfits"
