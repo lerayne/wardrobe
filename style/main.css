@@ -18,3 +18,9 @@ body /deep/ #creationDialog label {
 body /deep/ .clearfix {
 	clear:both
 }
+
+body /deep/ paper-button[highlighted],
+body /deep/ paper-icon-button[highlighted] {
+	background-color: #006dcc;
+	color:#fff;
+}

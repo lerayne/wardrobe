@@ -282,6 +282,18 @@ class Actions {
 
 
 
+	function upload_stencil ($params){
+		global $db, $env;
+
+		$instance = $db->selectRow('SELECT file FROM ?_item_instances WHERE id = ?', $params['instance']);
+
+		$filepath = $instance['file'].'.'.dechex($params['layer']).'.png';
+
+		rename($env['assets'].$params['image'], $env['assets'].$filepath);
+	}
+
+
+
 	function update_times ($cause, $now, $agency, $model=false, $shelf=false, $item=false){
 		global $db, $env;
 
