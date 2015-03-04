@@ -211,6 +211,30 @@ class Actions {
 	}
 
 
+	function delete_layer($params){
+		global $db;
+
+		// select file paths
+		$to_delete = $db->select('
+			SELECT
+				ins.file
+			FROM ?_layers lrs
+			JOIN ?_item_instances ins ON lrs.item_id = ins.item_id
+			WHERE lrs.id = ?
+			'
+			, $params['id']
+		);
+
+		//delete db entry
+		$db->query('DELETE FROM ?_layers WHERE id = ?', $params['id']);
+
+		//delete files
+		foreach ($to_delete as $file) {
+			unlink($file.'.'.dechex($params['id']).'.png');
+		}
+	}
+
+
 	function add_instance($params) {
 		global $db, $env;
 

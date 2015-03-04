@@ -161,8 +161,14 @@
 			},
 
 			onItemSelected:function(event, data){
-				app.currentState.item = data;
-				this.current.item = data;
+
+				if (!this.current.item) {
+					this.current.item = {}
+					app.currentState.item = {}
+				}
+
+				app.currentState.item.properties = data;
+				this.current.item.properties = data;
 
 				if (data.id > 0) {
 					this.subscribe();
@@ -175,7 +181,7 @@
 			},
 
 			onInstanceSelected:function(event, index){
-				this.pushInstance(this.current.item.item.shelf_id, index)
+				this.pushInstance(this.current.item.properties.shelf_id, index)
 			},
 
 
@@ -218,11 +224,11 @@
 
 			//ITEM SELECT QUEUE
 			subscribe:function(){
-				console.log('subscribe on', this.current.item.id);
+				console.log('subscribe on', this.current.item.properties.id);
 
 				app.connection.subscribe(this, 'item-properties', {
 					feed:'item_props',
-					id: this.current.item.id
+					id: this.current.item.properties.id
 				}, this.parseItem)
 			},
 
@@ -254,19 +260,23 @@
 				this.pushItem(data);
 			},
 
-			pushItem:function(data){
+			pushItem:function(item){
 				// preserve instance on update
-				data.activeInstance = this.current.item.activeInstance ? this.current.item.activeInstance : 0;
+				//item.activeInstanceIndex = this.current.item.activeInstanceIndex ? this.current.item.activeInstanceIndex : 0;
+				//item.activeLayerIndex = this.current.item.activeLayerIndex ? this.current.item.activeLayerIndex : 0;
+
+				item.activeInstanceIndex = this.current.item.activeInstanceIndex || 0;
+				item.activeLayerIndex = this.current.item.activeLayerIndex || 0;
 
 				this.currentObjectType = 'item';
-				this.currentObject = this.current.item = data;
-				app.currentState.item = data;
+				this.currentObject = this.current.item = item;
+				app.currentState.item = item;
 
-				this.pushInstance(data.item.shelf_id, this.current.item.activeInstance);
+				this.pushInstance(item.properties.shelf_id, this.current.item.activeInstanceIndex);
 			},
 
 			pushInstance:function(id, index){
-				this.current.item.activeInstance = index;
+				this.current.item.activeInstanceIndex = index;
 
 				var i = _(this.instances).findIndex({shelf_id:id});
 

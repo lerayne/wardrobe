@@ -1,6 +1,6 @@
 <link rel="import" href="../image-cropper/image-cropper.html">
 
-<polymer-element name="unit-properties-item" attributes="data" vertical layout flex>
+<polymer-element name="unit-properties-item" attributes="item" vertical layout flex>
 	<template>
 		<style>
 
@@ -101,7 +101,7 @@
 		</style>
 
 		<core-toolbar class="core-narrow">
-			{{data.item.title}}
+			{{item.properties.title}}
 			<span flex></span>
 			<paper-icon-button icon="create" on-tap="{{enterEditMode}}" hidden?="{{editMode}}"></paper-icon-button>
 			<paper-icon-button icon="check-circle" on-tap="{{save}}" hidden?="{{!editMode}}"></paper-icon-button>
@@ -109,7 +109,7 @@
 		</core-toolbar>
 
 		<div class="instances" horizontal layout center>
-			<template repeat="{{instance, index in data.instances}}">
+			<template repeat="{{instance, index in item.instances}}">
 				<div class="instance" on-tap="{{selectInstance}}">
 					<img _src="{{instance.layers[0].file}}" title="{{instance.title}}">
 				</div>
@@ -127,23 +127,23 @@
 		<div class="layers">
 
 			<div horizontal layout>
-				<paper-tabs selected="0" flex>
-					<template repeat="{{layer, index in data.instances[data.activeInstance].layers}}">
+				<paper-tabs selected="{{item.activeLayerIndex}}" flex>
+					<template repeat="{{layer, index in item.instances[item.activeInstanceIndex].layers}}">
 						<paper-tab on-tap="{{selectLayer}}"><text-string>props.item.layerHeader</text-string> &nbsp; {{index+1}}</paper-tab>
 					</template>
 				</paper-tabs>
-				<paper-fab hidden?="{{data.layers.length >= 3}}" style="margin:5px" icon="note-add" mini on-tap="{{addLayer}}"></paper-fab>
+				<paper-fab hidden?="{{item.layers.length >= 3}}" style="margin:5px" icon="note-add" mini on-tap="{{addLayer}}"></paper-fab>
 			</div>
 
 			<div id="layerPages">
-				<template repeat="{{layer, index in data.instances[data.activeInstance].layers}}">
-					<div class="layer" hidden?="{{index > 0}}">
+				<template repeat="{{layer, index in item.instances[item.activeInstanceIndex].layers}}">
+					<div class="layer" hidden?="{{index != item.activeLayerIndex}}">
 
 						<div vertical layout>
 
 							<div horizontal center layout>
 								<div class="layer-preview">
-									<img hidden?="{{!data.instances[data.activeInstance].layers[index].file}}" _src="{{data.instances[data.activeInstance].layers[index].file}}">
+									<img hidden?="{{!item.instances[item.activeInstanceIndex].layers[index].file}}" _src="{{item.instances[item.activeInstanceIndex].layers[index].file}}">
 								</div>
 
 								<div vertical layout>
@@ -154,8 +154,8 @@
 
 								<span flex></span>
 
-								<div vertical layout>
-									<paper-button hidden?="{{index == 0}}">
+								<div vertical center layout>
+									<paper-button hidden?="{{index == 0}}" on-tap="{{deleteLayer}}">
 										<text-string>props.item.deleteLayer</text-string>
 									</paper-button>
 
@@ -297,7 +297,7 @@
 				var meas = event.target.templateInstance.model.layer;
 				var i = event.target.templateInstance.model.index;
 
-				meas[axis] = this.data.layers[i].original[axis];
+				meas[axis] = this.item.layers[i].original[axis];
 
 			},
 
@@ -380,7 +380,7 @@
 
 				this.file = response.data.files[0];
 
-				console.log(response, this.file)
+				//console.log(response, this.file)
 			},
 
 			createInstance:function(){
@@ -391,8 +391,8 @@
 					action:'add_instance',
 					instance_title: this.$.inputTitle.value,
 					image: this.file,
-					item: this.data.item.id,
-					layer: this.data.layers[0].id,
+					item: this.item.properties.id,
+					layer: this.item.layers[0].id,
 					//bypass_write:1,
 					cropData: this.imgCropData
 				});
@@ -413,7 +413,7 @@
 
 				app.connection.write({
 					action:'add_layer',
-					item: this.data.item.id,
+					item: this.item.properties.id,
 					z_index: 0
 				}, function(actions, ret){
 
@@ -423,55 +423,61 @@
 
 					// todo - layer addition does not update the item time ('cause its very minor change) so we have to add it here manually
 					// todo - think this over. Alternative is to force resubscription on this item by making next:
-					//this.fire('item-selected', this.data.item)
+					this.fire('item-selected', this.item.properties)
 
-					if (typeof actionIndex != 'undefined'){
+					/*if (typeof actionIndex != 'undefined'){
 						var ai = parseInt(actionIndex, 10);
 						var layer_id = ret[ai];
 
-						this.data.instances[this.data.activeInstance].layers.push({
+						this.item.instances[this.item.activeInstanceIndex].layers.push({
 							id:layer_id,
-							item_id: this.data.item.id,
+							item_id: this.item.properties.id,
 							z_index:0,
 							x_offset:0,
 							y_offset:0
 						})
-					}
+					}*/
 
 				}, this);
+			},
+
+			deleteLayer:function(){
+
+				if (confirm(this.text('props.item.layer.confirmDeletion'))){
+					app.connection.write({
+						action:'delete_layer',
+						id: this.item.layers[this.item.activeLayerIndex].id
+					}, function(){
+						this.item.activeLayerIndex = 0;
+						this.fire('item-selected', this.item.properties);
+					}, this)
+				}
 			},
 
 			selectLayer:function(event){
 				var index = event.target.templateInstance.model.index;
 
-				// todo - think of cancel using jquery
-				$(this.$.layerPages).find('.layer').each(function(i,layer){
-					layer.hidden = true;
-				});
-
-				$(this.$.layerPages).find('.layer').eq(index)[0].hidden = false;
+				this.item.activeLayerIndex = index;
 			},
 
 			openImgUploadDialog:function(event){
 				var id = event.target.templateInstance.model.layer.id;
 
-				this.editingLayerId = id;
-
 				this.$.imgUploadDialog.open();
 			},
 
 			uploadImage:function(event){
-				var model = event.target.templateInstance.model.data;
+				var model = event.target.templateInstance.model.item;
 
-				console.log('upload model', model)
+				console.log('upload model', model);
 
 				app.connection.write({
 					action:'upload_stencil',
-					layer: this.editingLayerId,
-					instance: this.data.instances[this.data.activeInstance].id,
+					layer: this.layers[this.item.activeLayerIndex].id,
+					instance: this.item.instances[this.item.activeInstanceIndex].id,
 					image: this.file
 				}, function(){
-					this.fire('item-selected', this.data.item);
+					this.fire('item-selected', this.item.properties);
 					this.$.imgUploadDialog.close();
 				}, this)
 			}
