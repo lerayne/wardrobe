@@ -129,7 +129,7 @@
 			<div horizontal layout>
 				<paper-tabs selected="0" flex>
 					<template repeat="{{layer, index in data.instances[data.activeInstance].layers}}">
-						<paper-tab><text-string>props.item.layerHeader</text-string> &nbsp; {{index+1}}</paper-tab>
+						<paper-tab on-tap="{{selectLayer}}"><text-string>props.item.layerHeader</text-string> &nbsp; {{index+1}}</paper-tab>
 					</template>
 				</paper-tabs>
 				<paper-fab hidden?="{{data.layers.length >= 3}}" style="margin:5px" icon="note-add" mini on-tap="{{addLayer}}"></paper-fab>
@@ -408,6 +408,12 @@
 					}
 
 				}, this);
+			},
+
+			selectLayer:function(event){
+				var index = event.target.templateInstance.model.index;
+
+				console.log(index)
 			}
 
 		});
