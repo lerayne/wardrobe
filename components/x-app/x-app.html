@@ -96,6 +96,7 @@
 			eventDelegates:{
 				'instance-selected':'onInstanceSelected',
 				'item-selected':'onItemSelected',
+				'item-updated':'onItemUpdated',
 				'item-loaded':'onItemLoaded',
 				'shelf-selected':'onShelfSelected',
 				'model-selected':'onModelSelected',
@@ -161,23 +162,11 @@
 			},
 
 			onItemSelected:function(event, data){
+				this.loadItem(data, true)
+			},
 
-				if (!this.current.item) {
-					this.current.item = {};
-					app.currentState.item = {};
-				}
-
-				app.currentState.item.properties = data;
-				this.current.item.properties = data;
-
-				if (data.id > 0) {
-					this.subscribe();
-				} else {
-					console.log('deselect', data);
-
-					this.unscribe();
-					this.removeInstance(data.shelf_id);
-				}
+			onItemUpdated:function(event, data){
+				this.loadItem(data)
 			},
 
 			onInstanceSelected:function(event, index){
@@ -225,8 +214,30 @@
 			},
 
 			//ITEM SELECT QUEUE
+			loadItem:function(data, reset){
+
+				if (typeof reset == 'undefined') { var reset = false; }
+
+				if (!this.current.item || reset) {
+					this.current.item = {};
+					app.currentState.item = {};
+				}
+
+				app.currentState.item.properties = data;
+				this.current.item.properties = data;
+
+				if (data.id > 0) {
+					this.subscribe();
+				} else {
+					//console.log('deselect', data);
+
+					this.unscribe();
+					this.removeInstance(data.shelf_id);
+				}
+			},
+
 			subscribe:function(){
-				console.log('subscribe on', this.current.item.properties.id);
+				//console.log('subscribe on', this.current.item.properties.id);
 
 				app.connection.subscribe(this, 'item-properties', {
 					feed:'item_props',
