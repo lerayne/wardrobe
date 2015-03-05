@@ -473,7 +473,7 @@
 
 				app.connection.write({
 					action:'upload_stencil',
-					layer: this.layers[this.item.activeLayerIndex].id,
+					layer: this.item.layers[this.item.activeLayerIndex].id,
 					instance: this.item.instances[this.item.activeInstanceIndex].id,
 					image: this.file
 				}, function(){

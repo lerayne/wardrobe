@@ -163,8 +163,8 @@
 			onItemSelected:function(event, data){
 
 				if (!this.current.item) {
-					this.current.item = {}
-					app.currentState.item = {}
+					this.current.item = {};
+					app.currentState.item = {};
 				}
 
 				app.currentState.item.properties = data;
@@ -203,9 +203,11 @@
 			selectDefaults:function(data){
 				var newInstances = [];
 
+				console.log('selectDefaults', _(data).clone())
+
 				for (var i=0; i < data.length; i++) {
 					var layer = data[i];
-					var shelf_index = _(newInstances).findIndex({shelf:layer.shelf.id});
+					var shelf_index = _(newInstances).findIndex({shelf_id:layer.shelf.id});
 					layer.file = app.funcs.getFullFile(layer.file, layer.layer_id);
 
 					if (shelf_index < 0) {
