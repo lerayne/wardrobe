@@ -263,15 +263,9 @@
 				app.connection.write({
 					action:'add_layer',
 					item: this.item.properties.id,
-					z_index: 0
+					z_index: 0 - this.item.layers[0].z_index // by default z-index is the negative z-index of the first layer
 				}, function(actions, ret){
-
-					var actionIndex = _(actions).findKey({action:'add_layer'});
-
-					//console.log('adding_layer', actions, ret, actionIndex);
-
 					this.resubscribe();
-
 				}, this);
 			},
 

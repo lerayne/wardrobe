@@ -68,7 +68,7 @@
 						<text-string>props.item.deleteLayer</text-string>
 					</paper-button>
 
-					<paper-button on-tap="{{resetAll}}" style="margin-right:8px">
+					<paper-button on-tap="{{resetAll}}" style="margin-right:8px" hidden?="{{item.saved}}">
 						<text-string>props.layer.resetAll</text-string>
 						&nbsp;
 						<core-icon icon="refresh"></core-icon>
@@ -87,7 +87,7 @@
 								  on-change="{{unmarkSaved}}"
 							></paper-slider>
 					<paper-icon-button icon="add-circle" on-mousedown="{{addX}}"></paper-icon-button>
-					<paper-icon-button icon="refresh" on-tap="{{resetX}}"></paper-icon-button>
+					<paper-icon-button icon="refresh" on-tap="{{resetX}}" disabled?="{{item.saved}}"></paper-icon-button>
 				</label>
 
 				<label horizontal layout center>
@@ -99,7 +99,7 @@
 								  on-change="{{unmarkSaved}}"
 							></paper-slider>
 					<paper-icon-button icon="add-circle" on-mousedown="{{addY}}"></paper-icon-button>
-					<paper-icon-button icon="refresh" on-tap="{{resetY}}"></paper-icon-button>
+					<paper-icon-button icon="refresh" on-tap="{{resetY}}" disabled?="{{item.saved}}"></paper-icon-button>
 				</label>
 
 				<label horizontal layout center>
@@ -111,7 +111,7 @@
 								  on-change="{{unmarkSaved}}"
 							></paper-slider>
 					<paper-icon-button icon="add-circle" on-mousedown="{{addZ}}"></paper-icon-button>
-					<paper-icon-button icon="refresh" on-tap="{{resetZ}}"></paper-icon-button>
+					<paper-icon-button icon="refresh" on-tap="{{resetZ}}" disabled?="{{item.saved}}"></paper-icon-button>
 				</label>
 
 			</div>
