@@ -264,10 +264,11 @@
 
 			pushItem:function(item){
 				// preserve instance on update
-
 				item.activeInstanceIndex = this.current.item.activeInstanceIndex || 0;
-				item.activeLayerIndex = this.current.item.activeLayerIndex || 0;
+				if (!item.instances[item.activeInstanceIndex]) item.activeInstanceIndex = 0;
 
+				// preserve layer, if exists in new item ('cause in some case it's the same item re-subscription)
+				item.activeLayerIndex = this.current.item.activeLayerIndex || 0;
 				if (!item.layers[item.activeLayerIndex]) item.activeLayerIndex = 0;
 
 				this.currentObjectType = 'item';

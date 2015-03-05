@@ -1,0 +1,261 @@
+<polymer-element name="unit-properties-layer" attributes="layer, index, instance">
+	<template>
+		<style>
+			:host {
+
+			}
+
+			label {
+				padding:5px 10px;
+				display: block;
+			}
+
+			header {
+				padding:5px 10px;
+				background-color: #00bcd4;
+				color:#fff;
+				font-weight: bold;
+			}
+
+			.layer-preview {
+				width:80px;
+				height:80px;
+				text-align: center;
+				border:1px solid #ddd;
+				margin:5px;
+			}
+
+			.layer-preview img {
+				max-height: 80px;
+				max-width: 80px;
+			}
+
+			paper-slider {
+				clear: both;
+			}
+
+			.measurements paper-input {
+				width:40px;
+				margin-left:10px;
+			}
+
+			.measurements paper-input::shadow input {
+				text-align: center;
+			}
+
+			paper-button text-string {
+				font-size: 13px;
+			}
+		</style>
+
+		<div vertical layout>
+
+			<div horizontal center layout>
+				<div class="layer-preview">
+					<img hidden?="{{!layer.file}}" _src="{{layer.file}}">
+				</div>
+
+				<div vertical layout>
+					<paper-button highlighted on-tap="{{openImgUploadDialog}}">
+						<text-string>props.item.uploadLayer</text-string>
+					</paper-button>
+				</div>
+
+				<span flex></span>
+
+				<div vertical center layout>
+					<paper-button hidden?="{{index == 0}}" on-tap="{{deleteLayer}}">
+						<text-string>props.item.deleteLayer</text-string>
+					</paper-button>
+
+					<paper-button on-tap="{{resetAll}}" style="margin-right:8px">
+						<text-string>props.layer.resetAll</text-string> &nbsp;
+						<core-icon icon="refresh"></core-icon>
+					</paper-button>
+				</div>
+			</div>
+
+			<div class="measurements" on-mouseup="{{stopMovement}}">
+
+				<label horizontal layout center>
+					<text-string>props.item.x_offset</text-string>
+					<paper-input value="{{layer.x_offset}}"></paper-input>
+					<paper-icon-button icon="remove-circle" on-mousedown="{{subX}}"></paper-icon-button>
+					<paper-slider flex value="[[layer.x_offset]]" min="0" max="1000" immediateValue="{{layer.x_offset}}"></paper-slider>
+					<paper-icon-button icon="add-circle" on-mousedown="{{addX}}"></paper-icon-button>
+					<paper-icon-button icon="refresh" on-tap="{{resetX}}"></paper-icon-button>
+				</label>
+
+				<label horizontal layout center>
+					<text-string>props.item.y_offset</text-string>
+					<paper-input value="{{layer.y_offset}}"></paper-input>
+					<paper-icon-button icon="remove-circle" on-mousedown="{{subY}}"></paper-icon-button>
+					<paper-slider flex value="[[layer.y_offset]]" min="0" max="1000" immediateValue="{{layer.y_offset}}"></paper-slider>
+					<paper-icon-button icon="add-circle" on-mousedown="{{addY}}"></paper-icon-button>
+					<paper-icon-button icon="refresh" on-tap="{{resetY}}"></paper-icon-button>
+				</label>
+
+				<label horizontal layout center>
+					<text-string>props.item.z_index</text-string>
+					<paper-input value="{{layer.z_index}}"></paper-input>
+					<paper-icon-button icon="remove-circle" on-mousedown="{{subZ}}"></paper-icon-button>
+					<paper-slider flex value="[[layer.z_index]]" min="-2000" max="2000" immediateValue="{{layer.z_index}}"></paper-slider>
+					<paper-icon-button icon="add-circle" on-mousedown="{{addZ}}"></paper-icon-button>
+					<paper-icon-button icon="refresh" on-tap="{{resetZ}}"></paper-icon-button>
+				</label>
+
+			</div>
+		</div>
+
+		<paper-dialog id="imgUploadDialog" transition="core-transition-top" heading="{{ text('props.item.imageUpload.header') }}">
+
+			<label>
+				<text-string>props.item.imageUpload.file</text-string>
+				<input name="file" type="file" id="inputImgFile" on-change="{{tempUpload}}">
+			</label>
+
+			<paper-button self-center raised highlighted on-tap="{{ uploadImage }}">
+				<text-string>props.item.imageUpload.upload</text-string>
+			</paper-button>
+
+		</paper-dialog>
+
+	</template>
+
+	<script>
+		Polymer({
+			text:text,
+
+			stopMovement:function(e){
+				clearTimeout(this.sliderTO);
+				clearInterval(this.sliderInterval);
+			},
+
+			startMovement:function(e, axis, summand){
+				var meas = e.target.templateInstance.model.layer;
+
+				var move = (function(){
+					meas[axis] += summand;
+				});
+
+				move();
+
+				this.sliderTO = this.async(function(){
+					this.sliderInterval = setInterval(move, 50);
+				}, null, 500)
+			},
+
+			resetCoord:function(event, axis){
+				var meas = event.target.templateInstance.model.layer;
+				var i = event.target.templateInstance.model.index;
+
+				meas[axis] = app.currentState.item.layers[i].original[axis];
+			},
+
+			addX:function(event){
+				this.startMovement(event, 'x_offset', 1)
+			},
+
+			subX:function(event){
+				this.startMovement(event, 'x_offset', -1)
+			},
+
+			addY:function(event){
+				this.startMovement(event, 'y_offset', 1)
+			},
+
+			subY:function(event){
+				this.startMovement(event, 'y_offset', -1)
+			},
+
+			addZ:function(event){
+				this.startMovement(event, 'z_index', 1)
+			},
+
+			subZ:function(event){
+				this.startMovement(event, 'z_index', -1)
+			},
+
+			resetX:function(event){
+				this.resetCoord(event, 'x_offset');
+			},
+
+			resetY:function(event){
+				this.resetCoord(event, 'y_offset');
+			},
+
+			resetZ:function(event){
+				this.resetCoord(event, 'z_index');
+			},
+
+			resetAll:function(event){
+				this.resetX(event);
+				this.resetY(event);
+				this.resetZ(event);
+			},
+
+			openImgUploadDialog:function(event){
+				var id = event.target.templateInstance.model.layer.id;
+
+				this.$.imgUploadDialog.open();
+			},
+
+			uploadImage:function(event){
+				var model = event.target.templateInstance.model.item;
+
+				console.log('upload model', model);
+
+				app.connection.write({
+					action:'upload_stencil',
+					layer: this.layer.id,
+					instance: this.instance.id,
+					image: this.file
+				}, function(){
+					this.fire('stencil-uploaded');
+					this.$.imgUploadDialog.close();
+				}, this)
+			},
+
+			deleteLayer:function(){
+
+				if (confirm(this.text('props.item.layer.confirmDeletion'))){
+					app.connection.write({
+						action:'delete_layer',
+						id: this.layer.id
+					}, function(){
+						this.fire('layer-reset');
+						this.fire('stencil-uploaded');
+					}, this)
+				}
+			},
+
+			tempUpload:function(event, details){
+				console.log('unit-props tempUpload')
+
+				var formData = new FormData();
+
+				var file = event.target.files[0];
+
+				formData.append('file', file);
+
+				$.ajax({
+					url: 'server/_upload/index.php',
+					type: 'POST',
+					data: formData,
+					cache: false,
+					processData: false,
+					contentType: false,
+					success:this.parseTempFile.bind(this)
+				})
+			},
+
+			parseTempFile:function(response){
+				var response = JSON.parse(response);
+
+				this.file = response.data.files[0];
+
+				//console.log(response, this.file)
+			}
+		});
+	</script>
+</polymer-element>

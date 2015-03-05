@@ -1,4 +1,5 @@
 <link rel="import" href="../image-cropper/image-cropper.html">
+<link rel="import" href="./unit-properties-layer.html">
 
 <polymer-element name="unit-properties-item" attributes="item" vertical layout flex>
 	<template>
@@ -11,18 +12,6 @@
 			.layers {
 				margin:10px;
 				background-color: #fff;
-			}
-
-			.layer label {
-				padding:5px 10px;
-				display: block;
-			}
-
-			.layer header {
-				padding:5px 10px;
-				background-color: #00bcd4;
-				color:#fff;
-				font-weight: bold;
 			}
 
 			input.small {
@@ -58,32 +47,6 @@
 
 			.instance:hover {
 				border-color: #bbb;
-			}
-
-			.layer-preview {
-				width:80px;
-				height:80px;
-				text-align: center;
-				border:1px solid #ddd;
-				margin:5px;
-			}
-
-			.layer-preview img {
-				max-height: 80px;
-				max-width: 80px;
-			}
-
-			paper-slider {
-				clear: both;
-			}
-
-			.measurements paper-input {
-				width:40px;
-				margin-left:10px;
-			}
-
-			.measurements paper-input::shadow input {
-				text-align: center;
 			}
 
 			paper-tab::shadow #ink {
@@ -137,68 +100,13 @@
 
 			<div id="layerPages">
 				<template repeat="{{layer, index in item.instances[item.activeInstanceIndex].layers}}">
-					<div class="layer" hidden?="{{index != item.activeLayerIndex}}">
-
-						<div vertical layout>
-
-							<div horizontal center layout>
-								<div class="layer-preview">
-									<img hidden?="{{!item.instances[item.activeInstanceIndex].layers[index].file}}" _src="{{item.instances[item.activeInstanceIndex].layers[index].file}}">
-								</div>
-
-								<div vertical layout>
-									<paper-button highlighted on-tap="{{openImgUploadDialog}}">
-										<text-string>props.item.uploadLayer</text-string>
-									</paper-button>
-								</div>
-
-								<span flex></span>
-
-								<div vertical center layout>
-									<paper-button hidden?="{{index == 0}}" on-tap="{{deleteLayer}}">
-										<text-string>props.item.deleteLayer</text-string>
-									</paper-button>
-
-									<paper-button on-tap="{{resetAll}}" style="margin-right:8px">
-										<text-string>props.layer.resetAll</text-string> &nbsp;
-										<core-icon icon="refresh"></core-icon>
-									</paper-button>
-								</div>
-							</div>
-
-							<div class="measurements" on-mouseup="{{stopMovement}}">
-
-								<label horizontal layout center>
-									<text-string>props.item.x_offset</text-string>
-									<paper-input value="{{layer.x_offset}}"></paper-input>
-									<paper-icon-button icon="remove-circle" on-mousedown="{{subX}}"></paper-icon-button>
-									<paper-slider flex value="[[layer.x_offset]]" min="0" max="1000" immediateValue="{{layer.x_offset}}"></paper-slider>
-									<paper-icon-button icon="add-circle" on-mousedown="{{addX}}"></paper-icon-button>
-									<paper-icon-button icon="refresh" on-tap="{{resetX}}"></paper-icon-button>
-								</label>
-
-								<label horizontal layout center>
-									<text-string>props.item.y_offset</text-string>
-									<paper-input value="{{layer.y_offset}}"></paper-input>
-									<paper-icon-button icon="remove-circle" on-mousedown="{{subY}}"></paper-icon-button>
-									<paper-slider flex value="[[layer.y_offset]]" min="0" max="1000" immediateValue="{{layer.y_offset}}"></paper-slider>
-									<paper-icon-button icon="add-circle" on-mousedown="{{addY}}"></paper-icon-button>
-									<paper-icon-button icon="refresh" on-tap="{{resetY}}"></paper-icon-button>
-								</label>
-
-								<label horizontal layout center>
-									<text-string>props.item.z_index</text-string>
-									<paper-input value="{{layer.z_index}}"></paper-input>
-									<paper-icon-button icon="remove-circle" on-mousedown="{{subZ}}"></paper-icon-button>
-									<paper-slider flex value="[[layer.z_index]]" min="-2000" max="2000" immediateValue="{{layer.z_index}}"></paper-slider>
-									<paper-icon-button icon="add-circle" on-mousedown="{{addZ}}"></paper-icon-button>
-									<paper-icon-button icon="refresh" on-tap="{{resetZ}}"></paper-icon-button>
-								</label>
-
-							</div>
-						</div>
-
-					</div>
+					<unit-properties-layer
+							class="layer"
+							hidden?="{{index != item.activeLayerIndex}}"
+							layer="{{layer}}"
+							index="{{index}}"
+							instance="{{item.instances[item.activeInstanceIndex]}}">
+					</unit-properties-layer>
 				</template>
 			</div>
 
@@ -235,24 +143,15 @@
 
 		</paper-dialog>
 
-
-		<paper-dialog id="imgUploadDialog" transition="core-transition-top" heading="{{ text('props.item.imageUpload.header') }}">
-
-			<label>
-				<text-string>props.item.imageUpload.file</text-string>
-				<input name="file" type="file" id="inputImgFile" on-change="{{tempUpload}}">
-			</label>
-
-			<paper-button self-center raised highlighted on-tap="{{ uploadImage }}">
-				<text-string>props.item.imageUpload.upload</text-string>
-			</paper-button>
-
-		</paper-dialog>
-
 	</template>
 
 	<script>
 		Polymer({
+
+			eventDelegates:{
+				'stencil-uploaded':'resubscribe',
+				'layer-reset':'layerReset'
+			},
 
 			text:text,
 
@@ -274,73 +173,13 @@
 			},
 
 
-			stopMovement:function(e){
-				clearTimeout(this.sliderTO);
-				clearInterval(this.sliderInterval);
+
+			resubscribe:function(){
+				this.fire('item-selected', this.item.properties);
 			},
 
-			startMovement:function(e, axis, summand){
-				var meas = e.target.templateInstance.model.layer;
-
-				var move = (function(){
-					meas[axis] += summand;
-				});
-
-				move();
-
-				this.sliderTO = this.async(function(){
-					this.sliderInterval = setInterval(move, 50);
-				}, null, 500)
-			},
-
-			resetCoord:function(event, axis){
-				var meas = event.target.templateInstance.model.layer;
-				var i = event.target.templateInstance.model.index;
-
-				meas[axis] = this.item.layers[i].original[axis];
-
-			},
-
-			addX:function(event){
-				this.startMovement(event, 'x_offset', 1)
-			},
-
-			subX:function(event){
-				this.startMovement(event, 'x_offset', -1)
-			},
-
-			addY:function(event){
-				this.startMovement(event, 'y_offset', 1)
-			},
-
-			subY:function(event){
-				this.startMovement(event, 'y_offset', -1)
-			},
-
-			addZ:function(event){
-				this.startMovement(event, 'z_index', 1)
-			},
-
-			subZ:function(event){
-				this.startMovement(event, 'z_index', -1)
-			},
-
-			resetX:function(event){
-				this.resetCoord(event, 'x_offset');
-			},
-
-			resetY:function(event){
-				this.resetCoord(event, 'y_offset');
-			},
-
-			resetZ:function(event){
-				this.resetCoord(event, 'z_index');
-			},
-
-			resetAll:function(event){
-				this.resetX(event);
-				this.resetY(event);
-				this.resetZ(event);
+			layerReset:function(){
+				this.item.activeLayerIndex = 0;
 			},
 
 
@@ -350,13 +189,13 @@
 			},
 
 			imageLoaded:function(){
-				console.log('unit-props catched imgload');
+				//console.log('unit-props catched imgload');
 
 				this.$.instanceCreationDialog.updateTargetDimensions();
 			},
 
 			tempUpload:function(event, details){
-				console.log('unit-props tempUpload')
+				//console.log('unit-props tempUpload')
 
 				var formData = new FormData();
 
@@ -409,7 +248,7 @@
 			},
 
 			addLayer:function(){
-				console.log('adding_layer');
+				//console.log('adding_layer');
 
 				app.connection.write({
 					action:'add_layer',
@@ -419,67 +258,17 @@
 
 					var actionIndex = _(actions).findKey({action:'add_layer'});
 
-					console.log('adding_layer', actions, ret, actionIndex);
+					//console.log('adding_layer', actions, ret, actionIndex);
 
-					// todo - layer addition does not update the item time ('cause its very minor change) so we have to add it here manually
-					// todo - think this over. Alternative is to force resubscription on this item by making next:
-					this.fire('item-selected', this.item.properties)
-
-					/*if (typeof actionIndex != 'undefined'){
-						var ai = parseInt(actionIndex, 10);
-						var layer_id = ret[ai];
-
-						this.item.instances[this.item.activeInstanceIndex].layers.push({
-							id:layer_id,
-							item_id: this.item.properties.id,
-							z_index:0,
-							x_offset:0,
-							y_offset:0
-						})
-					}*/
+					this.resubscribe();
 
 				}, this);
-			},
-
-			deleteLayer:function(){
-
-				if (confirm(this.text('props.item.layer.confirmDeletion'))){
-					app.connection.write({
-						action:'delete_layer',
-						id: this.item.layers[this.item.activeLayerIndex].id
-					}, function(){
-						this.item.activeLayerIndex = 0;
-						this.fire('item-selected', this.item.properties);
-					}, this)
-				}
 			},
 
 			selectLayer:function(event){
 				var index = event.target.templateInstance.model.index;
 
 				this.item.activeLayerIndex = index;
-			},
-
-			openImgUploadDialog:function(event){
-				var id = event.target.templateInstance.model.layer.id;
-
-				this.$.imgUploadDialog.open();
-			},
-
-			uploadImage:function(event){
-				var model = event.target.templateInstance.model.item;
-
-				console.log('upload model', model);
-
-				app.connection.write({
-					action:'upload_stencil',
-					layer: this.item.layers[this.item.activeLayerIndex].id,
-					instance: this.item.instances[this.item.activeInstanceIndex].id,
-					image: this.file
-				}, function(){
-					this.fire('item-selected', this.item.properties);
-					this.$.imgUploadDialog.close();
-				}, this)
 			}
 
 		});
