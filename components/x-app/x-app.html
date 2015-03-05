@@ -262,11 +262,11 @@
 
 			pushItem:function(item){
 				// preserve instance on update
-				//item.activeInstanceIndex = this.current.item.activeInstanceIndex ? this.current.item.activeInstanceIndex : 0;
-				//item.activeLayerIndex = this.current.item.activeLayerIndex ? this.current.item.activeLayerIndex : 0;
 
 				item.activeInstanceIndex = this.current.item.activeInstanceIndex || 0;
 				item.activeLayerIndex = this.current.item.activeLayerIndex || 0;
+
+				if (!item.layers[item.activeLayerIndex]) item.activeLayerIndex = 0;
 
 				this.currentObjectType = 'item';
 				this.currentObject = this.current.item = item;
