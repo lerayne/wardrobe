@@ -26,12 +26,27 @@
 		<b>{{data.title}}</b>
 		<span hidden?="{{data.default == 0}}"> (Default)</span>
 
+		<span flex></span>
+
+		<template if="{{data.id != 0}}">
+			<paper-icon-button icon="cancel" on-tap="{{deleteItem}}"></paper-icon-button>
+		</template>
+
 	</template>
 
 	<script>
 		Polymer({
 			select:function(){
 				this.fire('item-selected', this.data);
+			},
+
+			deleteItem:function(event){
+				app.connection.write({
+					action:'delete_item',
+					id: this.data.id
+				});
+
+				event.stopPropagation();
 			}
 		});
 	</script>
