@@ -66,7 +66,8 @@
 				var that = this;
 
 				// todo - make resizing snapped by 10px
-				var frameSize = Math.min(this.offsetHeight, this.offsetWidth, this.canvasSize);
+				var minWidth = document.documentElement.offsetWidth - (380*2) //todo - think how to get these numbers
+				var frameSize = Math.min(this.offsetHeight, minWidth, this.canvasSize);
 				this.ratio = frameSize / this.canvasSize;
 
 				$(this.$.frame).css('transform', 'scale('+ this.ratio +')');

@@ -105,13 +105,15 @@
 							hidden?="{{index != item.activeLayerIndex}}"
 							layer="{{layer}}"
 							index="{{index}}"
-							instance="{{item.instances[item.activeInstanceIndex]}}">
+							item="{{item}}">
 					</unit-properties-layer>
 				</template>
 			</div>
 
-			<div horizontal layout end-justified>
-
+			<div horizontal end-justified layout style="padding:0 10px 10px">
+				<paper-button highlighted on-tap="{{saveLayers}}" disabled?="{{item.saved}}">
+					<text-string>props.item.save</text-string>
+				</paper-button>
 			</div>
 		</div>
 
@@ -149,8 +151,20 @@
 		Polymer({
 
 			eventDelegates:{
-				'stencil-uploaded':'resubscribe',
-				'layer-reset':'layerReset'
+				'layer-changed':'resubscribe'
+			},
+
+			areLayersSaved:function(){
+				var currentLayers = this.item.instances[this.item.activeInstanceIndex].layers;
+				var savedLayers = this.item.layers;
+
+				for (var i = 0; i < currentLayers.length; i++){
+					if (currentLayers[i].x_offset != savedLayers[i].original.x_offset) return false;
+					if (currentLayers[i].y_offset != savedLayers[i].original.y_offset) return false;
+					if (currentLayers[i].z_index != savedLayers[i].original.z_index) return false;
+				}
+
+				return true;
 			},
 
 			text:text,
@@ -176,10 +190,6 @@
 
 			resubscribe:function(){
 				this.fire('item-updated', this.item.properties);
-			},
-
-			layerReset:function(){
-				this.item.activeLayerIndex = 0;
 			},
 
 
@@ -269,6 +279,14 @@
 				var index = event.target.templateInstance.model.index;
 
 				this.item.activeLayerIndex = index;
+			},
+
+			saveLayers: function () {
+
+				app.connection.write({
+					action: 'update_layers',
+					layers: this.item.instances[this.item.activeInstanceIndex].layers
+				}, this.resubscribe, this);
 			}
 
 		});

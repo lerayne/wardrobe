@@ -24,3 +24,10 @@ body /deep/ paper-icon-button[highlighted] {
 	background-color: #006dcc;
 	color:#fff;
 }
+
+body /deep/ paper-button[disabled] {
+	background: #eaeaea;
+	color: #a8a8a8;
+	cursor: auto;
+	pointer-events: none;
+}

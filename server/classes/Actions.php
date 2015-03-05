@@ -211,6 +211,21 @@ class Actions {
 	}
 
 
+	function update_layers($params){
+		global $db;
+
+		foreach ($params['layers'] as $layer){
+			$new_params = Array(
+				'x_offset' => $layer['x_offset'],
+				'y_offset' => $layer['y_offset'],
+				'z_index' => $layer['z_index']
+			);
+
+			$db->query('UPDATE ?_layers SET ?a WHERE id = ?', $new_params, $layer['id']);
+		}
+	}
+
+
 	function delete_layer($params){
 		global $db;
 

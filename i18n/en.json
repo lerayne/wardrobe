@@ -54,6 +54,8 @@
 	"props.item.imageUpload.upload":"Upload",
 	"props.item.layer.confirmDeletion":"This will delete a layer and ALL images, connected with it. Continue?",
 
+    "props.item.save":"Save",
+
 	"current.header":"Current items",
 	"saved.header":"My saved outfits"
 }

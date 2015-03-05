@@ -274,6 +274,8 @@
 			},
 
 			pushItem:function(item){
+				item.saved = true;
+
 				// preserve instance on update
 				item.activeInstanceIndex = this.current.item.activeInstanceIndex || 0;
 				if (!item.instances[item.activeInstanceIndex]) item.activeInstanceIndex = 0;
