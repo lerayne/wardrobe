@@ -29,22 +29,30 @@
 		<span flex></span>
 
 		<template if="{{data.id != 0}}">
-			<paper-icon-button icon="cancel" on-tap="{{deleteItem}}"></paper-icon-button>
+			<paper-icon-button icon="delete" on-tap="{{deleteItem}}"></paper-icon-button>
 		</template>
 
 	</template>
 
 	<script>
 		Polymer({
+			text:text,
+
 			select:function(){
 				this.fire('item-selected', this.data);
 			},
 
 			deleteItem:function(event){
-				app.connection.write({
-					action:'delete_item',
-					id: this.data.id
-				});
+
+				if (confirm(text('items.deleteConfirm'))){
+
+					app.connection.write({
+						action:'delete_item',
+						id: this.data.id
+					}, function(){
+						$(this).remove();
+					}, this);
+				}
 
 				event.stopPropagation();
 			}

@@ -28,6 +28,7 @@
 
 	"items.header":"Select an item",
 	"items.undress":"Undress",
+	"items.deleteConfirm":"This will delete the item, all layers, instances and their images. Deletion can not be undone. Continue?",
 	"items.creation.header":"Create a new item",
 	"items.creation.title":"Name of an item",
 	"items.creation.name":"System name",
@@ -42,6 +43,7 @@
 	"props.item.z_index":"Z",
 	"props.item.x_offset":"X",
 	"props.item.y_offset":"Y",
+	"props.item.default":"Default (will apply on model first load)",
 	"props.item.instanceCreation.header":"Create new instance",
 	"props.item.instanceCreation.title":"Neme of an instance",
 	"props.item.instanceCreation.file":"Image",

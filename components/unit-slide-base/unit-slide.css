@@ -42,8 +42,9 @@ paper-button text-string {
 }
 
 #scroll {
-	padding: 15px 8px 1px 15px;
+	margin: 15px 8px 1px 15px;
 	position: relative;
+	box-shadow: 0 3px 3px #ccc;
 }
 
 core-toolbar {

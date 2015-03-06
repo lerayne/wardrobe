@@ -61,6 +61,10 @@
 				font-size: 13px;
 			}
 
+			paper-checkbox {
+				margin:0 10px;
+			}
+
 		</style>
 
 		<core-toolbar class="core-narrow">
@@ -108,6 +112,10 @@
 							item="{{item}}">
 					</unit-properties-layer>
 				</template>
+			</div>
+
+			<div horizontal layout style="padding:0 10px 10px">
+				<paper-checkbox checked="{{item.properties.default}}" on-change="{{unsave}}"></paper-checkbox> <text-string>props.item.default</text-string>
 			</div>
 
 			<div horizontal end-justified layout style="padding:0 10px 10px">
@@ -278,9 +286,15 @@
 			saveLayers: function () {
 
 				app.connection.write({
-					action: 'update_layers',
-					layers: this.item.instances[this.item.activeInstanceIndex].layers
+					action: 'update_item',
+					id: this.item.properties.id,
+					layers: this.item.instances[this.item.activeInstanceIndex].layers,
+					default: this.item.properties.default
 				}, this.resubscribe, this);
+			},
+
+			unsave:function(){
+				this.item.saved = false;
 			}
 
 		});

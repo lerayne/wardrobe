@@ -191,6 +191,128 @@ class Actions {
 	}
 
 
+	function update_item($params){
+		global $db;
+
+		foreach ($params['layers'] as $layer){
+			$new_params = Array(
+				'x_offset' => $layer['x_offset'],
+				'y_offset' => $layer['y_offset'],
+				'z_index' => $layer['z_index']
+			);
+
+			$db->query('UPDATE ?_layers SET ?a WHERE id = ?', $new_params, $layer['id']);
+		}
+
+		if ($params['default']){
+			$item = $db->selectRow('
+				SELECT
+					itm.*,
+					mdl.agency_id
+				FROM ?_items itm
+				JOIN ?_models mdl ON itm.model_id = mdl.id
+				WHERE itm.id = ?
+				',
+				$params['id']
+			);
+
+			$now = now();
+
+			$db->query('UPDATE ?_items SET `default` = 0, updated = ? WHERE shelf_id = ?d AND `default` = 1', $now, $item['shelf_id']);
+			$db->query('UPDATE ?_items SET `default` = 1 WHERE id = ?d', $item['id']);
+
+			$this->update_times(
+				'default item changed to ' . $item['title'],
+				$now,
+				$item['agency_id'],
+				$item['model_id'],
+				$item['shelf_id'],
+				$item['id']
+			);
+		}
+	}
+
+
+	function delete_item($params){
+		global $db, $env;
+
+		// collect deletion data
+		$item_to_delete = $db->selectRow('
+			SELECT
+				itm.title,
+				itm.shelf_id,
+				itm.model_id,
+				mdl.agency_id,
+				itm.default,
+				slv.required
+			FROM ?_items itm
+			JOIN ?_shelves slv ON slv.id = itm.shelf_id
+			JOIN ?_models mdl ON mdl.id = itm.model_id
+			JOIN ?_agencies ags ON ags.id = mdl.agency_id
+			WHERE itm.id = ?
+			',
+			$params['id']
+		);
+
+		$layers_to_delete = $db->selectCol('
+			SELECT
+				id
+			FROM ?_layers
+			WHERE item_id = ?
+			'
+			,$params['id']
+		);
+
+		$instances_to_delete = $db->selectCol('
+			SELECT
+				file
+			FROM ?_item_instances
+			WHERE item_id = ?
+			',
+			$params['id']
+		);
+
+		$GLOBALS['debug']['$item_to_delete'] = $item_to_delete;
+		//$GLOBALS['debug']['$layers_to_delete'] = $layers_to_delete;
+		//$GLOBALS['debug']['$instances_to_delete'] = $instances_to_delete;
+
+		// check for last item deletion if shelf is required
+		$items_count = $db->selectCell('SELECT count(id) FROM ?_items WHERE shelf_id = ?', $item_to_delete['shelf_id']);
+
+		$GLOBALS['debug']['$items_count'] = $items_count;
+
+		if ($items_count == '1' && $item_to_delete['required'] == '1') {
+			return "cant delete last item from required shelf!";
+		}
+
+		// delete files
+		foreach ($instances_to_delete as $file) {
+			foreach ($layers_to_delete as $layer_id) {
+				unlink($env['assets'].$file.'.'.dechex($layer_id).'.png');
+			}
+		}
+
+		// delete db entries
+		$db->query('DELETE FROM ?_item_instances WHERE item_id = ?', $params['id']);
+		$db->query('DELETE FROM ?_layers WHERE item_id = ?', $params['id']);
+		$db->query('DELETE FROM ?_items WHERE id = ?', $params['id']);
+
+		// set new default if needed
+		if ($item_to_delete['default'] != '0') {
+			$db->query('UPDATE ?_items SET default = 1 WHERE shelf_id = ? ORDER BY id LIMIT 1', $item_to_delete['shelf_id']);
+		}
+
+		//update time
+		$this->update_times(
+			'item '. $item_to_delete['title'] .' deleted',
+			now(),
+			$item_to_delete['agency_id'],
+			$item_to_delete['model_id'],
+			$item_to_delete['shelf_id']
+		);
+	}
+
+
 	function add_layer($params){
 		global $db;
 
@@ -207,21 +329,6 @@ class Actions {
 			return $new_layer_id;
 		} else {
 			return "item's layer cap of 3 reached";
-		}
-	}
-
-
-	function update_layers($params){
-		global $db;
-
-		foreach ($params['layers'] as $layer){
-			$new_params = Array(
-				'x_offset' => $layer['x_offset'],
-				'y_offset' => $layer['y_offset'],
-				'z_index' => $layer['z_index']
-			);
-
-			$db->query('UPDATE ?_layers SET ?a WHERE id = ?', $new_params, $layer['id']);
 		}
 	}
 

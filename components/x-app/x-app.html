@@ -6,6 +6,7 @@
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 
 <link rel="import" href="../unit-doll/unit-doll.html">
 <link rel="import" href="../text-string/text-string.html">
@@ -268,7 +269,9 @@
 
 				_.each(data.layers, function(layer){
 					layer.original = _(layer).clone();
-				})
+				});
+
+				data.properties.default = data.properties.default == 1;
 
 				this.pushItem(data);
 			},

@@ -31,3 +31,7 @@ body /deep/ paper-button[disabled] {
 	cursor: auto;
 	pointer-events: none;
 }
+
+body /deep/ paper-icon-button {
+	color:#888;
+}
