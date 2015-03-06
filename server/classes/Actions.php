@@ -204,19 +204,22 @@ class Actions {
 			$db->query('UPDATE ?_layers SET ?a WHERE id = ?', $new_params, $layer['id']);
 		}
 
-		if ($params['default']){
-			$item = $db->selectRow('
+		$item = $db->selectRow('
 				SELECT
 					itm.*,
-					mdl.agency_id
+					mdl.agency_id,
+					slv.required
 				FROM ?_items itm
+				JOIN ?_shelves slv ON itm.shelf_id = slv.id
 				JOIN ?_models mdl ON itm.model_id = mdl.id
 				WHERE itm.id = ?
 				',
-				$params['id']
-			);
+			$params['id']
+		);
 
-			$now = now();
+		$now = now();
+
+		if ($params['default'] && !$item['default']){
 
 			$db->query('UPDATE ?_items SET `default` = 0, updated = ? WHERE shelf_id = ?d AND `default` = 1', $now, $item['shelf_id']);
 			$db->query('UPDATE ?_items SET `default` = 1 WHERE id = ?d', $item['id']);
@@ -229,6 +232,15 @@ class Actions {
 				$item['shelf_id'],
 				$item['id']
 			);
+		}
+
+		if ($params['default'] == 'false' && $item['default']){
+
+			if (!$item['required']) {
+				$db->query('UPDATE ?_items SET `default` = 0, updated = ? WHERE id = ?', $now, $item['id']);
+			} else {
+				return 'required shelf should have default item!';
+			}
 		}
 	}
 

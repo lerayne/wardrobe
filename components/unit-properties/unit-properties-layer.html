@@ -80,7 +80,7 @@
 
 				<label horizontal layout center>
 					<text-string>props.item.x_offset</text-string>
-					<paper-input value="{{layer.x_offset}}"></paper-input>
+					<paper-input value="{{layer.x_offset}}" on-change="{{unsave}}"></paper-input>
 					<paper-icon-button icon="remove-circle" on-mousedown="{{subX}}"></paper-icon-button>
 					<paper-slider flex value="[[layer.x_offset]]" min="0" max="1000"
 								  immediateValue="{{layer.x_offset}}"
@@ -92,7 +92,7 @@
 
 				<label horizontal layout center>
 					<text-string>props.item.y_offset</text-string>
-					<paper-input value="{{layer.y_offset}}"></paper-input>
+					<paper-input value="{{layer.y_offset}}" on-change="{{unsave}}"></paper-input>
 					<paper-icon-button icon="remove-circle" on-mousedown="{{subY}}"></paper-icon-button>
 					<paper-slider flex value="[[layer.y_offset]]" min="0" max="1000"
 								  immediateValue="{{layer.y_offset}}"
@@ -104,7 +104,7 @@
 
 				<label horizontal layout center>
 					<text-string>props.item.z_index</text-string>
-					<paper-input value="{{layer.z_index}}"></paper-input>
+					<paper-input value="{{layer.z_index}}" on-change="{{unsave}}"></paper-input>
 					<paper-icon-button icon="remove-circle" on-mousedown="{{subZ}}"></paper-icon-button>
 					<paper-slider flex value="[[layer.z_index]]" min="-2000" max="2000"
 								  immediateValue="{{layer.z_index}}"
@@ -210,8 +210,10 @@
 				this.resetX(event);
 				this.resetY(event);
 				this.resetZ(event);
+			},
 
-				this.item.saved = true;
+			unsave:function(){
+				this.item.saved = false;
 			},
 
 			openImgUploadDialog: function (event) {

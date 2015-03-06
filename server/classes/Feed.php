@@ -271,7 +271,15 @@ class Feed {
 		// if not - return everything as it is
 		if (!$latest_update_date) return Array(Array(), $meta);
 
-		$props['properties'] = $db->selectRow('SELECT * FROM ?_items WHERE id = ?', $request['id']);
+		$props['properties'] = $db->selectRow('
+			SELECT
+				itm.*,
+				slv.required
+			FROM ?_items itm
+			JOIN ?_shelves slv ON slv.id = itm.shelf_id
+			WHERE itm.id = ?
+			', $request['id']
+		);
 		$props['layers'] = $db->select('SELECT * FROM ?_layers WHERE item_id = ?', $request['id']);
 		$props['instances'] = $db->select('SELECT * FROM ?_item_instances WHERE item_id = ?', $request['id']);
 

@@ -32,6 +32,7 @@ body /deep/ paper-button[disabled] {
 	pointer-events: none;
 }
 
+/*
 body /deep/ paper-icon-button {
 	color:#888;
-}
+}*/

@@ -115,7 +115,7 @@
 			</div>
 
 			<div horizontal layout style="padding:0 10px 10px">
-				<paper-checkbox checked="{{item.properties.default}}" on-change="{{unsave}}"></paper-checkbox> <text-string>props.item.default</text-string>
+				<paper-checkbox checked="{{item.properties.default}}" on-change="{{unsave}}" disabled?="{{item.original.default == '1' && item.original.required == '1'}}"></paper-checkbox> <text-string>props.item.default</text-string>
 			</div>
 
 			<div horizontal end-justified layout style="padding:0 10px 10px">
