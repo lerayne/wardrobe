@@ -1,6 +1,6 @@
--- MySQL dump 10.13  Distrib 5.6.17, for Win32 (x86)
+-- MySQL dump 10.13  Distrib 5.6.17, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: ward_test
+-- Host: localhost    Database: ward_test
 -- ------------------------------------------------------
 -- Server version	5.6.22-log
 
@@ -55,7 +55,7 @@ CREATE TABLE `wardrobe_item_instances` (
   `title` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `item` (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -85,7 +85,7 @@ CREATE TABLE `wardrobe_items` (
   KEY `author` (`author_id`),
   KEY `updated` (`updated`),
   KEY `default` (`default`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -103,7 +103,7 @@ CREATE TABLE `wardrobe_layers` (
   `y_offset` int(4) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `item` (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -194,4 +194,4 @@ CREATE TABLE `wardrobe_users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-02  1:09:51
+-- Dump completed on 2015-03-07  0:55:18
