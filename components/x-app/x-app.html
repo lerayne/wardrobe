@@ -202,6 +202,7 @@
 
 					if (shelf_index < 0) {
 						newInstances.push({
+							ins_id:layer.ins_id,
 							shelf_id: layer.shelf.id,
 							shelf: layer.shelf,
 							layers:[layer]
@@ -304,6 +305,7 @@
 				var deleteCount = i >= 0 ? 1 : 0;
 
 				this.instances.splice(i, deleteCount, {
+					ins_id:this.current.item.instances[index].id,
 					shelf_id:id,
 					shelf: this.current.shelf,
 					layers: this.current.item.instances[index].layers

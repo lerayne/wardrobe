@@ -1,8 +1,10 @@
--- MySQL dump 10.13  Distrib 5.6.17, for Win64 (x86_64)
+CREATE DATABASE  IF NOT EXISTS `wardrobe` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `wardrobe`;
+-- MySQL dump 10.13  Distrib 5.6.17, for Win32 (x86)
 --
--- Host: localhost    Database: ward_test
+-- Host: localhost    Database: wardrobe
 -- ------------------------------------------------------
--- Server version	5.6.22-log
+-- Server version	5.6.19-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -183,6 +185,36 @@ INSERT INTO `wardrobe_models` VALUES (1,'aphrodite','Aphrodite',1,1,NULL,1424457
 UNLOCK TABLES;
 
 --
+-- Table structure for table `wardrobe_saved`
+--
+
+DROP TABLE IF EXISTS `wardrobe_saved`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wardrobe_saved` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `title` varchar(45) DEFAULT NULL,
+  `model_id` int(10) unsigned NOT NULL,
+  `data` text NOT NULL,
+  `created` bigint(20) unsigned NOT NULL,
+  `updated` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `author` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wardrobe_saved`
+--
+
+LOCK TABLES `wardrobe_saved` WRITE;
+/*!40000 ALTER TABLE `wardrobe_saved` DISABLE KEYS */;
+INSERT INTO `wardrobe_saved` VALUES (1,1,NULL,1,'6,53,14,70,49,67',1425766987,1425766987);
+/*!40000 ALTER TABLE `wardrobe_saved` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `wardrobe_shelves`
 --
 
@@ -251,7 +283,7 @@ CREATE TABLE `wardrobe_users` (
 
 LOCK TABLES `wardrobe_users` WRITE;
 /*!40000 ALTER TABLE `wardrobe_users` DISABLE KEYS */;
-INSERT INTO `wardrobe_users` VALUES (1,'lerayne',NULL,'lerayne@gmail.com','062ac7c968833af0f79b2ff4a9de644e','2010-03-12 15:48:00',1,'local','2015-03-07 00:54:22','online');
+INSERT INTO `wardrobe_users` VALUES (1,'lerayne',NULL,'lerayne@gmail.com','062ac7c968833af0f79b2ff4a9de644e','2010-03-12 15:48:00',1,'local','2015-03-08 01:13:51','online');
 /*!40000 ALTER TABLE `wardrobe_users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -264,4 +296,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-07  0:54:59
+-- Dump completed on 2015-03-08  1:14:38

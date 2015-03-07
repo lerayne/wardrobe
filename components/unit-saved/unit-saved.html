@@ -1,6 +1,8 @@
+<link rel="import" href="../unit-slide-base/unit-slide-base.html">
 <link rel="import" href="../card-current-instance/card-current-instance.html">
+<link rel="import" href="../card-saved/card-saved.html">
 
-<polymer-element name="unit-saved" attributes="data" vertical layout flex>
+<polymer-element name="unit-saved" extends="unit-slide-base" attributes="data" vertical layout flex>
 	<template>
 
 		<link rel="stylesheet" href="../unit-slide-base/unit-slide.css">
@@ -14,6 +16,8 @@
 		<div hidden?="{{!data[0]}}" vertical layout flex>
 			<core-toolbar class="core-narrow">
 				<text-string>current.header</text-string>
+				<span flex></span>
+				<paper-icon-button icon="save" on-tap="{{saveSet}}"></paper-icon-button>
 			</core-toolbar>
 
 			<div id="scrollable" hidden?="{{collapsed}}" flex>
@@ -29,11 +33,46 @@
 			<core-toolbar class="core-narrow">
 				<text-string>saved.header</text-string>
 			</core-toolbar>
+
+			<div id="scrollable" flex>
+				<div id="scroll">
+					<template repeat="{{item in nodes}}">
+						<card-saved data="{{item}}"></card-saved>
+					</template>
+				</div>
+			</div>
 		</div>
 
 	</template>
 
 	<script>
-		Polymer();
+		Polymer({
+
+			ready:function(){
+				this.super();
+
+				this.subscribe()
+			},
+
+			subscribe:function(){
+				this.super();
+
+				app.connection.subscribe(this, 'saved-items', {
+					feed:'saved',
+					user_id: 1 // todo - login
+				}, this.parseUpdates)
+			},
+
+			saveSet:function(){
+
+				app.connection.write({
+					action:'add_saved',
+					user_id:1, // todo - login
+					instances: _.map(this.data, function(instance){
+						return instance.ins_id;
+					})
+				})
+			}
+		});
 	</script>
 </polymer-element>

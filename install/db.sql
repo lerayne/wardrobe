@@ -1,8 +1,10 @@
--- MySQL dump 10.13  Distrib 5.6.17, for Win64 (x86_64)
+CREATE DATABASE  IF NOT EXISTS `wardrobe` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `wardrobe`;
+-- MySQL dump 10.13  Distrib 5.6.17, for Win32 (x86)
 --
--- Host: localhost    Database: ward_test
+-- Host: localhost    Database: wardrobe
 -- ------------------------------------------------------
--- Server version	5.6.22-log
+-- Server version	5.6.19-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -133,6 +135,26 @@ CREATE TABLE `wardrobe_models` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `wardrobe_saved`
+--
+
+DROP TABLE IF EXISTS `wardrobe_saved`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wardrobe_saved` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `title` varchar(45) DEFAULT NULL,
+  `model_id` int(10) unsigned NOT NULL,
+  `data` text NOT NULL,
+  `created` bigint(20) unsigned NOT NULL,
+  `updated` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `author` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `wardrobe_shelves`
 --
 
@@ -194,4 +216,4 @@ CREATE TABLE `wardrobe_users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-07  0:55:18
+-- Dump completed on 2015-03-08  1:14:57

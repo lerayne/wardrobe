@@ -289,4 +289,58 @@ class Feed {
 		return Array($props, $meta);
 	}
 
+
+	function get_saved($request, $meta = Array()){
+		global $cfg, $db, $user;
+
+		// defaults
+		$request = load_defaults($request, $request_defaults = Array(
+			'model_id' => '0'
+		));
+
+		$meta = load_defaults($meta, $meta_defaults = Array(
+			'updates_since' => '0' // работает как false, а в SQL-запросах по дате - как 0
+		));
+
+		// режим обновления?
+		$update_mode = !!$meta['updates_since'];
+
+		// are there any updates?
+		$latest_update_date = $db->selectCell('
+			SELECT MAX(updated) FROM ?_saved
+			WHERE updated > ?
+				AND user_id = ?
+			',
+			$meta['updates_since'],
+			$request['user_id']
+		);
+
+		// if not - return everything as it is
+		if (!$latest_update_date) return Array(Array(), $meta);
+
+
+		$raw_saved = $db->select('
+			SELECT
+				svd.id,
+				svd.title,
+				svd.data,
+				svd.model_id,
+				mdl.title AS model_title,
+				mdl.agency_id,
+				ags.title AS agency_title
+			FROM ?_saved svd
+				JOIN ?_models mdl ON svd.model_id = mdl.id
+				JOIN ?_agencies ags ON mdl.agency_id = ags.id
+			WHERE svd.updated > ?
+				AND svd.user_id = ?
+			',
+			$meta['updates_since'],
+			$request['user_id']
+		);
+
+		// milestone for future requests
+		$meta['updates_since'] = $latest_update_date;
+
+		return Array($raw_saved, $meta);
+	}
 }

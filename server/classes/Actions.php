@@ -473,4 +473,30 @@ class Actions {
 
 		$db->query('UPDATE ?_agencies SET ?a WHERE id = ?', $time_update, $agency);
 	}
+
+
+
+	function add_saved($params){
+		global $db;
+
+		$model_id = $db->selectCell('
+			SELECT itm.model_id
+			FROM ?_item_instances ins
+			JOIN ?_items itm ON ins.item_id = itm.id
+			WHERE ins.id = ?
+			',
+			$params['instances'][0]
+		);
+
+		$now = now();
+
+		$new_item['user_id'] = $params['user_id'];
+		$new_item['model_id'] = $model_id;
+		$new_item['data'] = join(',', $params['instances']);
+		$new_item['created'] = $now;
+		$new_item['updated'] = $now;
+
+		$db->query('INSERT INTO ?_saved (?#) VALUES (?a)', array_keys($new_item), array_values($new_item));
+
+	}
 } 
