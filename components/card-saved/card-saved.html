@@ -3,11 +3,11 @@
 <polymer-element name="card-saved" extends="card-base" horizontal layout center>
 	<template>
 
-		<paper-item>
+		<!--<paper-item horizontal layout center flex>-->
 			{{data.agency_title}} / {{data.model_title}} / {{data.title || data.id}}
 			<span flex></span>
 			<paper-icon-button icon="delete" on-tap="{{delete}}"></paper-icon-button>
-		</paper-item>
+		<!--</paper-item>-->
 	</template>
 
 	<script>
