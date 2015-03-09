@@ -1,12 +1,36 @@
 <link rel="import" href="../card-base/card-base.html">
 
-<polymer-element name="card-saved" extends="card-base">
+<polymer-element name="card-saved" extends="card-base" horizontal layout center>
 	<template>
 
-		{{data.agency_title}}/{{data.model_title}}/{{data.title || data.id}}
+		<paper-item>
+			{{data.agency_title}} / {{data.model_title}} / {{data.title || data.id}}
+			<span flex></span>
+			<paper-icon-button icon="delete" on-tap="{{delete}}"></paper-icon-button>
+		</paper-item>
 	</template>
 
 	<script>
-		Polymer()
+		Polymer({
+			eventDelegates:{
+				'tap':'loadSet'
+			},
+
+			loadSet:function(){
+				this.fire('set-selected', this.data)
+			},
+
+			delete:function(event){
+
+				event.stopPropagation()
+
+				app.connection.write({
+					action:'delete_saved',
+					id: this.data.id
+				}, function(){
+					$(this).remove();
+				}, this)
+			}
+		})
 	</script>
 </polymer-element>

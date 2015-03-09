@@ -499,4 +499,9 @@ class Actions {
 		$db->query('INSERT INTO ?_saved (?#) VALUES (?a)', array_keys($new_item), array_values($new_item));
 
 	}
+
+
+	function delete_saved ($params){
+
+	}
 } 

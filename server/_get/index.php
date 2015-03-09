@@ -23,17 +23,19 @@ switch ($_REQUEST['subject']){
 
 		break;
 
-	case 'default_items':
+	case 'instances':
 
-		// assume that the first item created will be the default
+		if ($_REQUEST['defaults']) $defaults = 1;
+		if ($_REQUEST['multiple']) $multiple = 1;
+
 		$result = $db->select('
 			SELECT
 				ins.id AS ins_id,
 				lrs.id AS layer_id,
+				ins.file,
 				lrs.x_offset,
 				lrs.y_offset,
 				lrs.z_index,
-				ins.file,
 				slv.id AS shelf_id,
 				slv.name AS shelf_name,
 				slv.title AS shelf_title,
@@ -41,13 +43,16 @@ switch ($_REQUEST['subject']){
 				slv.z_index AS shelf_z_index,
 				slv.required AS shelf_required
 			FROM ?_layers lrs
-			JOIN ?_items itm ON lrs.item_id = itm.id AND itm.default = 1
+			JOIN ?_items itm ON lrs.item_id = itm.id {AND itm.default = ?}
 			JOIN ?_item_instances ins ON ins.item_id = itm.id
 			JOIN ?_shelves slv ON itm.shelf_id = slv.id
-			WHERE itm.model_id = ?
+			{WHERE ins.id IN (?a)}
+			{WHERE itm.model_id = ?d}
 			GROUP BY lrs.id
 			',
-			$_REQUEST['model']
+			$defaults ? 1 : DBSIMPLE_SKIP,
+			$multiple ? explode(',', $_REQUEST['ids']) : DBSIMPLE_SKIP,
+			$defaults ? $_REQUEST['model'] : DBSIMPLE_SKIP
 		);
 
 		foreach ($result as $i => $item) {

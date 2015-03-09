@@ -1,0 +1,45 @@
+<link rel="import" href="../unit-slide-base/unit-slide-base.html">
+<link rel="import" href="../card-current-instance/card-current-instance.html">
+
+<polymer-element name="unit-current" extends="unit-slide-base" attributes="data" vertical layout flex>
+	<template>
+
+		<link rel="stylesheet" href="../unit-slide-base/unit-slide.css">
+
+		<style>
+			:host {
+				background-color: #fff;
+			}
+		</style>
+
+		<core-toolbar class="core-narrow">
+			<text-string>current.header</text-string>
+			<span flex></span>
+			<paper-icon-button icon="save" on-tap="{{saveSet}}"></paper-icon-button>
+		</core-toolbar>
+
+		<div id="scrollable" hidden?="{{collapsed}}" flex>
+			<div id="scroll">
+				<template repeat="{{instance in data}}">
+					<card-current-instance data="{{instance}}"></card-current-instance>
+				</template>
+			</div>
+		</div>
+
+	</template>
+
+	<script>
+		Polymer({
+			saveSet:function(){
+
+				app.connection.write({
+					action:'add_saved',
+					user_id:1, // todo - login
+					instances: _.map(this.data, function(instance){
+						return instance.ins_id;
+					})
+				})
+			}
+		});
+	</script>
+</polymer-element>

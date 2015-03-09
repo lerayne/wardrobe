@@ -13,7 +13,7 @@
 <link rel="import" href="../tab-group/tab-group.html">
 <link rel="import" href="../unit-browse/unit-browse.html">
 <link rel="import" href="../unit-saved/unit-saved.html">
-<link rel="import" href="../unit-saved/unit-saved.html">
+<link rel="import" href="../unit-current/unit-current.html">
 <link rel="import" href="../unit-properties/unit-properties.html">
 
 <polymer-element name="x-app" vertical layout flex>
@@ -67,7 +67,8 @@
 						<unit-browse></unit-browse>
 					</div>
 					<div hidden?="{{navMode != 'saved'}}" class="tabbed-content" vertical layout flex>
-						<unit-saved data="{{instances}}"></unit-saved>
+						<unit-current flex data="{{instances}}" hidden?="{{!instances[0]}}"></unit-current>
+						<unit-saved flex data="{{instances}}"></unit-saved>
 					</div>
 
 			</div>
@@ -101,7 +102,8 @@
 				'item-loaded':'onItemLoaded',
 				'shelf-selected':'onShelfSelected',
 				'model-selected':'onModelSelected',
-				'agency-selected':'onAgencySelected'
+				'agency-selected':'onAgencySelected',
+				'set-selected':'onSetSelected'
 			},
 
 			created:function(){
@@ -148,7 +150,7 @@
 			onModelSelected:function(event, data){
 				if (!this.current.model || this.current.model.id != data.id){
 					this.initModel(data);
-					app.connection.get('default_items', {model:data.id}, this.selectDefaults.bind(this))
+					app.connection.get('instances', {model:data.id, defaults:1}, this.parseInstances.bind(this))
 				}
 
 				this.currentObjectType = 'model';
@@ -174,6 +176,12 @@
 				this.pushInstance(this.current.item.properties.shelf_id, index)
 			},
 
+			onSetSelected:function(event, data){
+				console.log('set selected', data)
+
+				app.connection.get('instances', {ids:data.data, multiple:1}, this.parseInstances.bind(this));
+			},
+
 
 
 			//PROPS
@@ -190,7 +198,7 @@
 				}
 			},
 
-			selectDefaults:function(data){
+			parseInstances:function(data){
 				var newInstances = [];
 
 				console.log('selectDefaults', _(data).clone())
