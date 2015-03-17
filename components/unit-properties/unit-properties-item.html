@@ -49,6 +49,10 @@
 				border-color: #bbb;
 			}
 
+			.instance[active], .instance[active]:hover {
+				border-color:#d23f31;
+			}
+
 			paper-tab::shadow #ink {
 				color: red;
 			}
@@ -77,7 +81,7 @@
 
 		<div class="instances" horizontal layout center>
 			<template repeat="{{instance, index in item.instances}}">
-				<div class="instance" on-tap="{{selectInstance}}">
+				<div class="instance" on-tap="{{selectInstance}}" active?="{{index == item.activeInstanceIndex}}">
 					<img _src="{{instance.layers[0].file}}" title="{{instance.title}}">
 				</div>
 			</template>

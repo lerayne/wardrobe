@@ -502,6 +502,8 @@ class Actions {
 
 
 	function delete_saved ($params){
+		global $db;
 
+		$db->query('DELETE FROM ?_saved WHERE id = ?d', $params['id']);
 	}
 } 
