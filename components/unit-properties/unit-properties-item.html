@@ -25,7 +25,6 @@
 			}
 
 			.instances {
-				height:66px;
 				padding: 0 10px;
 			}
 
@@ -36,7 +35,7 @@
 				height: 50px;
 				cursor:pointer;
 				text-align: center;
-				margin-right:5px;
+				margin: 5px 5px 0 0;
 				background-color: #fff;
 			}
 
@@ -79,7 +78,7 @@
 			<paper-icon-button icon="cancel" on-tap="{{exitEditMode}}" hidden?="{{!editMode}}"></paper-icon-button>
 		</core-toolbar>
 
-		<div class="instances" horizontal layout center>
+		<div class="instances" horizontal layout wrap center>
 			<template repeat="{{instance, index in item.instances}}">
 				<div class="instance" on-tap="{{selectInstance}}" active?="{{index == item.activeInstanceIndex}}">
 					<img _src="{{instance.layers[0].file}}" title="{{instance.title}}">
