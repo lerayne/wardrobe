@@ -14,7 +14,7 @@ app.class.Router = function(){
 		_(pairs).each(function(pair){
 			var keyval = pair.split('=');
 			that.params[keyval[0]] = keyval[1] || true;
-		});
+		}).value();
 	}
 };
 

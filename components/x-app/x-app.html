@@ -53,7 +53,7 @@
 
 		<!-- top toolbar  -->
 		<core-toolbar class="core-narrow">
-			<img src="../../assets/design/logo.png" style="height:48px"> Wardrobe project
+			<img src="../../assets/design/logo.png" style="height:32px"> Wardrobe project
 		</core-toolbar>
 
 
@@ -132,6 +132,12 @@
 				};
 
 				this.initModel();
+
+				var instances = app.router.get('instances');
+
+				if (instances) {
+					app.connection.get('instances', {ids: instances, multiple: 1}, this.parseInstances.bind(this));
+				}
 			},
 
 
