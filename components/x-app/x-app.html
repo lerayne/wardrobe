@@ -133,8 +133,23 @@
 
 				this.initModel();
 
-				var instances = app.router.get('instances');
+				// todo - finish this
+				var agency = app.router.get('agency');
+				if (agency) {
+					this.current.agency = {id: agency}
+				}
 
+				var model = app.router.get('model');
+				if (model) {
+					this.current.model = {id: model}
+				}
+
+				var shelf = app.router.get('shelf');
+				if (shelf) {
+					this.current.shelf = {id: model}
+				}
+
+				var instances = app.router.get('instances');
 				if (instances) {
 					app.connection.get('instances', {ids: instances, multiple: 1}, this.parseInstances.bind(this));
 				}

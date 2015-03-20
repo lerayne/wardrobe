@@ -8,7 +8,7 @@
 		</style>
 
 		<!--<img src="{{ data.file }}?ts={{timestamp}}">-->
-		<img src="{{ data.file }}">
+		<img id="image" src="{{ data.file }}">
 
 	</template>
 
@@ -18,6 +18,12 @@
 				var date = new Date();
 				this.timestamp = date.getTime();
 				this.place();
+
+				var that = this;
+
+				$(this.$.image).load(function(){
+					that.fire('doll-layer-loaded')
+				})
 			},
 
 			place:function(){

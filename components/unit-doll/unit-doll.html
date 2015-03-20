@@ -38,6 +38,10 @@
 			canvasSize: 1000, // todo: 1000 is changeable var, depends on actor
 			ratio:1,
 
+			eventDelegates:{
+				'doll-layer-loaded':'layerLoaded'
+			},
+
 			created:function(){
 				var that = this;
 
@@ -53,6 +57,34 @@
 			observe:{
 				items:'createLayers',
 				canvasSize:'initModel'
+			},
+
+			instancesChanged:function(old, data){
+
+				// todo - finish preventing gradual loading
+				//this.$.frame.hidden = true;
+
+				var layersQ = 0;
+
+				_.each(this.instances, function(ins){
+					layersQ += ins.layers.length
+				});
+
+				//console.log('new images set:', layersQ, old, this.instances)
+
+				this.awaitLoad = layersQ;
+				//console.time('loaded all images');
+			},
+
+			layerLoaded:function(){
+				this.awaitLoad -= 1;
+
+				//console.log('layer loaded', this.awaitLoad);
+
+				if (this.awaitLoad == 0) {
+					//this.$.frame.hidden = false;
+					//console.timeEnd('loaded all images');
+				}
 			},
 
 			initModel:function(data){
