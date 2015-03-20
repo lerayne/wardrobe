@@ -4,25 +4,29 @@
 	<template>
 		<style>
 			:host {
-
+				padding:0 10px 0 0;
 			}
 
-			.image {
-				height: 50px;
-				width: 50px;
-				border:1px solid #ddd;
+			.thumbnail {
+				width:55px;
+				height:55px;
+				padding:5px;
 				text-align: center;
+				border-right:1px solid #ddd;
+				margin-right: 10px;
+				background-color: #fff;
 			}
 
-			img {
+			.thumbnail img {
 				max-height: 50px;
 				max-width: 50px;
 			}
 		</style>
 
-		<div class="image">
+		<div class="thumbnail">
 			<img src="{{data.layers[0].file}}">
 		</div>
+
 		<span flex></span>
 		<paper-icon-button hidden?="{{data.shelf.required == 1}}" icon="cancel" on-tap="{{remove}}"></paper-icon-button>
 

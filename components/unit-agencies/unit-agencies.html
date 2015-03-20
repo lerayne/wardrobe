@@ -1,7 +1,7 @@
 <link rel="import" href="../unit-slide-base/unit-slide-base.html">
 <link rel="import" href="../card-agency/card-agency.html">
 
-<polymer-element name="unit-agencies" extends="unit-slide-base" vertical layout flex>
+<polymer-element name="unit-agencies" attributes="agency" extends="unit-slide-base" vertical layout flex>
 	<template>
 
 		<link rel="stylesheet" href="../unit-slide-base/unit-slide.css">
@@ -21,7 +21,7 @@
 		</style>
 
 		<div id="bookmark" flex hidden?="{{!collapsed}}" on-tap="{{open}}">
-			<div id="vertical">{{currentAgency.title}}</div>
+			<div id="vertical">{{agency.title}}</div>
 		</div>
 
 		<core-toolbar class="core-narrow" hidden?="{{collapsed}}">
@@ -31,8 +31,8 @@
 
 		<div id="scrollable" hidden?="{{collapsed}}" flex>
 			<div id="scroll">
-				<template repeat="{{agency in nodes}}">
-					<card-agency data="{{agency}}"></card-agency>
+				<template repeat="{{node in nodes}}">
+					<card-agency data="{{node}}" active?="{{node.id == agency.id}}"></card-agency>
 				</template>
 			</div>
 
@@ -86,7 +86,7 @@
 
 			onSelect:function(event, data){
 				this.super();
-				this.currentAgency = data;
+				this.agency = data;
 			},
 
 			openCreationDialog:function() {

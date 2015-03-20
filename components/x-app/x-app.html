@@ -51,11 +51,15 @@
 			}
 		</style>
 
+		<!-- top toolbar  -->
 		<core-toolbar class="core-narrow">
 			<img src="../../assets/design/logo.png" style="height:48px"> Wardrobe project
 		</core-toolbar>
 
+
 		<div horizontal layout flex>
+
+			<!-- left (nav) panel -->
 			<div class="side panel" vertical layout flex>
 
 				<paper-tabs selected="{{navModeId}}">
@@ -64,7 +68,7 @@
 				</paper-tabs>
 
 					<div hidden?="{{navMode != 'browse'}}" class="tabbed-content" vertical layout flex>
-						<unit-browse></unit-browse>
+						<unit-browse current="{{current}}"></unit-browse>
 					</div>
 					<div hidden?="{{navMode != 'saved'}}" class="tabbed-content" vertical layout flex>
 						<unit-current flex data="{{instances}}" hidden?="{{!instances[0]}}"></unit-current>
@@ -73,10 +77,13 @@
 
 			</div>
 
+			<!-- center (doll) panel -->
 			<div class="panel" vertical layout>
 				<unit-doll id="doll" instances="{{instances}}" canvasSize="{{dollCanvasSize}}"></unit-doll>
 			</div>
 
+
+			<!--right (props) panel -->
 			<div class="side panel" vertical layout flex>
 				<paper-tabs selected="{{propsModeId}}">
 					<paper-tab x-unit="properties" on-tap="{{propsSelectTab}}"><text-string class="tab">navigation.tabs.properties</text-string></paper-tab>
@@ -100,9 +107,9 @@
 				'item-selected':'onItemSelected',
 				'item-updated':'onItemUpdated',
 				'item-loaded':'onItemLoaded',
-				'shelf-selected':'onShelfSelected',
-				'model-selected':'onModelSelected',
-				'agency-selected':'onAgencySelected',
+				//'shelf-selected':'onShelfSelected',
+				//'model-selected':'onModelSelected',
+				//'agency-selected':'onAgencySelected',
 				'set-selected':'onSetSelected'
 			},
 
@@ -116,11 +123,23 @@
 
 				this.currentObjectType = '';
 				this.currentObject = {};
-				this.current = {};
+
+				this.current = {
+					agency:{},
+					model:{},
+					shelf:{},
+					item:{}
+				};
+
 				this.initModel();
 			},
 
 
+			observe:{
+				'current.agency':'agencyChange',
+				'current.model':'modelChange',
+				'current.shelf':'shelfChange'
+			},
 
 
 			// TABS MANAGEMENT
@@ -138,16 +157,55 @@
 			},
 
 
-
-
-			// ON SELECTED/UPDATED
-			onAgencySelected:function(event, data){
+			// OBSERVED MAIN CHANGES
+			agencyChange:function(old, data){
 				this.currentObjectType = 'agency';
 				this.currentObject = this.current.agency = data;
 				app.currentState.agency = data;
+
+				app.router.note('agency', data.id);
 			},
 
-			onModelSelected:function(event, data){
+
+			modelChange:function(old, data){
+				console.log('onModelSelected', old, data)
+
+				// if we go to a new model - load defaults
+				if (!old.id || old.id != data.id){
+					this.initModel(data);
+					app.connection.get('instances', {model:data.id, defaults:1}, this.parseInstances.bind(this))
+				}
+
+				this.currentObjectType = 'model';
+				this.currentObject = this.current.model = data;
+				app.currentState.model = data;
+
+				app.router.note('model', data.id);
+			},
+
+			shelfChange:function(old, data){
+				this.currentObjectType = 'shelf';
+				this.currentObject = this.current.shelf = data;
+				app.currentState.shelf = data;
+
+				app.router.note('shelf', data.id);
+			},
+
+
+			// ON SELECTED/UPDATED
+			/*onAgencySelected:function(event, data){
+				this.currentObjectType = 'agency';
+				this.currentObject = this.current.agency = data;
+				app.currentState.agency = data;
+
+				app.router.note('agency', data.id);
+			},*/
+
+			/*onModelSelected:function(event, data){
+
+				console.log('onModelSelected', this.current.model, data)
+
+				// if we go to a new model - load defaults
 				if (!this.current.model || this.current.model.id != data.id){
 					this.initModel(data);
 					app.connection.get('instances', {model:data.id, defaults:1}, this.parseInstances.bind(this))
@@ -156,16 +214,22 @@
 				this.currentObjectType = 'model';
 				this.currentObject = this.current.model = data;
 				app.currentState.model = data;
-			},
 
-			onShelfSelected:function(event, data){
+				app.router.note('model', data.id);
+			},*/
+
+			/*onShelfSelected:function(event, data){
 				this.currentObjectType = 'shelf';
 				this.currentObject = this.current.shelf = data;
 				app.currentState.shelf = data;
-			},
+
+				app.router.note('shelf', data.id);
+			},*/
 
 			onItemSelected:function(event, data){
-				this.loadItem(data, true)
+				this.loadItem(data, true);
+
+				app.router.note('item', data.id);
 			},
 
 			onItemUpdated:function(event, data){
@@ -201,7 +265,7 @@
 			parseInstances:function(data){
 				var newInstances = [];
 
-				console.log('selectDefaults', _(data).clone())
+				console.log('direct_instance_load', _(data).clone())
 
 				for (var i=0; i < data.length; i++) {
 					var layer = data[i];
@@ -308,8 +372,8 @@
 			pushInstance:function(id, index){
 				this.current.item.activeInstanceIndex = index;
 
+				// if such shelf item is present - replace it, otherwise add new
 				var i = _(this.instances).findIndex({shelf_id:id});
-
 				var deleteCount = i >= 0 ? 1 : 0;
 
 				this.instances.splice(i, deleteCount, {
@@ -326,6 +390,13 @@
 				if (i >= 0) {
 					this.instances.splice(i, 1)
 				}
+			},
+
+
+			// observe vars
+
+			instancesChanged:function(){
+				app.router.note('instances', _.pluck(this.instances, 'ins_id').join(','));
 			}
 
 		});

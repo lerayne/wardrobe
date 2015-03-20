@@ -1,7 +1,7 @@
 <link rel="import" href="../unit-slide-base/unit-slide-base.html">
 <link rel="import" href="../card-model/card-model.html">
 
-<polymer-element name="unit-models" extends="unit-slide-base" vertical layout flex>
+<polymer-element name="unit-models" attributes="model" extends="unit-slide-base" vertical layout flex>
 	<template>
 
 		<link rel="stylesheet" href="../unit-slide-base/unit-slide.css">
@@ -21,7 +21,7 @@
 		</style>
 
 		<div id="bookmark" flex hidden?="{{!collapsed}}" on-tap="{{open}}">
-			<div id="vertical">{{currentModel.title}}</div>
+			<div id="vertical">{{model.title}}</div>
 		</div>
 
 		<core-toolbar class="core-narrow" hidden?="{{collapsed}}">
@@ -33,8 +33,8 @@
 
 		<div id="scrollable" hidden?="{{collapsed}}" flex>
 			<div id="scroll">
-				<template repeat="{{model in nodes}}">
-					<card-model data="{{model}}"></card-model>
+				<template repeat="{{node in nodes}}">
+					<card-model data="{{node}}" active?="{{node.id == model.id}}"></card-model>
 				</template>
 			</div>
 
@@ -96,7 +96,7 @@
 
 			onSelect:function(event, data){
 				this.super();
-				this.currentModel = data;
+				this.model = data;
 			},
 
 			openCreationDialog:function(){

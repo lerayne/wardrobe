@@ -3,7 +3,7 @@
 <link rel="import" href="../unit-shelves/unit-shelves.html">
 <link rel="import" href="../unit-items/unit-items.html">
 
-<polymer-element name="unit-browse" horizontal layout flex>
+<polymer-element name="unit-browse" attributes="current" horizontal layout flex>
 	<template>
 		<style>
 			:host {
@@ -11,37 +11,44 @@
 			}
 		</style>
 
-		<unit-agencies id="agencies"></unit-agencies>
-		<unit-models id="models"></unit-models>
-		<unit-shelves id="shelves"></unit-shelves>
-		<unit-items id="items"></unit-items>
+		<unit-agencies id="agencies" agency="{{current.agency}}"></unit-agencies>
+		<unit-models id="models" model="{{current.model}}"></unit-models>
+		<unit-shelves id="shelves" shelf="{{current.shelf}}"></unit-shelves>
+		<unit-items id="items" item="{{current.item}}"></unit-items>
 
 	</template>
 
 	<script>
 		Polymer({
 
-			subunits:['agencies', 'models', 'shelves', 'items'],
-
 			eventDelegates:{
 				'open-subunit':'openSubunit',
 				'close-subunit':'closeSubunit',
 				'subunit-back':'subunitBack',
 
-				'agency-selected':'onAgencySelected',
-				'model-selected':'onModelSelected',
-				'shelf-selected':'onShelfSelected',
-				'item-selected':'onItemSelected',
+				//'agency-selected':'onAgencySelected',
+				//'model-selected':'onModelSelected',
+				//'shelf-selected':'onShelfSelected',
+				//'item-selected':'onItemSelected',
 				'model-undress':'undress'
 			},
 
+			observe:{
+				'current.agency':'agencyChange',
+				'current.model':'modelChange',
+				'current.shelf':'shelfChange'
+			},
+
 			created:function(){
-				this.currentState = {};
+				//this.currentState = {};
 			},
 
 			ready:function(){
 				this.openSubunit(null, {subunitName:'agencies'})
 			},
+
+
+			subunits:['agencies', 'models', 'shelves', 'items'],
 
 			openSubunit:function(event, data){
 				//console.log('open', data.subunitName);
@@ -87,24 +94,40 @@
 				}
 			},
 
-			onAgencySelected:function(event, data){
-				this.currentState.agency = data;
+			agencyChange:function(old, data){
 				this.$.models.selectAgency(data);
 			},
 
-			onModelSelected:function(event, data){
-				this.currentState.model = data;
+			modelChange:function(event, data){
 				this.$.shelves.selectModel(data)
 			},
 
-			onShelfSelected:function(event, data){
-				this.currentState.shelf = data;
+			shelfChange:function(event, data){
 				this.$.items.selectShelf(data);
 			},
 
-			onItemSelected:function(event, data){
-				this.currentState.index = data;
-			},
+			/*onAgencySelected:function(event, data){
+				// todo - for removal
+				//this.currentState.agency = data;
+				this.$.models.selectAgency(data);
+			},*/
+
+			/*onModelSelected:function(event, data){
+				// todo - for removal
+				//this.currentState.model = data;
+				this.$.shelves.selectModel(data)
+			},*/
+
+			/*onShelfSelected:function(event, data){
+				// todo - for removal
+				//this.currentState.shelf = data;
+				this.$.items.selectShelf(data);
+			},*/
+
+			/*onItemSelected:function(event, data){
+				// todo - for removal
+				//this.currentState.index = data;
+			},*/
 
 			undress:function(){
 

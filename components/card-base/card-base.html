@@ -14,7 +14,7 @@
 				border-top:none;
 			}
 
-			:host([selected]) {
+			:host([active]) {
 				background-color: lemonchiffon;
 			}
 		</style>
@@ -25,20 +25,22 @@
 		Polymer({
 
 			publish:{
-				selected:{
+				active:{
 					default:false,
 					reflect:true
 				}
 			},
 
-			computed:{
-				selected:'data.selected'
-			},
+			// todo - for removal
+			/*computed:{
+				active:'data.selected'
+			},*/
 
 			attached:function(){
-				if (this.data.selected){
+				// todo - for removal
+				/*if (this.data.selected){
 					this.select()
-				}
+				}*/
 			},
 
 			select:function(){}

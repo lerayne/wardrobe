@@ -2,7 +2,7 @@
 <link rel="import" href="../card-item/card-item.html">
 <link rel="import" href="../image-cropper/image-cropper.html">
 
-<polymer-element name="unit-items" extends="unit-slide-base" vertical layout flex>
+<polymer-element name="unit-items" attributes="item" extends="unit-slide-base" vertical layout flex>
 	<template>
 
 		<link rel="stylesheet" href="../unit-slide-base/unit-slide.css">
@@ -40,8 +40,8 @@
 		<div id="scrollable" hidden?="{{collapsed}}" flex>
 			<div id="scroll">
 				<card-item hidden?="{{currentShelf.required != '0'}}" data="{{ noneItem }}"></card-item>
-				<template repeat="{{model in nodes}}">
-					<card-item data="{{model}}"></card-item>
+				<template repeat="{{node in nodes}}">
+					<card-item data="{{node}}" active?="{{node.id == item.properties.id}}"></card-item>
 				</template>
 			</div>
 
@@ -139,7 +139,9 @@
 
 				this.noneItem.shelf_id = this.currentShelf.id;
 
-				this.parentZ = app.currentState.shelf.z_index;
+				if (app.currentState.shelf) {
+					this.parentZ = app.currentState.shelf.z_index;
+				}
 
 				app.connection.subscribe(this, 'items', {
 					feed:'items',
@@ -175,7 +177,7 @@
 					}
 				}, this);
 
-				this.selectedItem = data;
+				this.item = data;
 			},
 
 			openCreationDialog:function(){

@@ -6,6 +6,8 @@ $(function(){
 
 	var onDOMReady = function(){
 
+		app.router = new app.class.Router();
+
 		app.state.windowFocused = document.hasFocus();
 
 		app.connection = new app.class.Connection({

@@ -1,7 +1,7 @@
 <link rel="import" href="../unit-slide-base/unit-slide-base.html">
 <link rel="import" href="../card-shelf/card-shelf.html">
 
-<polymer-element name="unit-shelves" extends="unit-slide-base" vertical layout flex>
+<polymer-element name="unit-shelves" attributes="shelf" extends="unit-slide-base" vertical layout flex>
 	<template>
 
 		<link rel="stylesheet" href="../unit-slide-base/unit-slide.css">
@@ -21,7 +21,7 @@
 		</style>
 
 		<div id="bookmark" flex hidden?="{{!collapsed}}" on-tap="{{open}}">
-			<div id="vertical">{{currentShelf.title}}</div>
+			<div id="vertical">{{shelf.title}}</div>
 		</div>
 
 		<core-toolbar class="core-narrow" hidden?="{{collapsed}}">
@@ -38,8 +38,8 @@
 
 		<div id="scrollable" hidden?="{{collapsed}}" flex>
 			<div id="scroll">
-				<template repeat="{{shelf in nodes}}">
-					<card-shelf data="{{shelf}}"></card-shelf>
+				<template repeat="{{node in nodes}}">
+					<card-shelf data="{{node}}" active?="{{node.id == shelf.id}}"></card-shelf>
 				</template>
 			</div>
 
@@ -95,6 +95,7 @@
 				currentModel:'subscribe'
 			},
 
+			// suspect on unneeded
 			selectModel:function(data){
 				this.currentModel = data;
 			},
@@ -110,7 +111,7 @@
 
 			onSelect:function(event, data){
 				this.super();
-				this.currentShelf = data;
+				this.shelf = data;
 			},
 
 			openCreationDialog:function(){
